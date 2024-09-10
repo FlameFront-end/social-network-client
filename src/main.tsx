@@ -4,7 +4,7 @@ import { App, ConfigProvider } from 'antd'
 
 import RouterProvider from './router/RouterProvider'
 import reportWebVitals from './reportWebVitals'
-import { store } from './core/configureStore'
+import { store } from './store/configureStore.ts'
 
 import 'antd/dist/reset.css'
 import './assets/css/scrollbar.css'

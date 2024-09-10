@@ -1,12 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit'
-import chatSlice from '../features/chat/reducers/chatSlice.ts'
+import { api } from '../core/api.ts'
+import { authActions, authReducer } from '../features/auth/store/auth.slice'
+import { chatReducer } from '../features/chat/store/chat.slice.ts'
 
-export const store = configureStore({
-    reducer: {
-        chat: chatSlice
-    }
-})
+export const reducers = {
+    [api.reducerPath]: api.reducer,
+    auth: authReducer,
+    chat: chatReducer
+}
 
-export type RootState = ReturnType<typeof store.getState>
-
-export type AppDispatch = typeof store.dispatch
+export const actions = {
+    ...authActions
+}

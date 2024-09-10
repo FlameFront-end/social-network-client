@@ -1,8 +1,9 @@
-import { pathsConfig } from '@/pathsConfig'
 import NotFound404 from '../../pages/NotFound404'
 import Layout from '../../containers/Layout'
 import App from '../../App'
-import Chat from '../../features/chat/components/Chat'
+import { authRoutes } from '../../features/auth/routes/auth.routes.tsx'
+import { pathsConfig } from './paths.config.ts'
+import { chatRoutes } from '../../features/chat/routes/chat.routes.tsx'
 
 export const routesConfig = [
     {
@@ -13,10 +14,10 @@ export const routesConfig = [
                 element: <Layout />,
                 children: [
                     { path: '/', element: <App/> },
-                    { path: '/chat/:senderId/:receiverId', element: <Chat /> }
+                    ...chatRoutes
                 ]
-            }
-            // ...authRoutes
+            },
+            ...authRoutes
         ]
     }
 ]
