@@ -1,10 +1,9 @@
 import { useState, useEffect, type FC } from 'react'
-import { addMessage, fetchMessages } from '../../../../store/chatSlice'
 import { Input, Button, List } from 'antd'
 import socket from '../../../../core/socket'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
-import { type Message } from '../../../../store/chatSlice'
 import { useParams } from 'react-router-dom'
+import { addMessage, fetchMessages, type Message } from '../../reducers/chatSlice.ts'
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks.ts'
 
 const Chat: FC = () => {
     const { senderId, receiverId } = useParams<{ senderId: string, receiverId: string }>()
@@ -15,11 +14,7 @@ const Chat: FC = () => {
     useEffect(() => {
         const fetchChatMessages = async (): Promise<void> => {
             if (senderId != null && receiverId != null) {
-                try {
-                    await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) }))
-                } catch (error) {
-                    console.error('Failed to fetch messages:', error)
-                }
+                await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) }))
             }
         }
 
