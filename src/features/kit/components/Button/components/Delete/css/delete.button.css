@@ -1,0 +1,50 @@
+.delete-button_red {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 14px;
+    height: 14px;
+    padding: 12px;
+    color: #f5222d;
+    border-color: #f5222d;
+    background: #fff1f0;
+}
+
+.delete-button_red:hover {
+    color: #ff7875 !important;
+    border-color: #ffa39e !important;
+}
+
+.delete-button_orange {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 14px;
+    height: 14px;
+    padding: 12px;
+    color: #faad14;
+    border-color: #faad14;
+    background: #fffbe6;
+}
+
+.delete-button_orange:hover {
+    color: #ffd666 !important;
+    border-color: #ffe58f !important;
+}
+
+.delete-button_black {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 14px;
+    height: 14px;
+    padding: 12px;
+    color: #f5222d;
+    border-color: #000;
+    background: #f0f0f0;
+}
+
+.delete-button_black:hover {
+    color: #000 !important;
+    border-color: #f5222d !important;
+}

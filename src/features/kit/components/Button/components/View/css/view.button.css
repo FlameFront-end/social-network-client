@@ -1,0 +1,16 @@
+.view-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1677ff;
+    border-color: #1677ff;
+    background: #e6f4ff;
+    width: 14px;
+    height: 14px;
+    padding: 12px;
+}
+
+.view-button:hover {
+    color: #69b1ff !important;
+    border-color: #91caff !important;
+}

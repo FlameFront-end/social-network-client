@@ -1,0 +1,47 @@
+{
+  "name": "social-network-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 42420 --host 0.0.0.0",
+    "prod": "vite --port 42430 --host 0.0.0.0",
+    "preview": "vite preview --port 42430 --host 0.0.0.0",
+    "buildTsc": "tsc && vite build",
+    "build": "vite build",
+    "init": "npm install && npm run prepare",
+    "lint": "eslint --ext .tsx --ext .ts src/"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.7",
+    "antd": "^5.12.1",
+    "js-cookie": "^3.0.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^8.1.3",
+    "react-router-dom": "^6.20.1"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^18.19.2",
+    "@types/qs": "^6.9.10",
+    "@types/react": "^18.2.42",
+    "@types/react-dom": "^18.2.17",
+    "@types/react-highlight-words": "^0.16.7",
+    "@types/react-redux": "^7.1.32",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/react-transition-group": "^4.4.9",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^16.3.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "husky": "^8.0.3",
+    "typescript": "^5.3.2",
+    "vite": "^4.5.1",
+    "web-vitals": "^3.5.0"
+  }
+}
