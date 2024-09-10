@@ -1,13 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { setupListeners } from '@reduxjs/toolkit/query'
-import { reducers } from '../store'
+import chatSlice from '../store/chatSlice'
 
 export const store = configureStore({
-    reducer: reducers,
-    devTools: true
+    reducer: {
+        chat: chatSlice
+    }
 })
 
-export type AppState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>
 
-setupListeners(store.dispatch)
+export type AppDispatch = typeof store.dispatch
