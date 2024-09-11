@@ -8,6 +8,9 @@ import { store } from './store/configureStore.ts'
 
 import 'antd/dist/reset.css'
 import './assets/css/scrollbar.css'
+import '@coreui/coreui/dist/css/coreui.min.css'
+
+import 'dayjs/locale/ru.js'
 
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container)

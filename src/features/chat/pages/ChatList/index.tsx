@@ -20,7 +20,7 @@ const findOtherUserInChat = (activeChat: Collections.Chat | undefined, userId: n
 const ChatList: FC = () => {
     const userId = useAppSelector(state => state.auth.user.id)
     const [activeChatId, setActiveChatId] = useState(0)
-    const { data: chatList } = useGetChatListQuery(userId ?? 0)
+    const { data: chatList, isFetching } = useGetChatListQuery(userId ?? 0)
 
     const activeChat = chatList?.find(chat => chat.id === activeChatId)
 
@@ -30,6 +30,7 @@ const ChatList: FC = () => {
                 setActiveChatId={setActiveChatId}
                 activeChatId={activeChatId}
                 chatList={chatList ?? []}
+                isFetching={isFetching}
             />
             <Chat
                 senderId={userId ?? 0}

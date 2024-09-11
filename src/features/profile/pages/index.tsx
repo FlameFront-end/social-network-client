@@ -3,6 +3,8 @@ import { useGetUserQuery } from '../api/profile.api.ts'
 import { useLocation } from 'react-router-dom'
 import { Card, Avatar, Typography } from 'antd'
 import dayjs from 'dayjs'
+import Flex from '../../kit/components/Flex'
+import ava from '../../../../public/ava.png'
 
 const { Title, Text } = Typography
 
@@ -11,17 +13,15 @@ const Profile: FC = () => {
     const { data: user } = useGetUserQuery(state.userId)
 
     return (
-        <Card style={{ width: 300, margin: 'auto', textAlign: 'center' }}>
+        <Card style={{ width: 500, margin: 'auto', textAlign: 'center' }}>
             {(user != null) && (
-                <>
-                    <Avatar size={64} src={user.ava} />
-                    <Title level={4}>{user.nick}</Title>
+                <Flex direction='column' alignItems='center'>
+                    <Avatar size={64} src={user.ava ?? ava} />
+                    <Title level={4}>{user.surname} {user.name} {user.patronymic ?? ''}</Title>
                     <Text>Email: {user.email}</Text>
-                    <br />
                     <Text>Account Created: {dayjs(user.createdAt)?.format('DD.MM.YYYY')}</Text>
-                    <br />
                     {user.isAdmin && <Text>Admin User</Text>}
-                </>
+                </Flex>
             )}
         </Card>
     )

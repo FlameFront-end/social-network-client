@@ -11,6 +11,7 @@ import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
 import { SendOutlined } from '@ant-design/icons'
+import { CSpinner } from '@coreui/react-pro'
 
 interface Props {
     senderId: number | string
@@ -37,18 +38,22 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     const dispatch = useAppDispatch()
     const messages = useAppSelector((state) => state.chat.messages)
     const [content, setContent] = useState('')
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const fetchChatMessages = async (): Promise<void> => {
             if (senderId != null && receiverId != null) {
-                await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) }))
+                await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) })).then(() => {
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 300)
+                })
             }
         }
 
         void fetchChatMessages()
 
         socket.on('receiveMessage', (message: Message) => {
-            console.log('message', message)
             dispatch(chatActions.addMessage(message))
         })
 
@@ -69,40 +74,44 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }
 
     return (
-        <Flex direction='column' justifyContent='space-between' style={styles.wrapper}>
-            <List
-                bordered
-                dataSource={messages}
-                renderItem={(message: Message) => (
-                    <List.Item>
-                        <Flex direction='column'>
-                            <div>
-                                <strong
-                                    style={styles.nick}
-                                    onClick={() => { navigate(profilePaths.profile, { state: { userId: message.senderId } }) }}
-                                >
-                                    {message?.sender?.nick}
-                                </strong>
-                                <span> {dayjs(message?.createdAt)?.format('HH:mm')}</span>
-                            </div>
-                            <p>{message?.content}</p>
-                        </Flex>
-                    </List.Item>
-                )}
-            />
-            <Flex>
-                <Input
-                    style={styles.input}
-                    value={content}
-                    onChange={(e) => { setContent(e.target.value) }}
-                    onPressEnter={sendMessage}
-                    placeholder="Напишите сообщение..."
+        <>
+            {!isLoading ? <Flex direction='column' justifyContent='space-between' style={styles.wrapper}>
+                <List
+                    bordered
+                    dataSource={messages}
+                    renderItem={(message: Message) => (
+                        <List.Item>
+                            <Flex direction='column'>
+                                <div>
+                                    <strong
+                                        style={styles.nick}
+                                        onClick={() => { navigate(profilePaths.profile, { state: { userId: message.senderId } }) }}
+                                    >
+                                        {message?.sender?.name}
+                                    </strong>
+                                    <span> {dayjs(message?.createdAt)?.format('HH:mm')}</span>
+                                </div>
+                                <p>{message?.content}</p>
+                            </Flex>
+                        </List.Item>
+                    )}
                 />
-                <Button onClick={sendMessage} type="primary" icon={<SendOutlined />}>
-                    Отправить
-                </Button>
-            </Flex>
-        </Flex>
+                <Flex>
+                    <Input
+                        style={styles.input}
+                        value={content}
+                        onChange={(e) => { setContent(e.target.value) }}
+                        onPressEnter={sendMessage}
+                        placeholder="Напишите сообщение..."
+                    />
+                    <Button onClick={sendMessage} type="primary" icon={<SendOutlined />}>
+                        Отправить
+                    </Button>
+                </Flex>
+            </Flex> : <Flex justifyContent='center' alignItems='center' style={styles.wrapper}>
+                <CSpinner color="secondary"/>
+            </Flex>}
+        </>
     )
 }
 

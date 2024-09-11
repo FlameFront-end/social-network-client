@@ -1,4 +1,5 @@
 import { api } from '../../../core/api.ts'
+import { type RegisterPayload } from '../types/register.types.ts'
 
 export const authApi = api.injectEndpoints({
     endpoints: builder => ({
@@ -9,7 +10,7 @@ export const authApi = api.injectEndpoints({
                 body: payload
             })
         }),
-        register: builder.mutation({
+        register: builder.mutation<Promise<void>, RegisterPayload>({
             query: (payload) => ({
                 url: '/user/register',
                 method: 'POST',

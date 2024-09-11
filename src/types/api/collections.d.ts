@@ -23,13 +23,16 @@ declare namespace Collections {
     }
 
     interface User {
-        ava: string
-        createdAt: string
-        email: string
         id: number
+        patronymic: string | null
+        surname: string
+        name: string
+        email: string
+        ava: string | null
         isAdmin: boolean
-        nick: string
         password: string
+        birthdate: string
         updatedAt: string
+        createdAt: string
     }
 }
