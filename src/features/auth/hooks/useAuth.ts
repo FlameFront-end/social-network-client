@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { useAppSelector, useAppAction } from '@/hooks'
+import { useAppSelector } from '../../../store/hooks.ts'
+import { useAppAction } from '../../../hooks/useAppAction.ts'
 
 interface UseAuthReturn {
     isAuth: boolean

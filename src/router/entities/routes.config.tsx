@@ -4,9 +4,11 @@ import App from '../../App'
 import { authRoutes } from '../../features/auth/routes/auth.routes.tsx'
 import { pathsConfig } from './paths.config.ts'
 import { chatRoutes } from '../../features/chat/routes/chat.routes.tsx'
+import RouterProtect from '../RouterProtect.tsx'
 
 export const routesConfig = [
     {
+        element: <RouterProtect />,
         errorElement: <NotFound404 />,
         children: [
             {

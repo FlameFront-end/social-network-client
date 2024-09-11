@@ -1,15 +1,19 @@
 import { type FC, useEffect, useState } from 'react'
 import { Button, Layout, Menu } from 'antd'
-import {
-    DashboardOutlined,
-    LogoutOutlined
-} from '@ant-design/icons'
+import { DashboardOutlined, LogoutOutlined } from '@ant-design/icons'
+import { useAuth } from '../../features/auth/hooks/useAuth.ts'
 
 const { Sider: SiderAntd } = Layout
 
 const Sider: FC = () => {
+    const { logout } = useAuth()
+
     const [collapsed, setCollapsed] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
+
+    const handleLogoutClick = (): void => {
+        logout()
+    }
 
     const handleCollapsedToggle = (): void => {
         setCollapsed(!collapsed)
@@ -59,6 +63,7 @@ const Sider: FC = () => {
                 }}
                 type='primary'
                 icon={<LogoutOutlined />}
+                onClick={handleLogoutClick}
             >
                 {!collapsed && 'Logout'}
             </Button>

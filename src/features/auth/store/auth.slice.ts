@@ -5,27 +5,27 @@ import type { LoginResponse } from '../types/login.types'
 interface AuthState {
     user: {
         isAuth: boolean
-        jwt: string | undefined | null
+        token: string | undefined | null
         id: number | undefined
-        username: string | undefined
-        category: string | undefined
+        nick: string | undefined
+        ava: string | undefined
     }
 }
 
 const user = JSON.parse(Cookies.get('user') ?? '{}') as {
-    jwt?: string
+    token?: string
     id?: number
-    username?: string
-    category?: string
+    nick?: string
+    ava?: string
 }
 
 const initialState: AuthState = {
     user: {
-        isAuth: user?.jwt != null,
-        jwt: user?.jwt,
+        isAuth: user?.token != null,
+        token: user?.token,
         id: user?.id,
-        username: user?.username,
-        category: user?.category
+        nick: user?.nick,
+        ava: user?.ava
     }
 }
 
@@ -34,7 +34,7 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         setUser(state, { payload }: PayloadAction<LoginResponse>) {
-            Cookies.set('jwt', payload.jwt)
+            Cookies.set('token', payload.token)
             Cookies.set('user', JSON.stringify(payload))
 
             state.user = {
@@ -43,14 +43,14 @@ export const authSlice = createSlice({
             }
         },
         removeUser(state) {
-            Cookies.remove('jwt')
+            Cookies.remove('token')
             Cookies.remove('user')
 
-            state.user.jwt = null
+            state.user.token = null
             state.user.id = undefined
-            state.user.username = undefined
-            state.user.category = undefined
+            state.user.nick = undefined
             state.user.isAuth = false
+            state.user.ava = undefined
         }
     }
 })

@@ -1,8 +1,8 @@
-import { authRoutes } from '../../features/auth/routes/auth.routes.tsx'
-import { chatRoutes } from '../../features/chat/routes/chat.routes.tsx'
+import { authPaths } from '../../features/auth/routes/auth.paths.ts'
+import { chatPaths } from '../../features/chat/routes/chat.paths.ts'
 
 export const pathsConfig = {
     root: '/',
-    ...authRoutes,
-    ...chatRoutes
+    ...authPaths,
+    ...chatPaths
 }

@@ -4,8 +4,8 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-    jwt: string
+    token: string
     id: number
-    username: string
-    category: string
+    nick: string
+    ava: string
 }

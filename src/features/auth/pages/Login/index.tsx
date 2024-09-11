@@ -43,7 +43,7 @@ const Login: FC = () => {
         const response = await login(payload)
 
         if (!('error' in response)) {
-            const result = response?.data?.result
+            const result = response?.data
             setUser(result)
             form.resetFields()
         }
