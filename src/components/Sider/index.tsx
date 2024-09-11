@@ -1,12 +1,15 @@
 import { type FC, useEffect, useState } from 'react'
 import { Button, Layout, Menu } from 'antd'
-import { DashboardOutlined, LogoutOutlined } from '@ant-design/icons'
+import { WechatOutlined, LogoutOutlined, HomeOutlined } from '@ant-design/icons'
 import { useAuth } from '../../features/auth/hooks/useAuth.ts'
+import { useNavigate } from 'react-router-dom'
+import { pathsConfig } from '../../router/entities/paths.config.ts'
 
 const { Sider: SiderAntd } = Layout
 
 const Sider: FC = () => {
     const { logout } = useAuth()
+    const navigate = useNavigate()
 
     const [collapsed, setCollapsed] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
@@ -36,10 +39,17 @@ const Sider: FC = () => {
 
     const menuItems = [
         {
-            key: 'Dashboard',
-            icon: <DashboardOutlined />,
-            label: 'Dashboard',
-            onClick: () => {}
+            key: 'Моя страница',
+            icon: <HomeOutlined />,
+            label: 'Моя страница',
+            onClick: () => { navigate(pathsConfig.root) }
+        },
+
+        {
+            key: 'Мессенджер',
+            icon: <WechatOutlined />,
+            label: 'Мессенджер',
+            onClick: () => { navigate(pathsConfig.chat_list) }
         }
     ]
 
@@ -65,7 +75,7 @@ const Sider: FC = () => {
                 icon={<LogoutOutlined />}
                 onClick={handleLogoutClick}
             >
-                {!collapsed && 'Logout'}
+                {!collapsed && 'Выход'}
             </Button>
         </SiderAntd>
     )

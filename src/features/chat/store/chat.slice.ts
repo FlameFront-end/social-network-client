@@ -1,13 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-
-export interface Message {
-    id: number
-    senderId: number
-    receiverId: number
-    content: string
-    createdAt: string
-}
+import Message = Collections.Message
 
 interface ChatState {
     messages: Message[]

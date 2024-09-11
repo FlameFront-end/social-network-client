@@ -5,6 +5,7 @@ import { authRoutes } from '../../features/auth/routes/auth.routes.tsx'
 import { pathsConfig } from './paths.config.ts'
 import { chatRoutes } from '../../features/chat/routes/chat.routes.tsx'
 import RouterProtect from '../RouterProtect.tsx'
+import { profileRoutes } from '../../features/profile/routes/profile.routes.tsx'
 
 export const routesConfig = [
     {
@@ -16,7 +17,8 @@ export const routesConfig = [
                 element: <Layout />,
                 children: [
                     { path: '/', element: <App/> },
-                    ...chatRoutes
+                    ...chatRoutes,
+                    ...profileRoutes
                 ]
             },
             ...authRoutes

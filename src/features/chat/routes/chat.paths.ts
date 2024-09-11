@@ -1,3 +1,3 @@
 export const chatPaths = {
-    chat: '/chat/:senderId/:receiverId'
+    chat_list: '/chat_list'
 }
