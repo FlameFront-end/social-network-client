@@ -6,6 +6,8 @@ import { type Styles } from '../../../../types/global.types.ts'
 import { useAppAction } from '../../../../hooks/useAppAction.ts'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { type RegisterPayload } from '../../types/register.types.ts'
+import { useNavigate } from 'react-router-dom'
+import { pathsConfig } from '../../../../router/entities/paths.config.ts'
 
 const styles: Styles = {
     layout: {
@@ -35,6 +37,7 @@ const styles: Styles = {
 }
 
 const Register: FC = () => {
+    const navigate = useNavigate()
     const { setUser } = useAppAction()
     const [register, { isLoading }] = useRegisterMutation()
     const [form] = Form.useForm()
@@ -49,8 +52,9 @@ const Register: FC = () => {
         })
 
         if (!('error' in response)) {
-            const result = response?.data?.result
+            const result = response?.data
             setUser(result)
+            navigate(pathsConfig.root)
             form.resetFields()
         }
     }
@@ -101,6 +105,9 @@ const Register: FC = () => {
                     label='Ava'
                     name='ava'
                     hasFeedback
+                    rules={[
+                        { required: true, message: 'Please input your ava!' }
+                    ]}
                 >
                     <Upload
                         name="ava"
@@ -123,7 +130,7 @@ const Register: FC = () => {
                         { required: true, message: 'Please input your nickname!' }
                     ]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label='Password'
@@ -131,6 +138,7 @@ const Register: FC = () => {
                     hasFeedback
                     validateDebounce={600}
                     rules={[
+                        { required: true },
                         {
                             validator: async (_, value) => {
                                 if (value === undefined || value === '') {
