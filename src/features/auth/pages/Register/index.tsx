@@ -1,10 +1,11 @@
-import { type FC } from 'react'
-import { Layout, Button, Form, Input } from 'antd'
-import { useLoginMutation } from '../../api/auth.api'
-import type { LoginPayload } from '../../types/login.types'
+import { type FC, useState } from 'react'
+import { Layout, Button, Form, Input, Upload, type UploadProps } from 'antd'
+import { useRegisterMutation } from '../../api/auth.api'
 import { regExpPassword } from '../../../../utils/regExp.ts'
 import { type Styles } from '../../../../types/global.types.ts'
 import { useAppAction } from '../../../../hooks/useAppAction.ts'
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { type RegisterPayload } from '../../types/register.types.ts'
 
 const styles: Styles = {
     layout: {
@@ -33,14 +34,19 @@ const styles: Styles = {
     }
 }
 
-const Login: FC = () => {
+const Register: FC = () => {
     const { setUser } = useAppAction()
-    const [login, { isLoading }] = useLoginMutation()
-
+    const [register, { isLoading }] = useRegisterMutation()
     const [form] = Form.useForm()
 
-    const handleFinish = async (payload: LoginPayload): Promise<void> => {
-        const response = await login(payload)
+    const [imageUrl, setImageUrl] = useState<string>()
+    const [loading, setLoading] = useState(false)
+
+    const handleFinish = async (payload: RegisterPayload): Promise<void> => {
+        const response = await register({
+            ...payload,
+            ava: imageUrl
+        })
 
         if (!('error' in response)) {
             const result = response?.data?.result
@@ -48,6 +54,23 @@ const Login: FC = () => {
             form.resetFields()
         }
     }
+
+    const handleChange: UploadProps['onChange'] = (info) => {
+        if (info.file.status === 'uploading') {
+            setLoading(true)
+            return
+        }
+        if (info.file.status === 'done') {
+            setImageUrl(info.file.response.url)
+        }
+    }
+
+    const uploadButton = (
+        <button style={{ border: 0, background: 'none' }} type="button">
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </button>
+    )
 
     return (
         <Layout style={styles.layout}>
@@ -57,7 +80,7 @@ const Login: FC = () => {
                 labelCol={{ span: 24 }}
                 wrapperCol={{ span: 24 }}
                 style={{ maxWidth: 400, margin: '0 auto' }}
-                onFinish={(data: LoginPayload) => {
+                onFinish={(data: RegisterPayload) => {
                     void handleFinish(data)
                 }}
                 autoComplete='off'
@@ -70,6 +93,34 @@ const Login: FC = () => {
                     rules={[
                         { required: true, message: 'Please input your email!' },
                         { type: 'email', message: 'The input is not valid email!' }
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label='Ava'
+                    name='ava'
+                    hasFeedback
+                >
+                    <Upload
+                        name="ava"
+                        showUploadList={false}
+                        listType="picture-card"
+                        className="avatar-uploader"
+                        onChange={handleChange}
+                        action='http://localhost:3000/upload/image'
+                        accept="image/jpeg, image/png, image/gif"
+                    >
+                        {(imageUrl != null) ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                    </Upload>
+                </Form.Item>
+                <Form.Item
+                    label='Nickname'
+                    name='nick'
+                    hasFeedback
+                    validateDebounce={600}
+                    rules={[
+                        { required: true, message: 'Please input your nickname!' }
                     ]}
                 >
                     <Input />
@@ -94,13 +145,9 @@ const Login: FC = () => {
                     <Input.Password />
                 </Form.Item>
 
-                {/* <AnimatedShowControl show={isError}> */}
-                {/*    <Alert message={error?.message} type='error' showIcon/> */}
-                {/* </AnimatedShowControl> */}
-
                 <Form.Item>
                     <Button type='primary' htmlType='submit' loading={isLoading} block>
-                        Login
+                        Register
                     </Button>
                 </Form.Item>
             </Form>
@@ -108,4 +155,4 @@ const Login: FC = () => {
     )
 }
 
-export default Login
+export default Register

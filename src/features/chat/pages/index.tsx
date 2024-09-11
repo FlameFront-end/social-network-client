@@ -2,7 +2,7 @@ import { useState, useEffect, type FC } from 'react'
 import { Input, Button, List } from 'antd'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks.ts'
-import socket from '../../../core/socket.ts'
+// import socket from '../../../core/socket.ts'
 import { chatActions, fetchMessages, type Message } from '../store/chat.slice.ts'
 
 const Chat: FC = () => {
@@ -11,33 +11,33 @@ const Chat: FC = () => {
     const dispatch = useAppDispatch()
     const messages = useAppSelector((state) => state.chat.messages)
 
-    useEffect(() => {
-        const fetchChatMessages = async (): Promise<void> => {
-            if (senderId != null && receiverId != null) {
-                await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) }))
-            }
-        }
-
-        void fetchChatMessages()
-
-        socket.on('receiveMessage', (message: Message) => {
-            dispatch(chatActions.addMessage(message))
-        })
-
-        return () => {
-            socket.off('receiveMessage')
-        }
-    }, [dispatch, senderId, receiverId])
+    // useEffect(() => {
+    //     const fetchChatMessages = async (): Promise<void> => {
+    //         if (senderId != null && receiverId != null) {
+    //             await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) }))
+    //         }
+    //     }
+    //
+    //     void fetchChatMessages()
+    //
+    //     socket.on('receiveMessage', (message: Message) => {
+    //         dispatch(chatActions.addMessage(message))
+    //     })
+    //
+    //     return () => {
+    //         socket.off('receiveMessage')
+    //     }
+    // }, [dispatch, senderId, receiverId])
 
     const sendMessage = (): void => {
-        if (content.trim() !== '') {
-            socket.emit('sendMessage', {
-                senderId: Number(senderId),
-                receiverId: Number(receiverId),
-                content
-            })
-            setContent('')
-        }
+        // if (content.trim() !== '') {
+        //     socket.emit('sendMessage', {
+        //         senderId: Number(senderId),
+        //         receiverId: Number(receiverId),
+        //         content
+        //     })
+        //     setContent('')
+        // }
     }
 
     return (

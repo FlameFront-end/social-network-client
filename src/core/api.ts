@@ -6,7 +6,7 @@ export const api = createApi({
     endpoints: (build) => ({
         fetchUsers: build.query({
             query: () => ({
-                url: ''
+                url: 'http://localhost:3000'
             })
         })
     })
