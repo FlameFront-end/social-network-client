@@ -1,84 +1,88 @@
-import { type FC, useEffect, useState } from 'react'
-import { Button, Layout, Menu } from 'antd'
-import { WechatOutlined, LogoutOutlined, HomeOutlined } from '@ant-design/icons'
+import { type FC } from 'react'
 import { useAuth } from '../../features/auth/hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
 import { pathsConfig } from '../../router/entities/paths.config.ts'
+import { friendsPaths } from '../../features/friends/routes/friends.paths.ts'
+import { MessageOutlined, HomeOutlined, TeamOutlined } from '@ant-design/icons'
 
-const { Sider: SiderAntd } = Layout
+import {
+    SidebarContainer,
+    MenuItemContainer,
+    MenuItemIcon,
+    MenuItemLabel,
+    LogoutButton,
+    LogoutButtonLabel
+} from './Sidebar.styled'
 
-const Sider: FC = () => {
+const Sidebar: FC = () => {
     const { logout } = useAuth()
     const navigate = useNavigate()
 
-    const [collapsed, setCollapsed] = useState(false)
-    const [isMobile, setIsMobile] = useState(false)
+    const collapsed = false
+
+    // const [collapsed, setCollapsed] = useState(false)
+    // const [isMobile, setIsMobile] = useState(false)
 
     const handleLogoutClick = (): void => {
         logout()
     }
+    //
+    // const handleCollapsedToggle = (): void => {
+    //     setCollapsed(!collapsed)
+    // }
 
-    const handleCollapsedToggle = (): void => {
-        setCollapsed(!collapsed)
-    }
+    // const handleWindowResize = (): void => {
+    //     setIsMobile(window.innerWidth < 768)
+    // }
 
-    const handleWindowResize = (): void => {
-        setIsMobile(window.innerWidth < 768)
-    }
+    // useEffect(() => {
+    //     handleWindowResize()
+    // }, [])
 
-    useEffect(() => {
-        handleWindowResize()
-    }, [])
-
-    useEffect(() => {
-        window.addEventListener('resize', handleWindowResize)
-        return () => {
-            window.removeEventListener('resize', handleWindowResize)
-        }
-    }, [])
+    // useEffect(() => {
+    //     window.addEventListener('resize', handleWindowResize)
+    //     return () => {
+    //         window.removeEventListener('resize', handleWindowResize)
+    //     }
+    // }, [])
 
     const menuItems = [
         {
-            key: 'Моя страница',
-            icon: <HomeOutlined />,
             label: 'Моя страница',
+            key: 'root',
+            icon: <HomeOutlined />,
             onClick: () => { navigate(pathsConfig.root) }
         },
 
         {
-            key: 'Мессенджер',
-            icon: <WechatOutlined />,
             label: 'Мессенджер',
+            key: 'chat_list',
+            icon: <MessageOutlined />,
             onClick: () => { navigate(pathsConfig.chat_list) }
+        },
+        {
+            label: 'Друзья',
+            key: 'friends',
+            icon: <TeamOutlined />,
+            onClick: () => { navigate(friendsPaths.friends) }
         }
     ]
 
     return (
-        <SiderAntd
-            width={200}
-            theme='light'
-            className='site-layout-background'
-            collapsible
-            collapsed={collapsed}
-            onCollapse={handleCollapsedToggle}
-            breakpoint='md'
-            collapsedWidth={isMobile ? '0' : '80'}
-            style={{ borderRight: 'none', paddingTop: '20px' }}
-        >
-            <Menu items={menuItems} />
-            <Button
-                style={{
-                    width: collapsed ? 40 : 160,
-                    margin: '15px 20px'
-                }}
-                type='primary'
-                icon={<LogoutOutlined />}
-                onClick={handleLogoutClick}
-            >
-                {!collapsed && 'Выход'}
-            </Button>
-        </SiderAntd>
+        <SidebarContainer collapsed={collapsed}>
+            <div className="menu">
+                {menuItems.map((item) => (
+                    <MenuItemContainer key={item.key} onClick={item.onClick}>
+                        <MenuItemIcon>{item.icon}</MenuItemIcon>
+                        <MenuItemLabel collapsed={collapsed}>{item.label}</MenuItemLabel>
+                    </MenuItemContainer>
+                ))}
+            </div>
+            <LogoutButton collapsed={collapsed} onClick={handleLogoutClick}>
+                <LogoutButtonLabel collapsed={collapsed}>Выход</LogoutButtonLabel>
+            </LogoutButton>
+        </SidebarContainer>
     )
 }
 
-export default Sider
+export default Sidebar

@@ -25,7 +25,7 @@ const ChatList: FC = () => {
     const activeChat = chatList?.find(chat => chat.id === activeChatId)
 
     return (
-        <Flex style={styles.wrapper}>
+        <Flex style={styles.wrapper} gap={0}>
             <ChatListSidebar
                 setActiveChatId={setActiveChatId}
                 activeChatId={activeChatId}

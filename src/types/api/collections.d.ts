@@ -33,6 +33,9 @@ declare namespace Collections {
         isAdmin: boolean
         password: string
         birthdate: string
+        friends: number[]
+        incomingFriendRequests: number[]
+        outgoingFriendRequests: number[]
         updatedAt: string
         createdAt: string
     }

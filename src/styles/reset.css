@@ -1,0 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
+
+ul {
+    list-style: none;
+}

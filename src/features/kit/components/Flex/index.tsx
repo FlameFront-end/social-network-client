@@ -10,6 +10,7 @@ export interface FlexProps {
     flexWrap?: 'wrap' | 'nowrap'
     style?: CSSProperties
     children: ReactNode
+    className?: string
 }
 
 const Flex: FC<FlexProps> = ({
@@ -21,10 +22,11 @@ const Flex: FC<FlexProps> = ({
     flexShrink,
     flexWrap,
     style,
-    children
+    children,
+    className
 }) => {
     return (
-        <div style={{ display: 'flex', flexDirection: `${direction}`, gap, justifyContent, alignItems, flexGrow, flexShrink, flexWrap, ...style }}>
+        <div style={{ display: 'flex', flexDirection: `${direction}`, gap, justifyContent, alignItems, flexGrow, flexShrink, flexWrap, ...style }} className={className}>
             {children}
         </div>
     )
