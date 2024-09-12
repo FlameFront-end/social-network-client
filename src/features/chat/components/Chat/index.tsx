@@ -36,7 +36,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                 await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) })).then(() => {
                     setTimeout(() => {
                         setIsLoading(false)
-                    }, 300)
+                    }, 600)
                 })
             }
         }
@@ -111,65 +111,63 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }
 
     return (
-        <>
+        <StyledChatWrapper>
             {!isLoading ? (
-                <StyledChatWrapper>
-                    <Flex direction="column" justifyContent="space-between" className='wrapper'>
-                        <List
-                            className='list'
-                            dataSource={messages}
-                            renderItem={(message: Collections.Message) => (
-                                <List.Item>
-                                    <div>
-                                        <Flex alignItems='center'>
-                                            <Avatar size={40} src={message.sender.ava ?? ava} style={{ height: 'max-content' }}/>
-                                            <div
-                                                className='nick'
-                                                onClick={() => {
-                                                    navigate(profilePaths.profile, { state: { userId: message.senderId } })
-                                                }}
-                                            >
-                                                {message.sender.name}
-                                            </div>
-                                            <div className='time'> {dayjs(message.createdAt)?.format('HH:mm')}</div>
-                                        </Flex>
-                                        <Flex direction="column">
-                                            {message.content !== null && <div className='message'>{message.content}</div>}
-                                            {message.audioUrl !== null && <audio controls src={message.audioUrl} className='message'/>}
-                                        </Flex>
-                                    </div>
-                                </List.Item>
-                            )}
+                <Flex direction="column" justifyContent="space-between" className='wrapper'>
+                    <List
+                        className='list'
+                        dataSource={messages}
+                        renderItem={(message: Collections.Message) => (
+                            <List.Item>
+                                <div>
+                                    <Flex alignItems='center'>
+                                        <Avatar size={40} src={message.sender.ava ?? ava} style={{ height: 'max-content' }}/>
+                                        <div
+                                            className='nick'
+                                            onClick={() => {
+                                                navigate(profilePaths.profile, { state: { userId: message.senderId } })
+                                            }}
+                                        >
+                                            {message.sender.name}
+                                        </div>
+                                        <div className='time'> {dayjs(message.createdAt)?.format('HH:mm')}</div>
+                                    </Flex>
+                                    <Flex direction="column">
+                                        {message.content !== null && <div className='message'>{message.content}</div>}
+                                        {message.audioUrl !== null && <audio controls src={message.audioUrl} className='message'/>}
+                                    </Flex>
+                                </div>
+                            </List.Item>
+                        )}
+                    />
+                    <Flex alignItems='center' className='bottom_wrapper'>
+                        <Input
+                            value={content}
+                            onChange={(e) => {
+                                setContent(e.target.value)
+                            }}
+                            onPressEnter={sendMessage}
+                            placeholder="Напишите сообщение..."
                         />
-                        <Flex alignItems='center' className='bottom_wrapper'>
-                            <Input
-                                value={content}
-                                onChange={(e) => {
-                                    setContent(e.target.value)
-                                }}
-                                onPressEnter={sendMessage}
-                                placeholder="Напишите сообщение..."
-                            />
-                            <div>
-                                {isRecording ? (
-                                    <AudioMutedOutlined onClick={stopRecording}>Stop</AudioMutedOutlined>
-                                ) : (
-                                    <AudioOutlined onClick={startRecording}>Start</AudioOutlined>
-                                )}
-                            </div>
-                            {audioUrl != null && <audio controls src={audioUrl} />}
-                            <Button onClick={sendMessage} type="primary" icon={<SendOutlined />}>
+                        <div>
+                            {isRecording ? (
+                                <AudioMutedOutlined onClick={stopRecording} />
+                            ) : (
+                                <AudioOutlined onClick={startRecording} />
+                            )}
+                        </div>
+                        {audioUrl != null && <audio controls src={audioUrl} />}
+                        <Button onClick={sendMessage} type="primary" icon={<SendOutlined />}>
                                 Отправить
-                            </Button>
-                        </Flex>
+                        </Button>
                     </Flex>
-                </StyledChatWrapper>
+                </Flex>
             ) : (
                 <Flex justifyContent="center" alignItems="center" className='wrapper'>
                     <CSpinner color="secondary" />
                 </Flex>
             )}
-        </>
+        </StyledChatWrapper>
     )
 }
 

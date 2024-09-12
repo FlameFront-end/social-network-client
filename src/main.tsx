@@ -18,7 +18,7 @@ const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container)
 
 const Container = styled.div`
-    max-width: 1000px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 0 15px;
     background-color: #141414;

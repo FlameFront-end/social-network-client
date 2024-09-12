@@ -9,7 +9,7 @@ import { useGetChatListQuery } from '../../api/chat.api.ts'
 const styles: Styles = {
     wrapper: {
         width: '100%',
-        height: '100%'
+        height: 'calc(100vh  - 30px)'
     }
 }
 

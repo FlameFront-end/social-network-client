@@ -25,7 +25,7 @@ export const StyledChatWrapper = styled.div`
 
     .wrapper {
         width: 100%;
-        height: calc(100vh - 30px);
+        height: calc(100vh - 70px);
         overflow-y: auto;
         scrollbar-width: none;
         -ms-overflow-style: none;
