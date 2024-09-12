@@ -4,7 +4,7 @@ import Chat from '../../components/Chat'
 import Flex from '../../../kit/components/Flex'
 import type { Styles } from '../../../../types/global.types.ts'
 import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
-import { useGetChatListQuery } from '../../api/chat.api.ts'
+import { useGetChatsListQuery } from '../../api/chat.api.ts'
 
 const styles: Styles = {
     wrapper: {
@@ -20,16 +20,16 @@ const findOtherUserInChat = (activeChat: Collections.Chat | undefined, userId: n
 const ChatList: FC = () => {
     const userId = useAppSelector(state => state.auth.user.id)
     const [activeChatId, setActiveChatId] = useState(0)
-    const { data: chatList, isFetching } = useGetChatListQuery(userId ?? 0)
+    const { data: chatsList, isFetching } = useGetChatsListQuery(null)
 
-    const activeChat = chatList?.find(chat => chat.id === activeChatId)
+    const activeChat = chatsList?.find(chat => chat.id === activeChatId)
 
     return (
         <Flex style={styles.wrapper} gap={0}>
             <ChatListSidebar
                 setActiveChatId={setActiveChatId}
                 activeChatId={activeChatId}
-                chatList={chatList ?? []}
+                chatList={chatsList ?? []}
                 isFetching={isFetching}
             />
             <Chat

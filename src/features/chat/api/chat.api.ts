@@ -2,12 +2,19 @@ import { api } from '../../../core/api.ts'
 
 export const chatApi = api.injectEndpoints({
     endpoints: builder => ({
-        getChatList: builder.query<Collections.Chat[], number | string>({
-            query: (id) => ({
-                url: `/chat/${id}`
+        getChatsList: builder.query<Collections.Chat[], null>({
+            query: () => ({
+                url: '/chat/my-chats'
+            })
+        }),
+        createChat: builder.mutation<Collections.Chat, { senderId: number, receiverId: number }>({
+            query: (data) => ({
+                method: 'POST',
+                url: '/chat/create',
+                body: data
             })
         })
     })
 })
 
-export const { useGetChatListQuery } = chatApi
+export const { useGetChatsListQuery, useCreateChatMutation } = chatApi
