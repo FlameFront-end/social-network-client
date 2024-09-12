@@ -14,7 +14,8 @@ declare namespace Collections {
     interface Message {
         id: number
         chatId: number
-        content: string
+        content: string | null
+        audioUrl: string | null
         createdAt: string
         receiverId: number
         senderId: number
