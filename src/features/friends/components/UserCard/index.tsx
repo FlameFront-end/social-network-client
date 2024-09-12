@@ -9,12 +9,15 @@ import { StyledUserCard } from './UserCard.styled.tsx'
 import AccentButton from '../../../kit/components/Buttons/AccentButton'
 import { useCreateChatMutation, useGetChatsListQuery } from '../../../chat/api/chat.api.ts'
 import TextButton from '../../../kit/components/Buttons/TextButton'
+import { useNavigate } from 'react-router-dom'
+import { chatPaths } from '../../../chat/routes/chat.paths.ts'
 
 interface Props {
     user: Collections.User
 }
 
 const UserCard: FC<Props> = ({ user }) => {
+    const navigate = useNavigate()
     const myUserId = useAppSelector(state => state.auth.user.id)
     const [sendFriendRequest] = useSendFriendRequestMutation()
     const [createChat] = useCreateChatMutation()
@@ -58,7 +61,9 @@ const UserCard: FC<Props> = ({ user }) => {
 
                     {!isUserInChat(user.id) ? <TextButton onClick={() => { void handleCreateChat() }}>
                         Создать чат
-                    </TextButton> : <TextButton onClick={() => { void handleCreateChat() }}>
+                    </TextButton> : <TextButton onClick={() => {
+                        navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })
+                    }}>
                         Перейти в чат
                     </TextButton>}
                 </Flex>
