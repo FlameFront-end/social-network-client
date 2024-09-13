@@ -2,9 +2,9 @@ import { api } from '../../../core/api.ts'
 
 export const friendsApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        getOtherUsers: builder.query<Collections.User[], null>({
+        getPossibleFriends: builder.query<Collections.User[], null>({
             query: () => ({
-                url: '/user/other'
+                url: '/user/possible-friends'
             })
         }),
         sendFriendRequest: builder.mutation<Promise<void>, number>({
@@ -13,12 +13,12 @@ export const friendsApi = api.injectEndpoints({
                 url: `/user/send-friend-request/${userId}`
             })
         }),
-        getUser: builder.query<Collections.User, number>({
-            query: (userId) => ({
-                url: `/user/${userId}`
+        getMyFriends: builder.query<Collections.User[], null>({
+            query: () => ({
+                url: '/user/my-friends'
             })
         })
     })
 })
 
-export const { useGetOtherUsersQuery, useSendFriendRequestMutation, useGetUserQuery } = friendsApi
+export const { useGetPossibleFriendsQuery, useSendFriendRequestMutation, useGetMyFriendsQuery } = friendsApi

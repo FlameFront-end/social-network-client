@@ -150,13 +150,11 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                             onPressEnter={sendMessage}
                             placeholder="Напишите сообщение..."
                         />
-                        <div>
-                            {isRecording ? (
-                                <AudioMutedOutlined onClick={stopRecording} />
-                            ) : (
-                                <AudioOutlined onClick={startRecording} />
-                            )}
-                        </div>
+                        {isRecording ? (
+                            <AudioMutedOutlined onClick={stopRecording} className='icon' />
+                        ) : (
+                            <AudioOutlined onClick={startRecording} className='icon'/>
+                        )}
                         {audioUrl != null && <audio controls src={audioUrl} />}
                         <Button onClick={sendMessage} type="primary" icon={<SendOutlined />}>
                             Отправить

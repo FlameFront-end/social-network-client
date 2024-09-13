@@ -34,4 +34,12 @@ export const StyledChatWrapper = styled.div`
     .bottom_wrapper {
         margin: 10px 0;
     }
+    
+    .icon {
+        svg {
+            font-size: 20px;
+            fill: ${({ theme }) => theme.text} !important;
+        }
+    }
+    
 `

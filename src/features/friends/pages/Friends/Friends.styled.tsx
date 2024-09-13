@@ -7,7 +7,6 @@ export const StyledFriendsWrapper = styled.div`
     .card {
         width: 100%;
         height: 100%;
-        // background-color: ${({ theme }) => theme.background};
     }
     
     .spinner-wrapper {
@@ -15,5 +14,11 @@ export const StyledFriendsWrapper = styled.div`
         display: flex;
         justify-content: center;
         align-items: center
+    }
+    
+    .title {
+        font-size: 20px;
+        color: ${({ theme }) => theme.text};
+        margin-bottom: 15px;
     }
 `
