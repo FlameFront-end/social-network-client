@@ -4,11 +4,11 @@ export const darkTheme = {
     text: '#e1e3e6',
     text_light: '#939393',
     revert_text: '#333333',
-    accent: '#7498d0',
+    accent: '#3f73fc',
     hover: '#262626',
     card: {
         background: '#222222',
-        border: '#2e2e2f'
+        border: '#363738'
     },
     chat: {
         selectBackground: '#4e7aca',

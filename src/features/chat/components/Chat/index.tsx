@@ -1,5 +1,5 @@
-import { useState, useEffect, type FC, useRef } from 'react'
-import { Button, List, Avatar } from 'antd'
+import { useState, useEffect, type FC, useRef, type MutableRefObject } from 'react'
+import { List, Avatar } from 'antd'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch.ts'
 import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
 import { chatActions, fetchMessages } from '../../store/chat.slice.ts'
@@ -13,10 +13,17 @@ import { CSpinner } from '@coreui/react-pro'
 import ava from '../../../../../public/ava.png'
 import { StyledChatWrapper } from './Chat.styled.tsx'
 import Input from '../../../kit/components/Input'
+import Picker from '@emoji-mart/react'
+import data from '@emoji-mart/data'
+import PrimaryButton from '../../../kit/components/Buttons/PrimaryButton'
 
 interface Props {
     senderId: number | string
     receiverId: number | string
+}
+
+interface Emoji {
+    native: string
 }
 
 const Chat: FC<Props> = ({ senderId, receiverId }) => {
@@ -25,40 +32,16 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     const messages = useAppSelector((state) => state.chat.messages)
     const [content, setContent] = useState('')
     const [isLoading, setIsLoading] = useState(true)
-
     const [isRecording, setIsRecording] = useState(false)
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
     const [audioUrl, setAudioUrl] = useState<string | null>(null)
     const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+    const bottomWrapper: MutableRefObject<HTMLDivElement | null> = useRef(null)
+    const wrapper: MutableRefObject<HTMLDivElement | null> = useRef(null)
 
-    useEffect(() => {
-        const fetchChatMessages = async (): Promise<void> => {
-            if (senderId != null && receiverId != null) {
-                await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) })).then(() => {
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 600)
-                })
-            }
-        }
-
-        void fetchChatMessages()
-
-        socket.on('receiveMessage', (message: Collections.Message) => {
-            dispatch(chatActions.addMessage(message))
-        })
-
-        return () => {
-            socket.off('receiveMessage')
-        }
-    }, [dispatch, senderId, receiverId])
-
-    useEffect(() => {
-        if (audioBlob != null) {
-            const url = URL.createObjectURL(audioBlob)
-            setAudioUrl(url)
-        }
-    }, [audioBlob])
+    const [scrollPosition, setScrollPosition] = useState(0)
 
     const startRecording = (): void => {
         setIsRecording(true)
@@ -111,15 +94,75 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
         }
     }
 
+    const addEmoji = (emoji: Emoji): void => {
+        setContent(content + emoji.native)
+    }
+
+    const handleScroll = (): void => {
+        if (wrapper?.current != null) {
+            const scrollHeight = wrapper.current.scrollHeight
+            const scrollTop = wrapper.current.scrollTop
+            const maxScrollPosition = scrollHeight - wrapper.current.clientHeight
+            setScrollPosition(maxScrollPosition - scrollTop)
+        }
+    }
+
+    const scrollToBottom = (behavior: 'smooth' | 'auto'): void => {
+        bottomWrapper.current?.scrollIntoView({ behavior, block: 'end' })
+    }
+
+    useEffect(() => {
+        const fetchChatMessages = async (): Promise<void> => {
+            if (senderId != null && receiverId != null) {
+                await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) })).then(() => {
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 600)
+                })
+            }
+        }
+
+        void fetchChatMessages()
+
+        socket.on('receiveMessage', (message: Collections.Message) => {
+            dispatch(chatActions.addMessage(message))
+        })
+
+        return () => {
+            socket.off('receiveMessage')
+        }
+    }, [dispatch, senderId, receiverId])
+
+    useEffect(() => {
+        if (audioBlob != null) {
+            const url = URL.createObjectURL(audioBlob)
+            setAudioUrl(url)
+        }
+    }, [audioBlob])
+
+    useEffect(() => {
+        if (wrapper.current != null) {
+            wrapper.current.addEventListener('scroll', handleScroll)
+        }
+
+        return () => {
+            wrapper?.current?.removeEventListener('scroll', handleScroll)
+        }
+    }, [wrapper?.current])
+
+    useEffect(() => {
+        scrollToBottom('auto')
+    }, [messages])
+
     return (
         <StyledChatWrapper>
             {!isLoading ? (
-                <Flex direction="column" justifyContent="space-between" className='wrapper'>
+                <Flex direction="column" justifyContent="space-between" className='wrapper' ref={wrapper}>
                     <List
                         className='list'
                         dataSource={messages}
                         renderItem={(message: Collections.Message) => (
-                            <List.Item>
+                            <List.Item key={message.id}>
                                 <div>
                                     <Flex alignItems='center'>
                                         <Avatar size={40} src={message.sender.ava ?? ava} style={{ height: 'max-content' }}/>
@@ -141,7 +184,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                             </List.Item>
                         )}
                     />
-                    <Flex alignItems='center' className='bottom_wrapper'>
+                    <Flex alignItems='center' className='bottom_wrapper' ref={bottomWrapper}>
                         <Input
                             value={content}
                             onChange={(e) => {
@@ -150,21 +193,31 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                             onPressEnter={sendMessage}
                             placeholder="Напишите сообщение..."
                         />
+                        <button className='btn emoji-btn' onClick={() => { setShowEmojiPicker(!showEmojiPicker) }}>😊</button>
+                        {showEmojiPicker && <div className='emoji-picker'><Picker data={data} onEmojiSelect={addEmoji}/></div>}
                         {isRecording ? (
-                            <AudioMutedOutlined onClick={stopRecording} className='icon' />
+                            <button className='btn' onClick={stopRecording}>
+                                <AudioMutedOutlined className='icon' />
+                            </button>
                         ) : (
-                            <AudioOutlined onClick={startRecording} className='icon'/>
+                            <button className='btn' onClick={startRecording}>
+                                <AudioOutlined className='icon'/>
+                            </button>
                         )}
-                        {audioUrl != null && <audio controls src={audioUrl} />}
-                        <Button onClick={sendMessage} type="primary" icon={<SendOutlined />}>
+                        {audioUrl != null && <audio controls src={audioUrl}/>}
+                        <PrimaryButton onClick={sendMessage} icon={<SendOutlined />} className='send'>
                             Отправить
-                        </Button>
+                        </PrimaryButton>
                     </Flex>
                 </Flex>
             ) : (
                 <Flex justifyContent="center" alignItems="center" className='wrapper'>
                     <CSpinner color="secondary" />
                 </Flex>
+            )}
+
+            {scrollPosition > 1000 && (
+                <button onClick={() => { scrollToBottom('smooth') }} className='btn scroll-btn'/>
             )}
         </StyledChatWrapper>
     )

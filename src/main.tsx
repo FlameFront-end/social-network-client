@@ -1,18 +1,18 @@
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { App, ConfigProvider } from 'antd'
+import styled, { ThemeProvider } from 'styled-components'
 
 import RouterProvider from './router/RouterProvider'
 import reportWebVitals from './reportWebVitals'
 import { store } from './store/configureStore.ts'
+import { darkTheme } from './core/theme.ts'
 
 import 'antd/dist/reset.css'
-import './assets/css/scrollbar.css'
 import '@coreui/coreui/dist/css/coreui.min.css'
+import './assets/css/scrollbar.css'
 
 import 'dayjs/locale/ru.js'
-import styled, { ThemeProvider } from 'styled-components'
-import { darkTheme } from './core/theme.ts'
 
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container)

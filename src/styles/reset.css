@@ -8,6 +8,11 @@ button {
     background-color: transparent;
     outline: none;
     border: none;
+
+
+    &:focus:not(:focus-visible) {
+        outline: none !important;
+    }
 }
 
 ul {

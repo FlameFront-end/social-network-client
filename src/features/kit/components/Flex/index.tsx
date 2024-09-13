@@ -1,4 +1,4 @@
-import { type CSSProperties, type FC, type ReactNode } from 'react'
+import { type CSSProperties, type ReactNode, forwardRef, type ForwardedRef } from 'react'
 
 export interface FlexProps {
     direction?: 'row' | 'row-reverse' | 'column' | 'column-reverse'
@@ -13,7 +13,7 @@ export interface FlexProps {
     className?: string
 }
 
-const Flex: FC<FlexProps> = ({
+const Flex = forwardRef<HTMLDivElement, FlexProps>(({
     direction = 'row',
     gap = 8,
     justifyContent,
@@ -24,12 +24,18 @@ const Flex: FC<FlexProps> = ({
     style,
     children,
     className
-}) => {
+}, ref: ForwardedRef<HTMLDivElement>) => {
     return (
-        <div style={{ display: 'flex', flexDirection: `${direction}`, gap, justifyContent, alignItems, flexGrow, flexShrink, flexWrap, ...style }} className={className}>
+        <div
+            ref={ref}
+            style={{ display: 'flex', flexDirection: `${direction}`, gap, justifyContent, alignItems, flexGrow, flexShrink, flexWrap, ...style }}
+            className={className}
+        >
             {children}
         </div>
     )
-}
+})
+
+Flex.displayName = 'Flex'
 
 export default Flex
