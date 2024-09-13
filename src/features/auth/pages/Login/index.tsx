@@ -1,39 +1,17 @@
 import { type FC } from 'react'
-import { Layout, Button, Form, Input } from 'antd'
+import { Button, Form } from 'antd'
 import { useLoginMutation } from '../../api/auth.api'
 import type { LoginPayload } from '../../types/login.types'
 import { regExpPassword } from '../../../../utils/regExp.ts'
-import { type Styles } from '../../../../types/global.types.ts'
 import { useAppAction } from '../../../../hooks/useAppAction.ts'
-
-const styles: Styles = {
-    layout: {
-        display: 'flex',
-        height: '100vh',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 40
-    },
-    space: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 40
-    },
-    formBlock: {
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        alignItems: 'baseline',
-        width: 400,
-        margin: '24px 0'
-    },
-    buttonRecovery: {
-        width: '30%'
-    }
-}
+import { StyledLoginWrapper } from './Login.styled.tsx'
+import TextButton from '../../../kit/components/Buttons/TextButton'
+import { useNavigate } from 'react-router-dom'
+import { authPaths } from '../../routes/auth.paths.ts'
+import Input from '../../../kit/components/Input'
 
 const Login: FC = () => {
+    const navigate = useNavigate()
     const { setUser } = useAppAction()
     const [login, { isLoading }] = useLoginMutation()
 
@@ -50,7 +28,7 @@ const Login: FC = () => {
     }
 
     return (
-        <Layout style={styles.layout}>
+        <StyledLoginWrapper>
             <Form
                 form={form}
                 name='login'
@@ -63,6 +41,7 @@ const Login: FC = () => {
                 autoComplete='off'
             >
                 <Form.Item
+                    className='form-item'
                     label='Email'
                     name='email'
                     hasFeedback
@@ -72,7 +51,7 @@ const Login: FC = () => {
                         { type: 'email', message: 'The input is not valid email!' }
                     ]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label='Password'
@@ -91,7 +70,7 @@ const Login: FC = () => {
                         }
                     ]}
                 >
-                    <Input.Password />
+                    <Input password/>
                 </Form.Item>
 
                 {/* <AnimatedShowControl show={isError}> */}
@@ -100,11 +79,15 @@ const Login: FC = () => {
 
                 <Form.Item>
                     <Button type='primary' htmlType='submit' loading={isLoading} block>
-                        Login
+                        Войти
                     </Button>
                 </Form.Item>
+
+                <label>
+                    Ещё не зарегстрированы? <TextButton onClick={() => { navigate(authPaths.register) }}>Регистрация</TextButton>
+                </label>
             </Form>
-        </Layout>
+        </StyledLoginWrapper>
     )
 }
 

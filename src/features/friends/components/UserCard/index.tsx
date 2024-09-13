@@ -47,7 +47,7 @@ const UserCard: FC<Props> = ({ user }) => {
 
     return (
         <StyledUserCard>
-            <Flex alignItems='center'>
+            <Flex alignItems='center' >
                 <Avatar size={64} src={user.ava ?? ava}/>
                 <Flex direction='column'>
                     <div className='full_name'>

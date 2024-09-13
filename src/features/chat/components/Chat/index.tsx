@@ -1,5 +1,5 @@
 import { useState, useEffect, type FC, useRef } from 'react'
-import { Input, Button, List, Avatar } from 'antd'
+import { Button, List, Avatar } from 'antd'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch.ts'
 import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
 import { chatActions, fetchMessages } from '../../store/chat.slice.ts'
@@ -12,6 +12,7 @@ import { SendOutlined, AudioOutlined, AudioMutedOutlined } from '@ant-design/ico
 import { CSpinner } from '@coreui/react-pro'
 import ava from '../../../../../public/ava.png'
 import { StyledChatWrapper } from './Chat.styled.tsx'
+import Input from '../../../kit/components/Input'
 
 interface Props {
     senderId: number | string
@@ -158,7 +159,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                         </div>
                         {audioUrl != null && <audio controls src={audioUrl} />}
                         <Button onClick={sendMessage} type="primary" icon={<SendOutlined />}>
-                                Отправить
+                            Отправить
                         </Button>
                     </Flex>
                 </Flex>

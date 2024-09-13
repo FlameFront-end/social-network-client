@@ -12,7 +12,7 @@ const Friends: FC = () => {
     return (
         <StyledFriendsWrapper>
             <Card className='card'>
-                <Flex direction='column'>
+                <Flex flexWrap={'wrap'}>
                     {!isFetching ? usersList?.map((user, index) => (
                         <UserCard user={user} key={index}/>
                     )) : <div className='spinner-wrapper'><CSpinner color="secondary"/></div>}

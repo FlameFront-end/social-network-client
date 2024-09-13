@@ -1,41 +1,17 @@
 import { type FC, useState } from 'react'
-import { Layout, Button, Form, Input, Upload, type UploadProps, DatePicker } from 'antd'
+import { Button, Form, Upload, type UploadProps, DatePicker } from 'antd'
 import { useRegisterMutation } from '../../api/auth.api'
 import { regExpPassword } from '../../../../utils/regExp.ts'
-import { type Styles } from '../../../../types/global.types.ts'
 import { useAppAction } from '../../../../hooks/useAppAction.ts'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { type RegisterDataForm } from '../../types/register.types.ts'
 import { useNavigate } from 'react-router-dom'
 import { pathsConfig } from '../../../../router/entities/paths.config.ts'
 import Flex from '../../../kit/components/Flex'
-
-const styles: Styles = {
-    layout: {
-        display: 'flex',
-        height: '100vh',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 40
-    },
-    space: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 40
-    },
-    formBlock: {
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        alignItems: 'baseline',
-        width: 400,
-        margin: '24px 0'
-    },
-    buttonRecovery: {
-        width: '30%'
-    }
-}
+import { StyledRegisterWrapper } from './Register.styled.tsx'
+import TextButton from '../../../kit/components/Buttons/TextButton'
+import { authPaths } from '../../routes/auth.paths.ts'
+import Input from '../../../kit/components/Input'
 
 const Register: FC = () => {
     const navigate = useNavigate()
@@ -72,14 +48,14 @@ const Register: FC = () => {
     }
 
     const uploadButton = (
-        <button style={{ border: 0, background: 'none' }} type="button">
-            {loading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div style={{ marginTop: 8 }}>Загрузить</div>
+        <button type="button" className='upload-btn'>
+            {loading ? <LoadingOutlined color='#e1e3e6'/> : <PlusOutlined color='#e1e3e6'/>}
+            <label style={{ marginTop: 8 }}>Загрузить</label>
         </button>
     )
 
     return (
-        <Layout style={styles.layout}>
+        <StyledRegisterWrapper>
             <Form
                 form={form}
                 name='register'
@@ -101,7 +77,7 @@ const Register: FC = () => {
                         { type: 'email', message: 'Введенный адрес электронной почты неверен!' }
                     ]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
 
                 <Flex>
@@ -149,7 +125,7 @@ const Register: FC = () => {
                             { required: true, message: 'Пожалуйста, выберите дату рождения!' }
                         ]}
                     >
-                        <DatePicker placeholder="Выберите дату" style={{ width: '100%' }} lang='ru' format='DD.MM.YYYY' />
+                        <DatePicker placeholder="Выберите дату" style={{ width: '100%' }} lang='ru' format='DD.MM.YYYY'/>
                     </Form.Item>
                 </Flex>
 
@@ -167,7 +143,7 @@ const Register: FC = () => {
                         action='http://localhost:3000/upload/image'
                         accept="image/jpeg, image/png, image/gif"
                     >
-                        {(imageUrl != null) ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                        {(imageUrl != null) ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }}/> : uploadButton}
                     </Upload>
                 </Form.Item>
                 <Form.Item
@@ -188,7 +164,7 @@ const Register: FC = () => {
                         }
                     ]}
                 >
-                    <Input.Password />
+                    <Input password/>
                 </Form.Item>
 
                 <Form.Item>
@@ -196,8 +172,12 @@ const Register: FC = () => {
                         Зарегестрироваться
                     </Button>
                 </Form.Item>
+
+                <label>
+                    Уже есть аккаунт? <TextButton onClick={() => { navigate(authPaths.login) }}>Вход</TextButton>
+                </label>
             </Form>
-        </Layout>
+        </StyledRegisterWrapper>
     )
 }
 
