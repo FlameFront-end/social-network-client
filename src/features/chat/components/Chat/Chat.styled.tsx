@@ -7,6 +7,7 @@ export const StyledChatWrapper = styled.div`
     border: 1px solid ${({ theme }) => theme.card.border};
     border-radius: 0 10px 10px 0;
     width: 100%;
+    
 
     .nick {
         font-size: 16px;
@@ -22,6 +23,8 @@ export const StyledChatWrapper = styled.div`
     .message {
         margin-top: 10px;
         color: ${({ theme }) => theme.text};
+        word-wrap: anywhere;
+        max-width: 700px;
     }
 
     .wrapper {

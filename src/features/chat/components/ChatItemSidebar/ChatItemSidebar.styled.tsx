@@ -5,22 +5,6 @@ export const StyledChatItemSidebarWrapper = styled.div`
     cursor: pointer;
     border-bottom: 1px solid gray;
     
-    &:hover {
-        background-color: ${({ theme }) => theme.chat.hoverBackground};
-    }
-    
-    &.last {
-        border-bottom: none;
-    }
-    
-    &.active {
-        background-color: ${({ theme }) => theme.chat.selectBackground};
-        
-        .last_message {
-            color: ${({ theme }) => theme.text};
-        }
-    }
-    
     .image {
         width: 50px;
         height: 50px;
@@ -32,8 +16,28 @@ export const StyledChatItemSidebarWrapper = styled.div`
         font-size: 17px;
         color: ${({ theme }) => theme.text};
     }
-    
+
     .last_message {
         color: ${({ theme }) => theme.text_light};
+        max-width: 180px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    &:hover {
+        background-color: ${({ theme }) => theme.chat.hoverBackground};
+    }
+
+    &.last {
+        border-bottom: none;
+    }
+
+    &.active {
+        background-color: ${({ theme }) => theme.chat.selectBackground};
+
+        .last_message {
+            color: ${({ theme }) => theme.text};
+        }
     }
 `
