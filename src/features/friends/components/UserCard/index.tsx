@@ -2,7 +2,7 @@ import { type FC, useEffect, useState } from 'react'
 import { Avatar } from 'antd'
 import Flex from '../../../kit/components/Flex'
 import ava from '../../../../../public/ava.png'
-import { useSendFriendRequestMutation } from '../../api/friends.api.ts'
+import { useRemoveFriendRequestMutation, useSendFriendRequestMutation } from '../../api/friends.api.ts'
 import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
 
 import { StyledUserCard } from './UserCard.styled.tsx'
@@ -20,6 +20,7 @@ const UserCard: FC<Props> = ({ user }) => {
     const navigate = useNavigate()
     const myUserId = useAppSelector(state => state.auth.user.id)
     const [sendFriendRequest] = useSendFriendRequestMutation()
+    const [removeFriendRequest] = useRemoveFriendRequestMutation()
     const [createChat] = useCreateChatMutation()
     const { data: chatsList } = useGetChatsListQuery(null)
 
@@ -37,8 +38,14 @@ const UserCard: FC<Props> = ({ user }) => {
         })
     }
 
+    const handleRemoveFriendRequest = async (): Promise<void> => {
+        await removeFriendRequest(user.id).then(() => {
+            setIsAlreadySent(false)
+        })
+    }
+
     const handleCreateChat = async (): Promise<void> => {
-        await createChat({ senderId: myUserId ?? 0, receiverId: user.id })
+        await createChat(user.id)
     }
 
     const isUserInChat = (userId: number): boolean => {
@@ -55,7 +62,7 @@ const UserCard: FC<Props> = ({ user }) => {
                     </div>
                     {!isAlreadySent ? <AccentButton onClick={() => { void handleSendFriendRequest() }}>
                         Добавить в друзья
-                    </AccentButton> : <AccentButton onClick={() => { void handleSendFriendRequest() }}>
+                    </AccentButton> : <AccentButton onClick={() => { void handleRemoveFriendRequest() }}>
                        Отозвать запрос
                     </AccentButton>}
 

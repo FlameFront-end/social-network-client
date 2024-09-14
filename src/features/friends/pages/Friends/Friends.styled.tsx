@@ -16,9 +16,15 @@ export const StyledFriendsWrapper = styled.div`
         align-items: center
     }
     
-    .title {
+    h3 {
         font-size: 20px;
         color: ${({ theme }) => theme.text};
         margin-bottom: 15px;
     }
+
+    p {
+        font-size: 14px;
+        color: ${({ theme }) => theme.text};
+        margin-bottom: 0;
+    }   
 `

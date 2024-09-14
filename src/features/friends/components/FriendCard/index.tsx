@@ -20,7 +20,8 @@ const FriendCard: FC<Props> = ({ user }) => {
     const { data: chatsList } = useGetChatsListQuery(null)
 
     const handleCreateChat = async (): Promise<void> => {
-        await createChat({ senderId: myUserId ?? 0, receiverId: user.id })
+        console.log('user.id', user.id)
+        await createChat(user.id)
     }
 
     const isUserInChat = (userId: number): boolean => {

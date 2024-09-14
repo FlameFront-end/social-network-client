@@ -16,16 +16,18 @@ const Friends: FC = () => {
             <Card className='card'>
                 <Flex direction='column' gap={12}>
                     <Card>
-                        <h3 className='title'>Мои друзья</h3>
-                        {!isFriendsFetching ? <Flex flexWrap='wrap'>{friendsList?.map((friend, index) => (
-                            <FriendCard user={friend} key={index}/>
-                        ))}</Flex> : <Flex justifyContent='center' alignItems='center'>
+                        <h3>Мои друзья</h3>
+                        {!isFriendsFetching ? <>
+                            {((friendsList?.length) !== 0) ? <Flex flexWrap='wrap'>{friendsList?.map((friend, index) => (
+                                <FriendCard user={friend} key={index}/>
+                            ))}</Flex> : <p>Вы ещё не добавили ни одного друга</p>}
+                        </> : <Flex justifyContent='center' alignItems='center'>
                             <div className='spinner-wrapper'><CSpinner color="secondary"/></div>
                         </Flex>}
                     </Card>
 
                     <Card>
-                        <h3 className='title'>Возможные друзья</h3>
+                        <h3>Возможные друзья</h3>
                         {!isPossibleFriendsFetching ? <Flex flexWrap='wrap'>{possibleFriendsList?.map((possibleFriend, index) => (
                             <UserCard user={possibleFriend} key={index}/>
                         ))}</Flex> : <Flex justifyContent='center' alignItems='center'>

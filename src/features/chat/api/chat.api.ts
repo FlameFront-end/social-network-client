@@ -7,11 +7,13 @@ export const chatApi = api.injectEndpoints({
                 url: '/chat/my-chats'
             })
         }),
-        createChat: builder.mutation<Collections.Chat, { senderId: number, receiverId: number }>({
-            query: (data) => ({
+        createChat: builder.mutation<Collections.Chat, number>({
+            query: (receiverId) => ({
                 method: 'POST',
                 url: '/chat/create',
-                body: data
+                body: {
+                    receiverId
+                }
             })
         })
     })

@@ -13,12 +13,24 @@ export const friendsApi = api.injectEndpoints({
                 url: `/user/send-friend-request/${userId}`
             })
         }),
+        removeFriendRequest: builder.mutation<Promise<void>, number>({
+            query: (userId) => ({
+                method: 'DELETE',
+                url: `/user/remove-friend-request/${userId}`
+            })
+        }),
         getMyFriends: builder.query<Collections.User[], null>({
             query: () => ({
                 url: '/user/my-friends'
             })
         })
+
     })
 })
 
-export const { useGetPossibleFriendsQuery, useSendFriendRequestMutation, useGetMyFriendsQuery } = friendsApi
+export const {
+    useGetPossibleFriendsQuery,
+    useSendFriendRequestMutation,
+    useGetMyFriendsQuery,
+    useRemoveFriendRequestMutation
+} = friendsApi

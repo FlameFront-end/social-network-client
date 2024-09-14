@@ -9,7 +9,6 @@ button {
     outline: none;
     border: none;
 
-
     &:focus:not(:focus-visible) {
         outline: none !important;
     }
@@ -18,3 +17,4 @@ button {
 ul {
     list-style: none;
 }
+
