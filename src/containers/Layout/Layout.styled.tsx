@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Layout } from 'antd'
+import { App, Layout } from 'antd'
 
 export const StyledLayout = styled(Layout)`
     min-height: calc(100vh - 50px - 16px);
@@ -10,8 +10,7 @@ export const StyledLayout = styled(Layout)`
     margin: 16px auto;
 `
 
-export const StyledContent = styled(Layout.Content)`
-    margin-bottom: 16px;
+export const StyledApp = styled(App)`
     input {
         color: ${({ theme }) => theme.text} !important;
         background-color: ${({ theme }) => theme.card.background} !important;
@@ -35,4 +34,8 @@ export const StyledContent = styled(Layout.Content)`
         -webkit-text-fill-color: ${({ theme }) => theme.text} !important;
         caret-color: ${({ theme }) => theme.text} !important;
     }
+`
+
+export const StyledContent = styled(Layout.Content)`
+    margin-bottom: 16px;
 `

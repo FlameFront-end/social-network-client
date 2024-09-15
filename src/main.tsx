@@ -1,10 +1,11 @@
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { App, ConfigProvider, type ThemeConfig } from 'antd'
+import { ConfigProvider, type ThemeConfig } from 'antd'
 import { ThemeProvider } from 'styled-components'
 
 import reportWebVitals from './reportWebVitals'
 import RouterProvider from './router/RouterProvider'
+import { StyledApp } from './containers/Layout/Layout.styled.tsx'
 import { store } from './store/configureStore.ts'
 import { darkTheme } from './core/theme.ts'
 
@@ -33,9 +34,9 @@ root.render(
     <Provider store={store}>
         <ThemeProvider theme={darkTheme}>
             <ConfigProvider theme={antdTheme}>
-                <App>
+                <StyledApp>
                     <RouterProvider />
-                </App>
+                </StyledApp>
             </ConfigProvider>
         </ThemeProvider>
     </Provider>
