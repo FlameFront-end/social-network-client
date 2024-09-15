@@ -22,6 +22,7 @@ const MainHeader: FC = () => {
 
                 {user != null
                     ? <button
+                        className='user_btn'
                         onClick={() => {
                             navigate(profilePaths.profile, { state: { userId: user.id } })
                         }}>

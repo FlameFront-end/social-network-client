@@ -14,9 +14,11 @@ import { chatPaths } from '../../../chat/routes/chat.paths.ts'
 
 interface Props {
     user: Collections.User
+    refetchPossible: () => void
+    refetchOutgoing: () => void
 }
 
-const UserCard: FC<Props> = ({ user }) => {
+const PossibleCard: FC<Props> = ({ user, refetchPossible, refetchOutgoing }) => {
     const navigate = useNavigate()
     const myUserId = useAppSelector(state => state.auth.user.id)
     const [sendFriendRequest] = useSendFriendRequestMutation()
@@ -40,12 +42,16 @@ const UserCard: FC<Props> = ({ user }) => {
     const handleSendFriendRequest = async (): Promise<void> => {
         await sendFriendRequest(user.id).then(() => {
             setIsAlreadySent(true)
+            refetchPossible()
+            refetchOutgoing()
         })
     }
 
     const handleRemoveFriendRequest = async (): Promise<void> => {
         await removeFriendRequest(user.id).then(() => {
             setIsAlreadySent(false)
+            refetchPossible()
+            refetchOutgoing()
         })
     }
 
@@ -82,4 +88,4 @@ const UserCard: FC<Props> = ({ user }) => {
     )
 }
 
-export default UserCard
+export default PossibleCard
