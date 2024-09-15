@@ -25,11 +25,16 @@ const UserCard: FC<Props> = ({ user }) => {
     const { data: chatsList } = useGetChatsListQuery(null)
 
     const [isAlreadySent, setIsAlreadySent] = useState(false)
+    const [isUserInChat, setIsUserInChat] = useState(false)
 
     useEffect(() => {
         if (myUserId != null) {
             setIsAlreadySent(user.incomingFriendRequests?.includes(myUserId))
         }
+    }, [])
+
+    useEffect(() => {
+        setIsUserInChat(chatsList?.some((chat) => chat.user1Id === user.id || chat.user2Id === user.id) ?? false)
     }, [])
 
     const handleSendFriendRequest = async (): Promise<void> => {
@@ -45,11 +50,9 @@ const UserCard: FC<Props> = ({ user }) => {
     }
 
     const handleCreateChat = async (): Promise<void> => {
-        await createChat(user.id)
-    }
-
-    const isUserInChat = (userId: number): boolean => {
-        return chatsList?.some((chat) => chat.user1Id === userId || chat.user2Id === userId) ?? false
+        await createChat(user.id).then(() => {
+            setIsUserInChat(true)
+        })
     }
 
     return (
@@ -66,7 +69,7 @@ const UserCard: FC<Props> = ({ user }) => {
                        Отозвать запрос
                     </AccentButton>}
 
-                    {!isUserInChat(user.id) ? <TextButton onClick={() => { void handleCreateChat() }}>
+                    {!isUserInChat ? <TextButton onClick={() => { void handleCreateChat() }}>
                         Создать чат
                     </TextButton> : <TextButton onClick={() => {
                         navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })

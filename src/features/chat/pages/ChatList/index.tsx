@@ -22,7 +22,11 @@ const ChatList: FC = () => {
     const { state } = useLocation()
     const userId = useAppSelector(state => state.auth.user.id)
     const [activeChatId, setActiveChatId] = useState(0)
-    const { data: chatsList, isFetching } = useGetChatsListQuery(null)
+    const { data: chatsList, isFetching, refetch } = useGetChatsListQuery(null)
+
+    useEffect(() => {
+        void refetch()
+    }, [])
 
     useEffect(() => {
         if (chatsList != null && (Boolean(state?.senderId)) && (Boolean(state?.receiverId))) {

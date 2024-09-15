@@ -135,7 +135,7 @@ const Register: FC = () => {
                     hasFeedback
                 >
                     <Upload
-                        name="ava"
+                        name="image"
                         showUploadList={false}
                         listType="picture-card"
                         className="avatar-uploader"
