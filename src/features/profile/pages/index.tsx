@@ -18,10 +18,10 @@ const Profile: FC = () => {
             {(user != null) && (
                 <Flex direction='column' alignItems='center'>
                     <Avatar size={64} src={user.ava ?? ava} />
-                    <Title level={4}>{getFullName(user.surname, user.name, user.patronymic ?? '')}</Title>
-                    <Text>Email: {user.email}</Text>
-                    <Text>Account Created: {dayjs(user.createdAt)?.format('DD.MM.YYYY')}</Text>
-                    {user.isAdmin && <Text>Admin User</Text>}
+                    <Title level={4}>{getFullName(user.surname, user.name, null)}</Title>
+                    <Text>Почта: {user.email}</Text>
+                    <Text>Дата регистрации: {dayjs(user.createdAt)?.format('DD.MM.YYYY')}</Text>
+                    {user.isAdmin && <Text>Администратор</Text>}
                 </Flex>
             )}
         </Card>

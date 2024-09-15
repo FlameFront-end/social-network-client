@@ -30,8 +30,8 @@ const initialState: AuthState = {
         id: user?.id,
         ava: user?.ava,
         name: user?.name,
-        surname: user?.name,
-        patronymic: user?.name
+        surname: user?.surname,
+        patronymic: user?.patronymic
     }
 }
 
