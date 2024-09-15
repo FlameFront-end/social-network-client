@@ -16,4 +16,12 @@ export const StyledRegisterWrapper = styled.div`
         flex-direction: column;
         align-items: center;
     }
+    
+    .upload {
+        .anticon-plus {
+            svg {
+                fill: ${({ theme }) => theme.text} !important;
+            }
+        }
+    }
 `

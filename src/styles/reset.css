@@ -18,3 +18,7 @@ ul {
     list-style: none;
 }
 
+.ant-btn-primary {
+    box-shadow: none;
+}
+

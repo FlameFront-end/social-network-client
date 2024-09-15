@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { Button, Form } from 'antd'
+import { Button, Form, Input } from 'antd'
 import { useLoginMutation } from '../../api/auth.api'
 import type { LoginPayload } from '../../types/login.types'
 import { regExpPassword } from '../../../../utils/regExp.ts'
@@ -8,7 +8,6 @@ import { StyledLoginWrapper } from './Login.styled.tsx'
 import TextButton from '../../../kit/components/Buttons/TextButton'
 import { useNavigate } from 'react-router-dom'
 import { authPaths } from '../../routes/auth.paths.ts'
-import Input from '../../../kit/components/Input'
 
 const Login: FC = () => {
     const navigate = useNavigate()
@@ -70,7 +69,7 @@ const Login: FC = () => {
                         }
                     ]}
                 >
-                    <Input password/>
+                    <Input.Password/>
                 </Form.Item>
 
                 {/* <AnimatedShowControl show={isError}> */}

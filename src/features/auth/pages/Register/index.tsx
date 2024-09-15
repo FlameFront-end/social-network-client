@@ -1,5 +1,5 @@
 import { type FC, useState } from 'react'
-import { Button, Form, Upload, type UploadProps, DatePicker } from 'antd'
+import { Button, Form, Upload, Input, DatePicker, type UploadProps } from 'antd'
 import { useRegisterMutation } from '../../api/auth.api'
 import { regExpPassword } from '../../../../utils/regExp.ts'
 import { useAppAction } from '../../../../hooks/useAppAction.ts'
@@ -11,7 +11,6 @@ import Flex from '../../../kit/components/Flex'
 import { StyledRegisterWrapper } from './Register.styled.tsx'
 import TextButton from '../../../kit/components/Buttons/TextButton'
 import { authPaths } from '../../routes/auth.paths.ts'
-import Input from '../../../kit/components/Input'
 
 const Register: FC = () => {
     const navigate = useNavigate()
@@ -133,6 +132,7 @@ const Register: FC = () => {
                     label='Фотография'
                     name='ava'
                     hasFeedback
+                    className='upload'
                 >
                     <Upload
                         name="image"
@@ -164,7 +164,7 @@ const Register: FC = () => {
                         }
                     ]}
                 >
-                    <Input password/>
+                    <Input.Password/>
                 </Form.Item>
 
                 <Form.Item>

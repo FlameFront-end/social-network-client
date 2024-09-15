@@ -1,12 +1,13 @@
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { App, ConfigProvider } from 'antd'
-import styled, { ThemeProvider } from 'styled-components'
+import { App, ConfigProvider, type ThemeConfig } from 'antd'
+import { ThemeProvider } from 'styled-components'
 
 import RouterProvider from './router/RouterProvider'
 import reportWebVitals from './reportWebVitals'
 import { store } from './store/configureStore.ts'
 import { darkTheme } from './core/theme.ts'
+import { StyledContainer } from './main.styled.tsx'
 
 import 'antd/dist/reset.css'
 import '@coreui/coreui/dist/css/coreui.min.css'
@@ -17,25 +18,30 @@ import 'dayjs/locale/ru.js'
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container)
 
-const Container = styled.div`
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 15px;
-    background-color: #141414;
-`
+const antdTheme: ThemeConfig = {
+    token: {
+        colorBgContainer: '#222222',
+        colorBorder: '#363738',
+        colorTextPlaceholder: '#e1e3e6',
+        colorTextBase: '#e1e3e6',
+        colorPrimary: '#1890ff',
+        colorIcon: '#e1e3e6',
+        colorBgBase: '#222222'
+    }
+}
 
 root.render(
-    <Container>
+    <Provider store={store}>
         <ThemeProvider theme={darkTheme}>
-            <ConfigProvider>
-                <App>
-                    <Provider store={store}>
+            <ConfigProvider theme={antdTheme}>
+                <StyledContainer>
+                    <App>
                         <RouterProvider />
-                    </Provider>
-                </App>
+                    </App>
+                </StyledContainer>
             </ConfigProvider>
         </ThemeProvider>
-    </Container>
+    </Provider>
 )
 
 reportWebVitals()
