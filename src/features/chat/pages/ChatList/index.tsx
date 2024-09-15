@@ -55,8 +55,8 @@ const ChatList: FC = () => {
                 isFetching={isFetching}
             />
             <Chat
-                senderId={userId ?? 0}
-                receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? 0}
+                senderId={userId ?? null}
+                receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}
             />
         </Flex>
     )

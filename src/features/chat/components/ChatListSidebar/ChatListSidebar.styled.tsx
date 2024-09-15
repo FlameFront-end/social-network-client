@@ -16,4 +16,12 @@ export const StyledChatListWrapper = styled.div`
         justify-content: center;
         align-items: center;
     }
+    
+    .no_chats {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
 `

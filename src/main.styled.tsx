@@ -7,26 +7,26 @@ export const StyledContainer = styled.div`
     background-color: #141414;
     
     input {
-        color: ${({ theme }) => theme.text};
+        color: ${({ theme }) => theme.text} !important;
         background-color: ${({ theme }) => theme.card.background} !important;
-        caret-color: ${({ theme }) => theme.text}; 
+        caret-color: ${({ theme }) => theme.text} !important; 
     }
 
     input:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0 1000px ${({ theme }) => theme.card.background} inset;
-        -webkit-text-fill-color: ${({ theme }) => theme.text};
-        caret-color: ${({ theme }) => theme.text}; 
+        -webkit-box-shadow: 0 0 0 1000px ${({ theme }) => theme.card.background} inset !important;
+        -webkit-text-fill-color: ${({ theme }) => theme.text} !important;
+        caret-color: ${({ theme }) => theme.text} !important; 
     }
 
     input:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0 1000px ${({ theme }) => theme.card.background} inset;
-        -webkit-text-fill-color: ${({ theme }) => theme.text};
-        caret-color: ${({ theme }) => theme.text};
+        -webkit-box-shadow: 0 0 0 1000px ${({ theme }) => theme.card.background} inset !important;
+        -webkit-text-fill-color: ${({ theme }) => theme.text} !important;
+        caret-color: ${({ theme }) => theme.text} !important;
     }
 
     input:-webkit-autofill:hover {
-        -webkit-box-shadow: 0 0 0 1000px ${({ theme }) => theme.card.background} inset;
-        -webkit-text-fill-color: ${({ theme }) => theme.text};
-        caret-color: ${({ theme }) => theme.text}; 
+        -webkit-box-shadow: 0 0 0 1000px ${({ theme }) => theme.card.background} inset !important;
+        -webkit-text-fill-color: ${({ theme }) => theme.text} !important;
+        caret-color: ${({ theme }) => theme.text} !important; 
     }
 `

@@ -13,22 +13,24 @@ interface ChatListSidebarProps {
 
 const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChatId, chatList, isFetching }) => {
     useEffect(() => {
-        if (chatList != null) {
+        if (chatList.length !== 0) {
             setActiveChatId(chatList[0]?.id)
         }
     }, [chatList])
 
     return (
         <StyledChatListWrapper>
-            {!isFetching ? chatList?.map((chat, index) => (
-                <ChatItemSidebar
-                    chat={chat}
-                    key={index}
-                    isActive={activeChatId === chat.id}
-                    setActiveChatId={setActiveChatId}
-                    isLastItem={index === chatList.length - 1}
-                />
-            )) : <div className='spinner-wrapper'><CSpinner color="secondary"/></div>}
+            {!isFetching ? <>
+                {chatList.length !== 0 ? chatList?.map((chat, index) => (
+                    <ChatItemSidebar
+                        chat={chat}
+                        key={index}
+                        isActive={activeChatId === chat.id}
+                        setActiveChatId={setActiveChatId}
+                        isLastItem={index === chatList.length - 1}
+                    />
+                )) : <div className='no_chats'><h3>Чатов нет</h3></div>}
+            </> : <div className='spinner-wrapper'><CSpinner color="secondary"/></div>}
         </StyledChatListWrapper>
     )
 }

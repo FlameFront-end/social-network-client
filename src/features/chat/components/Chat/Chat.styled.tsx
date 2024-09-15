@@ -99,4 +99,11 @@ export const StyledChatWrapper = styled.div`
         }
     }
     
+    .no_select_chat {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
 `
