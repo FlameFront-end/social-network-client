@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const StyledFriendsWrapper = styled.div`
     width: 100%;
     height: 100%;
+
     
     .card {
         width: 100%;

@@ -7,7 +7,6 @@ interface Props {
 
 export const SidebarContainer = styled.div<Props>`
     background-color: ${({ theme }) => theme.background};
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: width 0.3s;
     width: ${({ collapsed }) => (collapsed ? '80px' : '200px')};
     border-right: none;

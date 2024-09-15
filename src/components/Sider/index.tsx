@@ -17,34 +17,11 @@ import {
 const Sidebar: FC = () => {
     const { logout } = useAuth()
     const navigate = useNavigate()
-
     const collapsed = false
-
-    // const [collapsed, setCollapsed] = useState(false)
-    // const [isMobile, setIsMobile] = useState(false)
 
     const handleLogoutClick = (): void => {
         logout()
     }
-    //
-    // const handleCollapsedToggle = (): void => {
-    //     setCollapsed(!collapsed)
-    // }
-
-    // const handleWindowResize = (): void => {
-    //     setIsMobile(window.innerWidth < 768)
-    // }
-
-    // useEffect(() => {
-    //     handleWindowResize()
-    // }, [])
-
-    // useEffect(() => {
-    //     window.addEventListener('resize', handleWindowResize)
-    //     return () => {
-    //         window.removeEventListener('resize', handleWindowResize)
-    //     }
-    // }, [])
 
     const menuItems = [
         {

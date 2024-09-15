@@ -6,6 +6,8 @@ export interface LoginPayload {
 export interface LoginResponse {
     token: string
     id: number
-    nick: string
     ava: string
+    name: string
+    surname: string
+    patronymic: string | null
 }

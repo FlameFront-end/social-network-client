@@ -21,6 +21,7 @@ const Login: FC = () => {
 
         if (!('error' in response)) {
             const result = response?.data
+            console.log('result', result)
             setUser(result)
             form.resetFields()
         }

@@ -7,7 +7,6 @@ import reportWebVitals from './reportWebVitals'
 import RouterProvider from './router/RouterProvider'
 import { store } from './store/configureStore.ts'
 import { darkTheme } from './core/theme.ts'
-import { StyledContainer } from './main.styled.tsx'
 
 import 'antd/dist/reset.css'
 import '@coreui/coreui/dist/css/coreui.min.css'
@@ -34,11 +33,9 @@ root.render(
     <Provider store={store}>
         <ThemeProvider theme={darkTheme}>
             <ConfigProvider theme={antdTheme}>
-                <StyledContainer>
-                    <App>
-                        <RouterProvider />
-                    </App>
-                </StyledContainer>
+                <App>
+                    <RouterProvider />
+                </App>
             </ConfigProvider>
         </ThemeProvider>
     </Provider>
