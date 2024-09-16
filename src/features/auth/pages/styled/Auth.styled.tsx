@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StyledRegisterWrapper = styled.div`
+export const StyledAuthWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,12 +11,16 @@ export const StyledRegisterWrapper = styled.div`
         color: ${({ theme }) => theme.text} !important;
     }
     
+    .card {
+        padding: 40px;
+    }
+    
     .upload-btn {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-    
+
     .upload {
         .anticon-plus {
             svg {
