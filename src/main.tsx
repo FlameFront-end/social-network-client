@@ -26,7 +26,9 @@ const antdTheme: ThemeConfig = {
         colorTextBase: '#e1e3e6',
         colorPrimary: '#1890ff',
         colorIcon: '#e1e3e6',
-        colorBgBase: '#222222'
+        colorBgBase: '#222222',
+        controlOutline: '#1890ff',
+        colorSplit: '#363738'
     }
 }
 

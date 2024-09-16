@@ -36,17 +36,29 @@ export const StyledChatWrapper = styled.div`
         overflow-y: auto;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        padding-bottom: 50px;
     }
 
     .bottom_wrapper {
-        position: relative;
+        width: calc(100% - 40px);
+        position: absolute;
         margin: 10px 0;
+        bottom: 0;
+        padding: 10px;
+        background-color: #292929;
+        border-radius: 12px;
+        -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
+        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
     }
-    
+
     .icon {
-        svg {
-            font-size: 20px;
-            fill: ${({ theme }) => theme.text} !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 28px !important;
+        height: 30px !important;
+        svg {   
+            font-size: 18px;
         }
     }
     
@@ -57,12 +69,26 @@ export const StyledChatWrapper = styled.div`
         z-index: 700;
     }
     
+    input {
+        background-color: #292929 !important;
+        border: none !important;
+        outline: none !important;
+        
+        &:active, &:focus {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+    }
+    
     .btn {
+        width: 30px !important;
+        height: 30px !important;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 3px;
-        background-color: ${({ theme }) => theme.card.background};
+        background-color: #292929;  
         color: ${({ theme }) => theme.text};
         border: none;
         &:hover {
