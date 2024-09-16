@@ -28,8 +28,11 @@ export const StyledChatWrapper = styled.div`
     }
 
     .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         width: 100%;
-        height: calc(100vh - 70px);
+        height: 100%;
         overflow-y: auto;
         scrollbar-width: none;
         -ms-overflow-style: none;

@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom'
 const styles: Styles = {
     wrapper: {
         width: '100%',
-        height: 'calc(100vh - 32px - 50px)'
+        height: 'calc(100vh - 90px)'
     }
 }
 
