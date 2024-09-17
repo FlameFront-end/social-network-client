@@ -35,6 +35,10 @@ export const StyledChatWrapper = styled.div`
         -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
         box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
     }
+    
+    .bottom {
+        margin-top: 50px;
+    }
 
     .reply {
         padding: 0 11px;

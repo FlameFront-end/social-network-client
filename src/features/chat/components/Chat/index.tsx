@@ -34,7 +34,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
     const [audioUrl, setAudioUrl] = useState<string | null>(null)
     const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-    const bottomWrapper: MutableRefObject<HTMLDivElement | null> = useRef(null)
+    const bottom: MutableRefObject<HTMLDivElement | null> = useRef(null)
     const wrapper: MutableRefObject<HTMLDivElement | null> = useRef(null)
 
     const startRecording = (): void => {
@@ -80,6 +80,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                     setAudioBlob(null)
                     setContent('')
                     setReplyToMessage(null)
+                    scrollToBottom('smooth')
                 })
             } else if (content.trim() !== '') {
                 socket.emit('sendMessage', {
@@ -90,6 +91,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                 })
                 setContent('')
                 setReplyToMessage(null)
+                scrollToBottom('smooth')
             }
         }
     }
@@ -108,7 +110,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }
 
     const scrollToBottom = (behavior: 'smooth' | 'auto'): void => {
-        bottomWrapper.current?.scrollIntoView({ behavior, block: 'end' })
+        bottom.current?.scrollIntoView({ behavior, block: 'end' })
     }
 
     useEffect(() => {
@@ -165,7 +167,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                             renderItem={(message: Collections.Message) => <Message message={message} setReplyToMessage={setReplyToMessage}/>}
                         />
 
-                        <Flex direction='column' className='bottom_wrapper' ref={bottomWrapper}>
+                        <Flex direction='column' className='bottom_wrapper'>
                             {(replyToMessage != null) && (
                                 <Flex justifyContent='space-between' alignItems='center' className='reply'>
                                     <Flex>
@@ -206,6 +208,8 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                                 </button>
                             </Flex>
                         </Flex>
+
+                        <div className='bottom' ref={bottom}/>
                     </Flex>
                 ) : (
                     <Flex justifyContent="center" alignItems="center" className='wrapper'>

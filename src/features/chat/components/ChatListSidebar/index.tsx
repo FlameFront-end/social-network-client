@@ -27,7 +27,6 @@ const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChat
         socket.emit('join', userID)
 
         socket.on('updateChats', (updatedChats: Collections.Chat[]) => {
-            console.log('updatedChats', updatedChats)
             setChats(updatedChats)
         })
 
