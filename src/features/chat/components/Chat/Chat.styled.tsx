@@ -51,6 +51,26 @@ export const StyledChatWrapper = styled.div`
         box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
     }
 
+    .reply {
+        padding: 0 11px;
+
+        .separator {
+            grid-area: separator;
+            width: 2px;
+            border-radius: 2px;
+            background-color: #71aaeb;
+        }
+
+
+        .author {
+            color: #71aaeb;
+        }
+    }
+    
+    .reply-message {
+        margin-top: 5px;
+    }
+
     .icon {
         display: flex;
         justify-content: center;

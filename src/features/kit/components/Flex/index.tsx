@@ -11,6 +11,7 @@ export interface FlexProps {
     style?: CSSProperties
     children: ReactNode
     className?: string
+    onClick?: () => void
 }
 
 const Flex = forwardRef<HTMLDivElement, FlexProps>(({
@@ -23,13 +24,25 @@ const Flex = forwardRef<HTMLDivElement, FlexProps>(({
     flexWrap,
     style,
     children,
-    className
+    className,
+    onClick
 }, ref: ForwardedRef<HTMLDivElement>) => {
     return (
         <div
             ref={ref}
-            style={{ display: 'flex', flexDirection: `${direction}`, gap, justifyContent, alignItems, flexGrow, flexShrink, flexWrap, ...style }}
+            style={{
+                display: 'flex',
+                flexDirection: `${direction}`,
+                gap,
+                justifyContent,
+                alignItems,
+                flexGrow,
+                flexShrink,
+                flexWrap,
+                ...style
+            }}
             className={className}
+            onClick={onClick}
         >
             {children}
         </div>

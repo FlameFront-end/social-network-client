@@ -8,7 +8,7 @@ import Flex from '../../../kit/components/Flex'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
-import { SendOutlined, AudioOutlined, AudioMutedOutlined } from '@ant-design/icons'
+import { SendOutlined, AudioOutlined, AudioMutedOutlined, CloseOutlined } from '@ant-design/icons'
 import { CSpinner } from '@coreui/react-pro'
 import ava from '../../../../../public/ava.png'
 import { StyledChatWrapper } from './Chat.styled.tsx'
@@ -33,6 +33,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [isRecording, setIsRecording] = useState(false)
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+    const [replyToMessage, setReplyToMessage] = useState<Collections.Message | null>(null)
 
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
     const [audioUrl, setAudioUrl] = useState<string | null>(null)
@@ -77,20 +78,24 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                         audio: arrayBuffer,
                         senderId,
                         receiverId,
-                        content: content.trim() !== '' ? content : null
+                        content: content.trim() !== '' ? content : null,
+                        replyToMessageId: replyToMessage?.id
                     })
                 }).then(() => {
                     setAudioUrl(null)
                     setAudioBlob(null)
                     setContent('')
+                    setReplyToMessage(null)
                 })
             } else if (content.trim() !== '') {
                 socket.emit('sendMessage', {
                     senderId: senderId.toString(),
                     receiverId: receiverId.toString(),
-                    content
+                    content,
+                    replyToMessageId: replyToMessage?.id
                 })
                 setContent('')
+                setReplyToMessage(null)
             }
         }
     }
@@ -155,6 +160,8 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
         scrollToBottom('auto')
     }, [messages])
 
+    console.log('messages', messages)
+
     return (
         <StyledChatWrapper>
             {receiverId !== null ? <>
@@ -164,20 +171,29 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                             className='list'
                             dataSource={messages}
                             renderItem={(message: Collections.Message) => (
-                                <List.Item key={message.id}>
+                                <List.Item key={message.id} onClick={() => { setReplyToMessage(message) }}>
                                     <div>
-                                        <Flex alignItems='center'>
+                                        <Flex alignItems='center' onClick={() => {
+                                            navigate(profilePaths.profile, { state: { userId: message.senderId } })
+                                        }}>
                                             <Avatar size={40} src={message.sender.ava ?? ava} style={{ height: 'max-content' }}/>
-                                            <div
-                                                className='nick'
-                                                onClick={() => {
-                                                    navigate(profilePaths.profile, { state: { userId: message.senderId } })
-                                                }}
-                                            >
+                                            <div className='nick'>
                                                 {message.sender.name}
                                             </div>
                                             <div className='time'> {dayjs(message.createdAt)?.format('HH:mm')}</div>
                                         </Flex>
+
+                                        {message.replyToMessageId != null ? <Flex direction="column" className='reply reply-message'>
+                                            <Flex>
+                                                <div className="separator"/>
+                                                <Flex direction='column' gap={0}>
+                                                    <div className='author'>{message.replyToMessage?.sender.name} {message.replyToMessage?.sender.surname}</div>
+                                                    {message.replyToMessage?.content !== null && <div className='message'>{message.replyToMessage?.content}</div>}
+                                                    {message.replyToMessage?.audioUrl !== null && <audio className='message' controls src={message.replyToMessage?.audioUrl}/>}
+                                                </Flex>
+                                            </Flex>
+                                        </Flex> : null}
+
                                         <Flex direction="column">
                                             {message.content !== null && <div className='message'>{message.content}</div>}
                                             {message.audioUrl !== null && <audio controls src={message.audioUrl} className='message'/>}
@@ -186,30 +202,47 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                                 </List.Item>
                             )}
                         />
-                        <Flex alignItems='center' className='bottom_wrapper' ref={bottomWrapper}>
-                            <Input
-                                value={content}
-                                onChange={(e) => {
-                                    setContent(e.target.value)
-                                }}
-                                onPressEnter={sendMessage}
-                                placeholder="Напишите сообщение..."
-                            />
-                            <button className='btn emoji-btn' onClick={() => { setShowEmojiPicker(!showEmojiPicker) }}>😊</button>
-                            {showEmojiPicker && <div className='emoji-picker'><Picker data={data} onEmojiSelect={addEmoji}/></div>}
-                            {isRecording ? (
-                                <button className='btn' onClick={stopRecording}>
-                                    <AudioMutedOutlined className='icon' />
-                                </button>
-                            ) : (
-                                <button className='btn' onClick={startRecording}>
-                                    <AudioOutlined className='icon'/>
-                                </button>
+
+                        <Flex direction='column' className='bottom_wrapper' ref={bottomWrapper}>
+                            {(replyToMessage != null) && (
+                                <Flex justifyContent='space-between' alignItems='center' className='reply'>
+                                    <Flex>
+                                        <div className="separator"/>
+                                        <Flex direction='column' gap={0}>
+                                            <div className='author'>{replyToMessage.sender.name} {replyToMessage.sender.surname}</div>
+                                            <div>{replyToMessage.content }</div>
+                                        </Flex>
+                                    </Flex>
+                                    <button onClick={() => { setReplyToMessage(null) }}>
+                                        <CloseOutlined />
+                                    </button>
+                                </Flex>
                             )}
-                            {audioUrl != null && <audio controls src={audioUrl}/>}
-                            <PrimaryButton onClick={sendMessage} icon={<SendOutlined />} className='send'>
-                                Отправить
-                            </PrimaryButton>
+                            <Flex alignItems='center' >
+                                <Input
+                                    value={content}
+                                    onChange={(e) => {
+                                        setContent(e.target.value)
+                                    }}
+                                    onPressEnter={sendMessage}
+                                    placeholder="Напишите сообщение..."
+                                />
+                                <button className='btn emoji-btn' onClick={() => { setShowEmojiPicker(!showEmojiPicker) }}>😊</button>
+                                {showEmojiPicker && <div className='emoji-picker'><Picker data={data} onEmojiSelect={addEmoji}/></div>}
+                                {isRecording ? (
+                                    <button className='btn' onClick={stopRecording}>
+                                        <AudioMutedOutlined className='icon' />
+                                    </button>
+                                ) : (
+                                    <button className='btn' onClick={startRecording}>
+                                        <AudioOutlined className='icon'/>
+                                    </button>
+                                )}
+                                {audioUrl != null && <audio controls src={audioUrl}/>}
+                                <PrimaryButton onClick={sendMessage} icon={<SendOutlined />} className='send'>
+                                    Отправить
+                                </PrimaryButton>
+                            </Flex>
                         </Flex>
                     </Flex>
                 ) : (

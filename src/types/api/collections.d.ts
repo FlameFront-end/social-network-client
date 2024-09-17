@@ -21,6 +21,20 @@ declare namespace Collections {
         senderId: number
         receiver: Collections.User
         sender: Collections.User
+        replyToMessage: Collections.ReplyToMessage | null
+        replyToMessageId: number | null
+    }
+
+    interface ReplyToMessage {
+        id: number
+        chatId: number
+        content: string | null
+        audioUrl: string | null
+        createdAt: string
+        receiverId: number
+        senderId: number
+        receiver: Collections.User
+        sender: Collections.User
     }
 
     interface User {

@@ -37,5 +37,5 @@ export const StyledApp = styled(App)`
 `
 
 export const StyledContent = styled(Layout.Content)`
-    margin-bottom: 16px;
+    margin: 16px 16px 0;
 `
