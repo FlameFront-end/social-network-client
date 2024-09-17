@@ -8,7 +8,7 @@ export const StyledChatWrapper = styled.div`
     border-radius: 0 10px 10px 0;
     width: 100%;
     
-    .wrapper {
+    .wrapper-chat {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -22,18 +22,6 @@ export const StyledChatWrapper = styled.div`
     
     .list {
         padding: 0 30px;
-    }
-
-    .bottom_wrapper {
-        width: calc(100% - 40px);
-        position: absolute;
-        margin: 10px 0;
-        bottom: 0;
-        padding: 10px;
-        background-color: #292929;
-        border-radius: 12px;
-        -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
-        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
     }
     
     .bottom {
@@ -71,24 +59,6 @@ export const StyledChatWrapper = styled.div`
         }
     }
     
-    .emoji-picker {
-        position: absolute;
-        right: 0;
-        bottom: 60px;
-        z-index: 700;
-    }
-    
-    input {
-        background-color: #292929 !important;
-        border: none !important;
-        outline: none !important;
-        
-        &:active, &:focus {
-            border: none !important;
-            outline: none !important;
-            box-shadow: none !important;
-        }
-    }
     
     .btn {
         width: 30px !important;
