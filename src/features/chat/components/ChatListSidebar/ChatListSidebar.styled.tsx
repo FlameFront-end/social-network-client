@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const StyledChatListWrapper = styled.div`
     overflow-y: auto;
     width: 400px;
+    padding: 0 8px;
 
     background-color: ${({ theme }) => theme.card.background};
     border: 1px solid ${({ theme }) => theme.card.border};

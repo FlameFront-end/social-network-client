@@ -80,10 +80,10 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
     }, [audioBlob])
 
     const sendMessage = (): void => {
-        if ((senderId != null) && (receiverId != null)) {
+        if (senderId != null && receiverId != null) {
             if (audioBlob != null) {
                 void audioBlob.arrayBuffer().then((arrayBuffer) => {
-                    socket.emit('voice-message', {
+                    socket.emit('sendMessage', {
                         audio: arrayBuffer,
                         senderId,
                         receiverId,
@@ -112,7 +112,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
     }
 
     return (
-        <StyledChatBottom>
+        <StyledChatBottom direction='column'>
             {(replyToMessage != null) && (
                 <Flex justifyContent='space-between' alignItems='center' className='reply'>
                     <Flex>

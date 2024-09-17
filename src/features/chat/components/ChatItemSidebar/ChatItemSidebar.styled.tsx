@@ -1,20 +1,26 @@
 import styled from 'styled-components'
 
 export const StyledChatItemSidebarWrapper = styled.div`
-    padding: 10px;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
     cursor: pointer;
-    border-bottom: 1px solid gray;
+    
+    transition: opacity 160ms ease;
     
     .image {
         width: 50px;
         height: 50px;
         border-radius: 50%;
     }
-    
+
     .full_name {
-        font-weight: 600;
-        font-size: 17px;
+        font-size: 14px;
         color: ${({ theme }) => theme.text};
+        max-width: 180px;
+        white-space: nowrap;         
+        overflow: hidden;            
+        text-overflow: ellipsis;      
     }
 
     .last_message {
@@ -26,7 +32,7 @@ export const StyledChatItemSidebarWrapper = styled.div`
     }
     
     &:hover {
-        background-color: ${({ theme }) => theme.chat.hoverBackground};
+        background-color: rgba(255, 255, 255, 0.04);
     }
 
     &.last {
@@ -34,7 +40,7 @@ export const StyledChatItemSidebarWrapper = styled.div`
     }
 
     &.active {
-        background-color: ${({ theme }) => theme.chat.selectBackground};
+        background-color: rgba(255, 255, 255, 0.04);
 
         .last_message {
             color: ${({ theme }) => theme.text};

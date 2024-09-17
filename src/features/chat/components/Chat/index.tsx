@@ -18,6 +18,7 @@ interface Props {
 const Chat: FC<Props> = ({ senderId, receiverId }) => {
     const dispatch = useAppDispatch()
     const messages = useAppSelector((state) => state.chat.messages)
+
     const [isLoading, setIsLoading] = useState(true)
     const [replyToMessage, setReplyToMessage] = useState<Collections.Message | null>(null)
     const [scrollPosition, setScrollPosition] = useState(0)
@@ -37,6 +38,12 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     const scrollToBottom = (behavior: 'smooth' | 'auto'): void => {
         scrollBottom.current?.scrollIntoView({ behavior, block: 'end' })
     }
+
+    useEffect(() => {
+        return () => {
+            setReplyToMessage(null)
+        }
+    }, [receiverId])
 
     useEffect(() => {
         const fetchChatMessages = async (): Promise<void> => {
