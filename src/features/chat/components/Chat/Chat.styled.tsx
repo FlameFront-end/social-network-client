@@ -8,25 +8,6 @@ export const StyledChatWrapper = styled.div`
     border-radius: 0 10px 10px 0;
     width: 100%;
     
-
-    .nick {
-        font-size: 16px;
-        cursor: pointer;
-        color: ${({ theme }) => theme.accent};
-    }
-
-    .time {
-        font-size: 12px;
-        color: ${({ theme }) => theme.text_light};
-    }
-
-    .message {
-        margin-top: 10px;
-        color: ${({ theme }) => theme.text};
-        word-wrap: anywhere;
-        max-width: 700px;
-    }
-
     .wrapper {
         display: flex;
         flex-direction: column;
@@ -37,6 +18,10 @@ export const StyledChatWrapper = styled.div`
         scrollbar-width: none;
         -ms-overflow-style: none;
         padding-bottom: 50px;
+    }
+    
+    .list {
+        padding: 0 30px;
     }
 
     .bottom_wrapper {
@@ -53,15 +38,14 @@ export const StyledChatWrapper = styled.div`
 
     .reply {
         padding: 0 11px;
-
+        
         .separator {
             grid-area: separator;
             width: 2px;
             border-radius: 2px;
             background-color: ${({ theme }) => theme.accent};
         }
-
-
+        
         .author {
             color: ${({ theme }) => theme.accent};
         }
@@ -77,6 +61,7 @@ export const StyledChatWrapper = styled.div`
         align-items: center;
         width: 28px !important;
         height: 30px !important;
+        
         svg {   
             font-size: 18px;
         }
@@ -112,7 +97,7 @@ export const StyledChatWrapper = styled.div`
         color: ${({ theme }) => theme.text};
         border: none;
         &:hover {
-            background-color: ${({ theme }) => theme.card.background} !important;
+            background-color: transparent !important;
             border: none
         }
     }
@@ -126,7 +111,7 @@ export const StyledChatWrapper = styled.div`
         height: 38px;
         position: absolute;
         right: 40px;
-        bottom: 40px;
+        bottom: 100px;
         border: 1px solid #363738;
         border-radius: 50%;
 
@@ -139,13 +124,6 @@ export const StyledChatWrapper = styled.div`
             background-color: rgba(255, 255, 255, 0.08) !important;
             border: 1px solid #363738;
         }
-    }
-    
-    .send {
-        &:hover {
-            outline: none;
-            border: none !important;
-        } 
     }
     
     .no_select_chat {
