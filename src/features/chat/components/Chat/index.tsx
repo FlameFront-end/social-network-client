@@ -160,8 +160,6 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
         scrollToBottom('auto')
     }, [messages])
 
-    console.log('messages', messages)
-
     return (
         <StyledChatWrapper>
             {receiverId !== null ? <>
@@ -178,7 +176,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                                         }}>
                                             <Avatar size={40} src={message.sender.ava ?? ava} style={{ height: 'max-content' }}/>
                                             <div className='nick'>
-                                                {message.sender.name}
+                                                {message.sender.name} {message.sender.surname}
                                             </div>
                                             <div className='time'> {dayjs(message.createdAt)?.format('HH:mm')}</div>
                                         </Flex>

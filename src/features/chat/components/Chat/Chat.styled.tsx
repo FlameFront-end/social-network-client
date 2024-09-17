@@ -58,12 +58,12 @@ export const StyledChatWrapper = styled.div`
             grid-area: separator;
             width: 2px;
             border-radius: 2px;
-            background-color: #71aaeb;
+            background-color: ${({ theme }) => theme.accent};
         }
 
 
         .author {
-            color: #71aaeb;
+            color: ${({ theme }) => theme.accent};
         }
     }
     
@@ -145,7 +145,7 @@ export const StyledChatWrapper = styled.div`
         &:hover {
             outline: none;
             border: none !important;
-        }
+        } 
     }
     
     .no_select_chat {

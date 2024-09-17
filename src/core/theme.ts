@@ -4,7 +4,7 @@ export const darkTheme = {
     text: '#e1e3e6',
     text_light: '#939393',
     revert_text: '#333333',
-    accent: '#3f73fc',
+    accent: '#71aaeb',
     hover: '#262626',
     card: {
         background: '#222222',
