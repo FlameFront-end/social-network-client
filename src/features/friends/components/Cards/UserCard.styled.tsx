@@ -6,6 +6,11 @@ export const StyledUserCard = styled(Card)`
     flex-basis: calc(33.33% - 16px);
     
     .full_name {
+        max-width: 170px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         color: ${({ theme }) => theme.text};
+        cursor: pointer;
     }
 `

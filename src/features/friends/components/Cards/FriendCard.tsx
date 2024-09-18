@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { chatPaths } from '../../../chat/routes/chat.paths.ts'
 import { StyledUserCard } from './UserCard.styled.tsx'
 import { useRemoveFriendMutation } from '../../api/friends.api.ts'
+import { profilePaths } from '../../../profile/routes/profile.paths.ts'
 
 interface Props {
     user: Collections.User
@@ -45,9 +46,11 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
     return (
         <StyledUserCard>
             <Flex alignItems='center' >
-                <Avatar size={64} src={user.ava ?? ava}/>
+                <div><Avatar size={64} src={user.ava ?? ava}/></div>
                 <Flex direction='column'>
-                    <div className='full_name'>
+                    <div className='full_name' onClick={() => {
+                        navigate(profilePaths.profile, { state: { userId: user.id } })
+                    }}>
                         {user.name} {user.surname}
                     </div>
                     <AccentButton onClick={() => { void handleDeleteFriend() }}>

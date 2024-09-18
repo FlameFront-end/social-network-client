@@ -10,6 +10,7 @@ import { useCreateChatMutation, useGetChatsListQuery } from '../../../chat/api/c
 import TextButton from '../../../kit/components/Buttons/TextButton'
 import { useNavigate } from 'react-router-dom'
 import { chatPaths } from '../../../chat/routes/chat.paths.ts'
+import { profilePaths } from '../../../profile/routes/profile.paths.ts'
 
 interface Props {
     user: Collections.User
@@ -56,19 +57,27 @@ const IncomingCard: FC<Props> = ({ user, refetchFriends, refetchIncoming, refetc
     return (
         <StyledUserCard>
             <Flex alignItems='center' >
-                <Avatar size={64} src={user.ava ?? ava}/>
+                <div><Avatar size={64} src={user.ava ?? ava}/></div>
                 <Flex direction='column'>
-                    <div className='full_name'>
+                    <div className='full_name' onClick={() => {
+                        navigate(profilePaths.profile, { state: { userId: user.id } })
+                    }}>
                         {user.name} {user.surname}
                     </div>
-                    <AccentButton onClick={() => { void handleAcceptFriendRequest() }}>
+                    <AccentButton onClick={() => {
+                        void handleAcceptFriendRequest()
+                    }}>
                         Принять запрос
                     </AccentButton>
-                    <AccentButton onClick={() => { void handleDeclineFriendRequest() }}>
+                    <AccentButton onClick={() => {
+                        void handleDeclineFriendRequest()
+                    }}>
                         Отклонить запрос
                     </AccentButton>
 
-                    {!isUserInChat ? <TextButton onClick={() => { void handleCreateChat() }}>
+                    {!isUserInChat ? <TextButton onClick={() => {
+                        void handleCreateChat()
+                    }}>
                         Создать чат
                     </TextButton> : <TextButton onClick={() => {
                         navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })
