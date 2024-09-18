@@ -21,7 +21,6 @@ export const StyledMessage = styled(List.Item)`
         width: 100%;
     }
     
-    
     .nick {
         font-size: 16px;
         cursor: pointer;
@@ -39,6 +38,28 @@ export const StyledMessage = styled(List.Item)`
         word-wrap: anywhere;
         max-width: 700px;
     }
+
+    .audio-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .audio-player {
+            display: none !important; /* Скрыть стандартный плеер */
+        }
+
+        .play-pause {
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .seek-bar {
+            height: 1px;
+            width: 100%;
+        }
+    }
+    
     
     .reply-message {
         margin-top: 5px;

@@ -24,7 +24,7 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
     return (
         <StyledChatItemSidebarWrapper className={(isActive ? 'active ' : '') + (isLastItem ? 'last' : '') } onClick={() => { setActiveChatId(chat.id) }}>
             <Flex alignItems='center'>
-                <Avatar src={interlocutor.ava ?? ava} size={60}/>
+                <div><Avatar src={interlocutor.ava ?? ava} size={60}/></div>
                 <Flex direction='column' gap={0}>
                     <div className='full_name'>{interlocutor.surname} {interlocutor.name}</div>
                     <div className='last_message'>{chat.lastMessage}</div>

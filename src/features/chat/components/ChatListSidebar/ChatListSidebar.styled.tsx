@@ -2,7 +2,8 @@ import styled from 'styled-components'
 
 export const StyledChatListWrapper = styled.div`
     overflow-y: auto;
-    width: 400px;
+    min-width: 300px;
+    max-width: 300px;
     padding: 0 8px;
 
     background-color: ${({ theme }) => theme.card.background};

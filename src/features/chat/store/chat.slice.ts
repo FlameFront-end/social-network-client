@@ -26,6 +26,12 @@ const chatSlice = createSlice({
     reducers: {
         addMessage: (state, action) => {
             state.messages.push(action.payload)
+        },
+        markMessagesAsRead(state, action) {
+            const chatId = action.payload
+            state.messages = state.messages.map(message =>
+                message.chatId === chatId ? { ...message, isRead: true } : message
+            )
         }
     },
     extraReducers: (builder) => {

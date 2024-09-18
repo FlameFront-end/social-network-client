@@ -21,7 +21,8 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [replyToMessage, setReplyToMessage] = useState<Collections.Message | null>(null)
-    const [scrollPosition, setScrollPosition] = useState(0)
+
+    const scrollPosition = useRef(0)
 
     const scrollBottom: MutableRefObject<HTMLDivElement | null> = useRef(null)
     const wrapper: MutableRefObject<HTMLDivElement | null> = useRef(null)
@@ -31,7 +32,12 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
             const scrollHeight = wrapper.current.scrollHeight
             const scrollTop = wrapper.current.scrollTop
             const maxScrollPosition = scrollHeight - wrapper.current.clientHeight
-            setScrollPosition(maxScrollPosition - scrollTop)
+
+            const newScrollPosition = maxScrollPosition - scrollTop
+
+            if (Math.abs(scrollPosition.current - newScrollPosition) > 50) {
+                scrollPosition.current = newScrollPosition
+            }
         }
     }
 
@@ -81,6 +87,8 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
         scrollToBottom('auto')
     }, [messages])
 
+    console.log('rer')
+
     return (
         <StyledChatWrapper>
             {receiverId !== null ? <>
@@ -108,7 +116,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                     </Flex>
                 )}
 
-                {scrollPosition > 1000 && (
+                {scrollPosition.current > 1000 && (
                     <button onClick={() => { scrollToBottom('smooth') }} className='btn scroll-btn'/>
                 )}
             </> : <div className='no_select_chat'><h3>Выберите кому <br/> вы хотите написать</h3></div>}

@@ -119,7 +119,8 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                         <div className="separator"/>
                         <Flex direction='column' gap={0}>
                             <div className='author'>{replyToMessage.sender.name} {replyToMessage.sender.surname}</div>
-                            <div>{replyToMessage.content }</div>
+                            {replyToMessage.content !== null && <div>{replyToMessage.content}</div>}
+                            {replyToMessage.audioUrl !== null && <div>Голосовое сообщение</div>}
                         </Flex>
                     </Flex>
                     <button onClick={() => { setReplyToMessage(null) }}>

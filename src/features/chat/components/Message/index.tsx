@@ -38,7 +38,15 @@ const Message: FC<Props> = ({ message, setReplyToMessage }) => {
                             <Flex direction='column' gap={0}>
                                 <div className='author'>{message.replyToMessage?.sender.name} {message.replyToMessage?.sender.surname}</div>
                                 {message.replyToMessage?.content !== null && <div className='message'>{message.replyToMessage?.content}</div>}
-                                {message.replyToMessage?.audioUrl !== null && <audio className='message' controls src={message.replyToMessage?.audioUrl}/>}
+                                {message.replyToMessage?.audioUrl !== null &&
+                                    <div className='audio-controls'>
+                                        <audio className='audio-player' src={message.replyToMessage?.audioUrl}></audio>
+                                        <div className="audio-controls">
+                                            <button className='play-pause'>Play</button>
+                                            <input type="range" className='seek-bar' value="0" max="100"/>
+                                        </div>
+                                    </div>
+                                }
                             </Flex>
                         </Flex>
                     </Flex> : null}
