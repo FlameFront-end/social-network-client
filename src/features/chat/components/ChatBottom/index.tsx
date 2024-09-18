@@ -5,7 +5,7 @@ import { AudioMutedOutlined, AudioOutlined, CloseOutlined, SendOutlined } from '
 import { Input } from 'antd'
 import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
-import socket from '../../../../core/socket.ts'
+import socketApi from '../../../../core/socket-api.ts'
 
 interface Props {
     setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
@@ -83,7 +83,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
         if (senderId != null && receiverId != null) {
             if (audioBlob != null) {
                 void audioBlob.arrayBuffer().then((arrayBuffer) => {
-                    socket.emit('sendMessage', {
+                    socketApi.socket?.emit('sendMessage', {
                         audio: arrayBuffer,
                         senderId,
                         receiverId,
@@ -98,7 +98,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                     scrollToBottom('smooth')
                 })
             } else if (content.trim() !== '') {
-                socket.emit('sendMessage', {
+                socketApi.socket?.emit('sendMessage', {
                     senderId: senderId.toString(),
                     receiverId: receiverId.toString(),
                     content,

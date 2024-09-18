@@ -3,7 +3,7 @@ import { List } from 'antd'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch.ts'
 import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
 import { chatActions, fetchMessages } from '../../store/chat.slice.ts'
-import socket from '../../../../core/socket.ts'
+import socketApi from '../../../../core/socket-api.ts'
 import Flex from '../../../kit/components/Flex'
 import { CSpinner } from '@coreui/react-pro'
 import { StyledChatWrapper } from './Chat.styled.tsx'
@@ -64,12 +64,12 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
 
         void fetchChatMessages()
 
-        socket.on('receiveMessage', (message: Collections.Message) => {
+        socketApi.socket?.on('receiveMessage', (message: Collections.Message) => {
             dispatch(chatActions.addMessage(message))
         })
 
         return () => {
-            socket.off('receiveMessage')
+            socketApi.socket?.off('receiveMessage')
         }
     }, [dispatch, senderId, receiverId])
 
@@ -86,8 +86,6 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     useEffect(() => {
         scrollToBottom('auto')
     }, [messages])
-
-    console.log('rer')
 
     return (
         <StyledChatWrapper>
