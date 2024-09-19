@@ -13,10 +13,13 @@ import {
     LogoutButton,
     LogoutButtonLabel
 } from './Sidebar.styled'
+import { profilePaths } from '../../features/profile/routes/profile.paths.ts'
+import { useAppSelector } from '../../hooks/useAppSelector.ts'
 
 const Sidebar: FC = () => {
     const { logout } = useAuth()
     const navigate = useNavigate()
+    const userId = useAppSelector(state => state.auth.user.id)
     const collapsed = false
 
     const handleLogoutClick = (): void => {
@@ -28,7 +31,7 @@ const Sidebar: FC = () => {
             label: 'Моя страница',
             key: 'root',
             icon: <HomeOutlined />,
-            onClick: () => { navigate(pathsConfig.root) }
+            onClick: () => { navigate(profilePaths.profile, { state: { userId } }) }
         },
 
         {

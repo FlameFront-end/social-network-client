@@ -12,11 +12,11 @@ export const SidebarContainer = styled.div<Props>`
     border-right: none;
     padding-top: 20px;
 
-    @media (max-width: 768px) {
-        width: 0;
-        position: absolute;
-        z-index: 1;
-    }
+    //@media (max-width: 768px) {
+    //    width: 0;
+    //    position: absolute;
+    //    z-index: 1;
+    //}
 `
 
 export const MenuItemContainer = styled.div`

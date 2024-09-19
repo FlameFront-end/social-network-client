@@ -3,7 +3,7 @@ import { App, Layout } from 'antd'
 
 export const StyledLayout = styled(Layout)`
     min-height: calc(100vh - 50px - 16px);
-    max-width: 1300px;
+    max-width: calc(920px + 200px + 50px);
     display: flex;
     gap: 16px;
     background-color: #141414;

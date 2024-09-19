@@ -1,3 +1,4 @@
 export const profilePaths = {
-    profile: '/profile'
+    profile: '/profile',
+    edit: '/profile/edit'
 }
