@@ -5,8 +5,9 @@ import type { RegisterDataForm } from '../../../auth/types/register.types.ts'
 import Flex from '../../../kit/components/Flex'
 import { useLocation } from 'react-router-dom'
 import dayjs from 'dayjs'
-import { useGetUserQuery } from '../../api/profile.api.ts'
+import { useGetUserQuery, useUpdateUserMutation } from '../../api/profile.api.ts'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { normalizeRepeatableFormGet, normalizeRepeatableFormPost } from '../../../../utils/normalizeRepeatableForm.ts'
 
 const { TextArea } = Input
 
@@ -14,14 +15,16 @@ const EditProfile: FC = () => {
     const { state } = useLocation()
     const [form] = Form.useForm()
 
+    const [updateUser, { isLoading }] = useUpdateUserMutation()
+
     const { data: user } = useGetUserQuery(state.userId)
 
     const handleFinish = async (payload: any): Promise<void> => {
-        const grandparents = payload.grandparents?.map((item: { grandparent: string }) => item.grandparent) ?? []
-        const parents = payload.parents?.map((item: { parent: string }) => item.parent) ?? []
-        const siblings = payload.siblings?.map((item: { sibling: string }) => item.sibling) ?? []
-        const children = payload.children?.map((item: { child: string }) => item.child) ?? []
-        const grandsons = payload.grandsons?.map((item: { grandson: string }) => item.grandson) ?? []
+        const grandparents = normalizeRepeatableFormPost(payload.grandparents, 'grandparent')
+        const parents = normalizeRepeatableFormPost(payload.parents, 'parent')
+        const siblings = normalizeRepeatableFormPost(payload.siblings, 'sibling')
+        const children = normalizeRepeatableFormPost(payload.children, 'child')
+        const grandsons = normalizeRepeatableFormPost(payload.grandsons, 'grandson')
 
         const newPayload = {
             ...payload,
@@ -33,19 +36,19 @@ const EditProfile: FC = () => {
             grandsons: grandsons.length !== 0 ? grandsons : null
         }
 
-        console.log('newPayload', newPayload)
-        console.log('userId', state.userId)
+        await updateUser(newPayload)
     }
 
     useEffect(() => {
         if (user != null) {
             form.setFieldsValue({
-                surname: user?.surname,
-                name: user?.name,
-                patronymic: user?.patronymic,
-                birthdate: dayjs(user?.birthdate, 'DD.MM.YYYY'),
-                shortInfo: 'Front-end developer',
-                city: 'Калуга'
+                ...user,
+                grandparents: normalizeRepeatableFormGet(user.grandparents, 'grandparent'),
+                parents: normalizeRepeatableFormGet(user.parents, 'parent'),
+                siblings: normalizeRepeatableFormGet(user.siblings, 'sibling'),
+                children: normalizeRepeatableFormGet(user.children, 'child'),
+                grandsons: normalizeRepeatableFormGet(user.grandsons, 'grandson'),
+                birthdate: dayjs(user?.birthdate, 'DD.MM.YYYY')
             })
         }
     }, [form, user])
@@ -297,7 +300,7 @@ const EditProfile: FC = () => {
                             <Button
                                 type='primary'
                                 htmlType='submit'
-                                loading={false}
+                                loading={isLoading}
                                 block
                                 className='save'
                             >

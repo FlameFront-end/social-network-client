@@ -6,8 +6,18 @@ export const profileApi = api.injectEndpoints({
             query: (userId) => ({
                 url: `/user/${userId}`
             })
+        }),
+        updateUser: builder.mutation<Collections.User, number | any>({
+            query: (payload) => ({
+                url: '/user/update',
+                method: 'PATCH',
+                body: payload
+            })
         })
     })
 })
 
-export const { useGetUserQuery } = profileApi
+export const {
+    useGetUserQuery,
+    useUpdateUserMutation
+} = profileApi

@@ -47,9 +47,16 @@ declare namespace Collections {
         isAdmin: boolean
         password: string
         birthdate: string
+        shortInfo: string | null
+        city: string | null
         friends: number[]
         incomingFriendRequests: number[]
         outgoingFriendRequests: number[]
+        grandparents: string[]
+        parents: string[]
+        siblings: string[]
+        children: string[]
+        grandsons: string[]
         updatedAt: string
         createdAt: string
     }
