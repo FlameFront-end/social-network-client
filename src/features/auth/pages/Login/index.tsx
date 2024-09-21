@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { type FC, useEffect } from 'react'
 import { Button, Form, Input } from 'antd'
 import { useLoginMutation } from '../../api/auth.api'
 import type { LoginPayload } from '../../types/login.types'
@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom'
 import { authPaths } from '../../routes/auth.paths.ts'
 import Card from '../../../kit/components/Card'
 import { StyledAuthWrapper } from '../styled/Auth.styled.tsx'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Login: FC = () => {
     const navigate = useNavigate()
@@ -17,6 +19,22 @@ const Login: FC = () => {
 
     const [form] = Form.useForm()
 
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const token = params.get('token')
+
+        if (token) {
+            axios.get(`http://localhost:3000/auth/validate-token/${token}`)
+                .then(response => {
+                    toast.success('Успешный вход в аккаунт')
+                    setUser(response.data)
+                })
+                .catch(() => {
+                    toast.error('Что-то пошло не так')
+                })
+        }
+    }, [])
+
     const handleFinish = async (payload: LoginPayload): Promise<void> => {
         const response = await login(payload)
 
@@ -24,6 +42,9 @@ const Login: FC = () => {
             const result = response?.data
             setUser(result)
             form.resetFields()
+            toast.success('Успешный вход в аккаунт')
+        } else {
+            toast.error('Что-то пошло не так')
         }
     }
 

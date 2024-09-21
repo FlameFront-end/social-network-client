@@ -16,11 +16,17 @@ export const authApi = api.injectEndpoints({
                 method: 'POST',
                 body: payload
             })
+        }),
+        validateToken: builder.query<Promise<void>, string>({
+            query: (token) => ({
+                url: `/user/validate-token/${token}`
+            })
         })
     })
 })
 
 export const {
     useLoginMutation,
-    useRegisterMutation
+    useRegisterMutation,
+    useValidateTokenQuery
 } = authApi

@@ -23,7 +23,8 @@
         "@typescript-eslint/space-before-function-paren": "off",
         "no-console": "warn",
         "promise/always-return": "off",
-        "multiline-ternary": "off"
+        "multiline-ternary": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off"
     },
     "settings": {
         "react": {
