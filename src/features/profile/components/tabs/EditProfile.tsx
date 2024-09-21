@@ -21,19 +21,13 @@ const EditProfile: FC = () => {
     const { data: user } = useGetUserQuery(state.userId)
 
     const handleFinish = async (payload: any): Promise<void> => {
-        const grandparents = normalizeRepeatableFormPost(payload.grandparents, 'grandparent')
-        const parents = normalizeRepeatableFormPost(payload.parents, 'parent')
-        const siblings = normalizeRepeatableFormPost(payload.siblings, 'sibling')
-        const children = normalizeRepeatableFormPost(payload.children, 'child')
-        const grandsons = normalizeRepeatableFormPost(payload.grandsons, 'grandson')
-
         const newPayload = {
             ...payload,
-            grandparents,
-            parents,
-            siblings,
-            children,
-            grandsons,
+            grandparents: normalizeRepeatableFormPost(payload.grandparents, 'grandparent'),
+            parents: normalizeRepeatableFormPost(payload.parents, 'parent'),
+            siblings: normalizeRepeatableFormPost(payload.siblings, 'sibling'),
+            children: normalizeRepeatableFormPost(payload.children, 'child'),
+            grandsons: normalizeRepeatableFormPost(payload.grandsons, 'grandson'),
             birthdate: payload.birthdate.format('DD.MM.YYYY')
         }
 
