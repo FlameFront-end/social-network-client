@@ -36,7 +36,7 @@ const RouterProtect = (): JSX.Element => {
     return (
         <>
             {contextHolder}
-            <Outlet/>
+            <Outlet />
             <FloatButton.BackTop />
         </>
     )
