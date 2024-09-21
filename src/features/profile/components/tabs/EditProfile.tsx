@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 import { useGetUserQuery, useUpdateUserMutation } from '../../api/profile.api.ts'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { normalizeRepeatableFormGet, normalizeRepeatableFormPost } from '../../../../utils/normalizeRepeatableForm.ts'
+import { toast } from 'react-toastify'
 
 const { TextArea } = Input
 
@@ -36,7 +37,9 @@ const EditProfile: FC = () => {
             grandsons: grandsons.length !== 0 ? grandsons : null
         }
 
-        await updateUser(newPayload)
+        await updateUser(newPayload).then(() => {
+            toast.success('Данные успешно обновлены')
+        })
     }
 
     useEffect(() => {

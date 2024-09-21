@@ -1,6 +1,6 @@
 import { type FC, type ReactNode, useState } from 'react'
 import EditProfileMenu from '../../components/EditProfileMenu'
-import { EditProfile } from '../../components/tabs'
+import { EditContacts, EditProfile, EditInterests } from '../../components/tabs'
 import Flex from '../../../kit/components/Flex'
 
 const Edit: FC = () => {
@@ -9,7 +9,11 @@ const Edit: FC = () => {
     const getTabByIndex = (activeTabIndex: number): ReactNode => {
         switch (activeTabIndex) {
             case 0:
-                return <EditProfile />
+                return <EditProfile/>
+            case 1:
+                return <EditContacts/>
+            case 2:
+                return <EditInterests/>
             default:
                 return <></>
         }

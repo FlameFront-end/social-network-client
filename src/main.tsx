@@ -1,15 +1,18 @@
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { ConfigProvider, type ThemeConfig } from 'antd'
+import { ConfigProvider } from 'antd'
 import { ThemeProvider } from 'styled-components'
+import { ToastContainer } from 'react-toastify'
 
 import reportWebVitals from './reportWebVitals'
 import RouterProvider from './router/RouterProvider'
 import { StyledApp } from './containers/Layout/Layout.styled.tsx'
 import { store } from './store/configureStore.ts'
 import { darkTheme } from './core/theme.ts'
+import { antdTheme } from './core/antdTheme.ts'
 
 import 'antd/dist/reset.css'
+import 'react-toastify/dist/ReactToastify.css'
 import '@coreui/coreui/dist/css/coreui.min.css'
 import './assets/css/scrollbar.css'
 
@@ -18,26 +21,12 @@ import 'dayjs/locale/ru.js'
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container)
 
-const antdTheme: ThemeConfig = {
-    token: {
-        colorBgContainer: '#222222',
-        colorBorder: '#363738',
-        colorTextPlaceholder: '#e1e3e6',
-        colorTextBase: '#e1e3e6',
-        colorPrimary: '#1890ff',
-        colorIcon: '#e1e3e6',
-        colorBgBase: '#222222',
-        controlOutline: '#1890ff',
-        colorSplit: '#363738',
-        colorPrimaryTextActive: 'red'
-    }
-}
-
 root.render(
     <Provider store={store}>
         <ThemeProvider theme={darkTheme}>
             <ConfigProvider theme={antdTheme}>
                 <StyledApp>
+                    <ToastContainer autoClose={2000} theme='dark'/>
                     <RouterProvider />
                 </StyledApp>
             </ConfigProvider>

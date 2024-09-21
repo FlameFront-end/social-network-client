@@ -10,7 +10,7 @@ export const StyledEditProfileTab = styled(Card)`
     }
     
     .label {
-        width: 200px;
+        width: 300px;
         color: #939393;
         float: left;
         text-align: right;
