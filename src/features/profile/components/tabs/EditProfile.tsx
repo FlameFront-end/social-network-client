@@ -29,12 +29,12 @@ const EditProfile: FC = () => {
 
         const newPayload = {
             ...payload,
-            birthdate: payload.birthdate.format('DD.MM.YYYY'),
-            grandparents: grandparents.length !== 0 ? grandparents : null,
-            parents: parents.length !== 0 ? parents : null,
-            siblings: siblings.length !== 0 ? siblings : null,
-            children: children.length !== 0 ? children : null,
-            grandsons: grandsons.length !== 0 ? grandsons : null
+            grandparents,
+            parents,
+            siblings,
+            children,
+            grandsons,
+            birthdate: payload.birthdate.format('DD.MM.YYYY')
         }
 
         await updateUser(newPayload).then(() => {
