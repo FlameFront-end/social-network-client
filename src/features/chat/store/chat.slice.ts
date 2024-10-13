@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Message = Collections.Message
-import { BACKEND_URL } from '../../../core/variables.ts'
+import { BACKEND_URL } from '@/core'
 
 interface ChatState {
     messages: Message[]

@@ -1,4 +1,4 @@
-import { api } from '../../../core/api.ts'
+import { api } from '@/core'
 
 export const friendsApi = api.injectEndpoints({
     endpoints: (builder) => ({

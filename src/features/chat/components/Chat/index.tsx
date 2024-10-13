@@ -1,15 +1,13 @@
 import { useState, useEffect, type FC, useRef, type MutableRefObject, type Dispatch, type SetStateAction } from 'react'
 import { List } from 'antd'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch.ts'
-import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
+import { useAppDispatch, useAppSelector } from '@/hooks'
 import { chatActions, fetchMessages } from '../../store/chat.slice.ts'
-import socketApi from '../../../../core/socket-api.ts'
-import Flex from '../../../kit/components/Flex'
 import { CSpinner } from '@coreui/react-pro'
 import { StyledChatWrapper } from './Chat.styled.tsx'
 import Message from '../Message'
 import ChatBottom from '../ChatBottom'
-import PrimaryButton from '../../../kit/components/Buttons/PrimaryButton'
+import { SocketApi } from '@/core'
+import { Flex, PrimaryButton } from '@/kit'
 
 interface Props {
     senderId: number | string | null
@@ -66,12 +64,12 @@ const Chat: FC<Props> = ({ senderId, receiverId, setIsShowSidebar }) => {
 
         void fetchChatMessages()
 
-        socketApi.socket?.on('receiveMessage', (message: Collections.Message) => {
+        SocketApi.socket?.on('receiveMessage', (message: Collections.Message) => {
             dispatch(chatActions.addMessage(message))
         })
 
         return () => {
-            socketApi.socket?.off('receiveMessage')
+            SocketApi.socket?.off('receiveMessage')
         }
     }, [dispatch, senderId, receiverId])
 

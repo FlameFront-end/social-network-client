@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { useGetFullUserQuery, useUpdateUserMutation } from '../../api/profile.api.ts'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { normalizeRepeatableFormGet, normalizeRepeatableFormPost } from '../../../../utils/normalizeRepeatableForm.ts'
+import { normalizeRepeatableFormGet, normalizeRepeatableFormPost } from '@/utils'
 import { toast } from 'react-toastify'
 
 const { TextArea } = Input

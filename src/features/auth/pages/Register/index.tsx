@@ -1,18 +1,17 @@
 import { type FC, useState } from 'react'
 import { Button, Form, Upload, Input, DatePicker, type UploadProps } from 'antd'
-import { useRegisterMutation } from '../../api/auth.api'
-import { regExpPassword } from '../../../../utils/regExp.ts'
-import { useAppAction } from '../../../../hooks/useAppAction.ts'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { type RegisterDataForm } from '../../types/register.types.ts'
 import { useNavigate } from 'react-router-dom'
-import { pathsConfig } from '../../../../router/entities/paths.config.ts'
-import Flex from '../../../kit/components/Flex'
-import TextButton from '../../../kit/components/Buttons/TextButton'
+import { regExpPassword } from '@/utils'
+import { useAppAction } from '@/hooks'
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { useRegisterMutation } from '../../api/auth.api'
+import { type RegisterDataForm } from '../../types/register.types.ts'
 import { authPaths } from '../../routes/auth.paths.ts'
-import Card from '../../../kit/components/Card'
+import { BACKEND_URL } from '@/core'
+import { Card, Flex, TextButton } from '@/kit'
+import { pathsConfig } from '@/pathsConfig'
+
 import { StyledAuthWrapper } from '../styled/Auth.styled.tsx'
-import { BACKEND_URL } from '../../../../core/variables.ts'
 
 const Register: FC = () => {
     const navigate = useNavigate()

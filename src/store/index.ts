@@ -1,16 +1,13 @@
-import { api } from '../core/api.ts'
+import { api } from '@/core'
 import { authActions, authReducer } from '../features/auth/store/auth.slice'
 import { chatReducer } from '../features/chat/store/chat.slice.ts'
-import { notificationActions, notificationReducer } from '../features/notification/store/notification.slice.ts'
 
 export const reducers = {
     [api.reducerPath]: api.reducer,
     auth: authReducer,
-    chat: chatReducer,
-    notification: notificationReducer
+    chat: chatReducer
 }
 
 export const actions = {
-    ...authActions,
-    ...notificationActions
+    ...authActions
 }

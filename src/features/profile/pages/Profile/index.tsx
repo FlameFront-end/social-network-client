@@ -1,13 +1,13 @@
 import { type FC } from 'react'
 import { useGetUserQuery } from '../../api/profile.api.ts'
 import { useLocation } from 'react-router-dom'
-import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
+import { useAppSelector } from '@/hooks'
 import ProfileHeader from '../../components/ProfileHeader'
 import { QRCodeSVG } from 'qrcode.react'
 import Cookies from 'js-cookie'
-import { FRONTEND_URL } from '../../../../core/variables.ts'
+import { FRONTEND_URL } from '@/core'
 import { useAuth } from '../../../auth/hooks/useAuth.ts'
-import { LogoutButton, LogoutButtonLabel } from '../../../../components/Sider/Sidebar.styled.tsx'
+import { LogoutButton, LogoutButtonLabel } from '../../../../components/Sidebar/Sidebar.styled.tsx'
 
 const Profile: FC = () => {
     const { state } = useLocation()

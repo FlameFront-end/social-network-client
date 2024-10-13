@@ -1,16 +1,14 @@
 import { type FC, useEffect, useState } from 'react'
 import { Avatar } from 'antd'
-import Flex from '../../../kit/components/Flex'
-import ava from '../../../../../public/ava.png'
 import { useAcceptFriendRequestMutation, useDeclineFriendRequestMutation } from '../../api/friends.api.ts'
-import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
 import { StyledUserCard } from './UserCard.styled.tsx'
-import AccentButton from '../../../kit/components/Buttons/AccentButton'
 import { useCreateChatMutation, useGetChatsListQuery } from '../../../chat/api/chat.api.ts'
-import TextButton from '../../../kit/components/Buttons/TextButton'
 import { useNavigate } from 'react-router-dom'
 import { chatPaths } from '../../../chat/routes/chat.paths.ts'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
+import { useAppSelector } from '@/hooks'
+import { AccentButton, Flex, TextButton } from '@/kit'
+import ava from '../../../../../public/ava.png'
 
 interface Props {
     user: Collections.User

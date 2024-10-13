@@ -1,11 +1,11 @@
 import { type Dispatch, type FC, type SetStateAction } from 'react'
 import { Avatar } from 'antd'
-import Flex from '../../../kit/components/Flex'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
 import ava from '../../../../../public/ava.png'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { StyledMessage } from './Message.styled.tsx'
+import { Flex } from '@/kit'
 
 interface Props {
     message: Collections.Message

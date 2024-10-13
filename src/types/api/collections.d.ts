@@ -53,16 +53,11 @@ declare namespace Collections {
         books: string | null
         games: string | null
         quotes: string | null
-        friends: number[]
-        incomingFriendRequests: number[]
-        outgoingFriendRequests: number[]
         grandparents: string[]
         parents: string[]
         siblings: string[]
         children: string[]
         grandsons: string[]
-        updatedAt: string
-        createdAt: string
     }
 
     interface User {
@@ -74,6 +69,11 @@ declare namespace Collections {
         ava: string | null
         isAdmin: boolean
         password: string
+        friends: number[]
+        incomingFriendRequests: number[]
+        outgoingFriendRequests: number[]
+        updatedAt: string
+        createdAt: string
     }
 
     interface FullUser {
@@ -85,6 +85,11 @@ declare namespace Collections {
         ava: string | null
         isAdmin: boolean
         password: string
+        friends: number[]
+        incomingFriendRequests: number[]
+        outgoingFriendRequests: number[]
+        updatedAt: string
+        createdAt: string
         details: Collections.UserDetails
     }
 }

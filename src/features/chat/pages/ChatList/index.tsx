@@ -1,12 +1,11 @@
 import { type FC, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import ChatListSidebar from '../../components/ChatListSidebar'
 import Chat from '../../components/Chat'
-import Flex from '../../../kit/components/Flex'
 import type { Styles } from '../../../../types/global.types.ts'
-import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
 import { useGetChatsListQuery } from '../../api/chat.api.ts'
-import { useLocation } from 'react-router-dom'
-import { useWindowWidth } from '../../../../hooks/useWindowWidth.ts'
+import { useAppSelector, useWindowWidth } from '@/hooks'
+import { Flex } from '@/kit'
 
 const styles: Styles = {
     wrapper: {

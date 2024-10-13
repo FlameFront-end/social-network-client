@@ -1,17 +1,17 @@
 import { type FC, useEffect } from 'react'
 import { Button, Form, Input } from 'antd'
-import { useLoginMutation } from '../../api/auth.api'
-import type { LoginPayload } from '../../types/login.types'
-import { regExpPassword } from '../../../../utils/regExp.ts'
-import { useAppAction } from '../../../../hooks/useAppAction.ts'
-import TextButton from '../../../kit/components/Buttons/TextButton'
-import { useNavigate } from 'react-router-dom'
-import { authPaths } from '../../routes/auth.paths.ts'
-import Card from '../../../kit/components/Card'
-import { StyledAuthWrapper } from '../styled/Auth.styled.tsx'
+import { regExpPassword } from '@/utils'
+import { useAppAction } from '@/hooks'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { BACKEND_URL } from '../../../../core/variables.ts'
+import { useNavigate } from 'react-router-dom'
+import { useLoginMutation } from '../../api/auth.api'
+import type { LoginPayload } from '../../types/login.types'
+import { authPaths } from '../../routes/auth.paths.ts'
+import { BACKEND_URL } from '@/core'
+import { Card, TextButton } from '@/kit'
+
+import { StyledAuthWrapper } from '../styled/Auth.styled.tsx'
 
 const Login: FC = () => {
     const navigate = useNavigate()
@@ -95,10 +95,6 @@ const Login: FC = () => {
                     >
                         <Input.Password/>
                     </Form.Item>
-
-                    {/* <AnimatedShowControl show={isError}> */}
-                    {/*    <Alert message={error?.message} type='error' showIcon/> */}
-                    {/* </AnimatedShowControl> */}
 
                     <Form.Item>
                         <Button type='primary' htmlType='submit' loading={isLoading} block>

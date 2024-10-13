@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import SocketApi from '../core/socket-api.ts'
+import { SocketApi } from '@/core'
 
 export const useConnectSocket = (): void => {
     const connectSocket = (): void => {

@@ -9,11 +9,9 @@ export default defineConfig({
     alias: {
       '@/components': path.resolve(__dirname, './src/components'),
       '@/core': path.resolve(__dirname, './src/core'),
-      '@/entities': path.resolve(__dirname, './src/entities'),
+      '@/kit': path.resolve(__dirname, './src/features/kit/components'),
       '@/utils': path.resolve(__dirname, './src/utils'),
       '@/hooks': path.resolve(__dirname, './src/hooks'),
-      '@/strapi': path.resolve(__dirname, './src/features/strapi/hooks'),
-      '@/globalTypes': path.resolve(__dirname, './src/types/global.types.ts'),
       '@/pathsConfig': path.resolve(__dirname, './src/router/entities/paths.config.ts')
     }
   },

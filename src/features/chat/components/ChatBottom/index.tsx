@@ -1,11 +1,11 @@
 import { type Dispatch, type FC, type MutableRefObject, type SetStateAction, useEffect, useRef, useState } from 'react'
 import { StyledChatBottom } from './ChatBottom.styled.tsx'
-import Flex from '../../../kit/components/Flex'
 import { AudioMutedOutlined, AudioOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons'
 import { Input } from 'antd'
 import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
-import socketApi from '../../../../core/socket-api.ts'
+import { Flex } from '@/kit'
+import { SocketApi } from '@/core'
 
 interface Props {
     setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
@@ -83,7 +83,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
         if (senderId != null && receiverId != null) {
             if (audioBlob != null) {
                 void audioBlob.arrayBuffer().then((arrayBuffer) => {
-                    socketApi.socket?.emit('sendMessage', {
+                    SocketApi.socket?.emit('sendMessage', {
                         audio: arrayBuffer,
                         senderId,
                         receiverId,
@@ -98,7 +98,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                     scrollToBottom('smooth')
                 })
             } else if (content.trim() !== '') {
-                socketApi.socket?.emit('sendMessage', {
+                SocketApi.socket?.emit('sendMessage', {
                     senderId: senderId.toString(),
                     receiverId: receiverId.toString(),
                     content,

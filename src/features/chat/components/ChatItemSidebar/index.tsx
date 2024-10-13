@@ -1,9 +1,9 @@
 import type { Dispatch, FC, SetStateAction } from 'react'
-import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
-import Flex from '../../../kit/components/Flex'
+import { useAppSelector } from '@/hooks'
 import { Avatar } from 'antd'
 import ava from '../../../../../public/ava.png'
 import { StyledChatItemSidebarWrapper } from './ChatItemSidebar.styled.tsx'
+import { Flex } from '@/kit'
 
 interface Props {
     chat: Collections.Chat

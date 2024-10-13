@@ -2,8 +2,8 @@ import { type Dispatch, type FC, type SetStateAction, useEffect, useState } from
 import { CSpinner } from '@coreui/react-pro'
 import ChatItemSidebar from '../ChatItemSidebar'
 import { StyledChatListWrapper } from './ChatListSidebar.styled.tsx'
-import socketApi from '../../../../core/socket-api.ts'
-import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
+import { useAppSelector } from '@/hooks'
+import { SocketApi } from '@/core'
 
 interface ChatListSidebarProps {
     activeChatId: number
@@ -25,9 +25,9 @@ const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChat
     }, [chatList])
 
     useEffect(() => {
-        socketApi.socket?.emit('join', userID)
+        SocketApi.socket?.emit('join', userID)
 
-        socketApi.socket?.on('updateChats', (updatedChats: Collections.Chat[]) => {
+        SocketApi.socket?.on('updateChats', (updatedChats: Collections.Chat[]) => {
             setChats(updatedChats)
         })
     }, [])

@@ -1,13 +1,12 @@
 import { type FC } from 'react'
 import { Avatar, Typography } from 'antd'
-import Flex from '../../../kit/components/Flex'
-import ava from '../../../../../public/ava.png'
-import { getFullName } from '../../../../utils/getFullName.ts'
-import { StyledProfileHeader } from './ProfileHeader.styled.tsx'
 import { useNavigate } from 'react-router-dom'
-
 import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { getFullName } from '@/utils'
 import { profilePaths } from '../../routes/profile.paths.ts'
+import { Flex } from '@/kit'
+import { StyledProfileHeader } from './ProfileHeader.styled.tsx'
+import ava from '../../../../../public/ava.png'
 
 const { Title } = Typography
 
