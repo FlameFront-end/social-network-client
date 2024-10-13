@@ -91,7 +91,7 @@ const Chat: FC<Props> = ({ senderId, receiverId, setIsShowSidebar }) => {
 
     return (
         <StyledChatWrapper>
-            <PrimaryButton onClick={() => { setIsShowSidebar(true) }}>Назад</PrimaryButton>
+            <PrimaryButton onClick={() => { setIsShowSidebar(true) }} className='back'>Назад</PrimaryButton>
             {receiverId !== null ? <>
                 {!isLoading ? (
                     <Flex direction="column" justifyContent="space-between" className='wrapper-chat' ref={wrapper}>

@@ -34,12 +34,14 @@ const RouterProtect = (): JSX.Element => {
         return <Navigate to={pathsConfig.root} replace />
     }
 
+    const showNavBottom = pathname !== pathsConfig.login && pathname !== pathsConfig.register
+
     return (
         <>
             {contextHolder}
             <Outlet />
             <FloatButton.BackTop />
-            <MobileNavBottom/>
+            {showNavBottom && <MobileNavBottom/>}
         </>
     )
 }

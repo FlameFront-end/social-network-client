@@ -18,7 +18,6 @@ interface Props {
 
 const ProfileHeader: FC<Props> = ({ user, isMyProfile }) => {
     const navigate = useNavigate()
-
     return (
         <StyledProfileHeader>
             {(user != null) && (

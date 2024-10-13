@@ -7,10 +7,19 @@ export const StyledChatWrapper = styled.div`
     border: 1px solid ${({ theme }) => theme.card.border};
     border-radius: 0 10px 10px 0;
     width: 100%;
-
+    
+    
     @media screen and (max-width: 800px){
         border-radius: 10px;
         padding: 10px;
+        
+        .back {
+            display: block;
+        }
+    }
+    
+    .back {
+        display: none;
     }
     
     .wrapper-chat {

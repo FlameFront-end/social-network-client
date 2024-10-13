@@ -8,7 +8,7 @@ export const StyledLayout = styled(Layout)`
     gap: 16px;
     background-color: #141414;
     margin: 0 auto;
-    padding-bottom: 16px;
+    padding-bottom: 100px;
 `
 
 export const StyledApp = styled(App)`

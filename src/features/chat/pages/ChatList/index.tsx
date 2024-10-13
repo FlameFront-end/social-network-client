@@ -11,7 +11,7 @@ import { useWindowWidth } from '../../../../hooks/useWindowWidth.ts'
 const styles: Styles = {
     wrapper: {
         width: '100%',
-        height: 'calc(100vh - 100px)'
+        height: 'calc(100vh - 165px)'
     }
 }
 
