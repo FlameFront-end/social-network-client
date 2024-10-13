@@ -12,6 +12,10 @@ export const SidebarContainer = styled.div<Props>`
     border-right: none;
     padding-top: 20px;
 
+    @media screen and (max-width: 800px){
+        display: none;
+    }
+
     //@media (max-width: 768px) {
     //    width: 0;
     //    position: absolute;

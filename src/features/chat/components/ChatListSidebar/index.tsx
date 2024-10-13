@@ -8,11 +8,12 @@ import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
 interface ChatListSidebarProps {
     activeChatId: number
     setActiveChatId: Dispatch<SetStateAction<number>>
+    setIsShowSidebar: Dispatch<SetStateAction<boolean>>
     chatList: Collections.Chat[]
     isFetching: boolean
 }
 
-const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChatId, chatList, isFetching }) => {
+const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChatId, chatList, isFetching, setIsShowSidebar }) => {
     const userID = useAppSelector(state => state.auth.user.id)
     const [chats, setChats] = useState<Collections.Chat[]>(chatList)
 
@@ -40,6 +41,7 @@ const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChat
                         key={index}
                         isActive={activeChatId === chat.id}
                         setActiveChatId={setActiveChatId}
+                        setIsShowSidebar={setIsShowSidebar}
                         isLastItem={index === chats.length - 1}
                     />
                 )) : <div className='no_chats'><h3>Чатов нет</h3></div>}

@@ -1,4 +1,4 @@
-import { useState, useEffect, type FC, useRef, type MutableRefObject } from 'react'
+import { useState, useEffect, type FC, useRef, type MutableRefObject, type Dispatch, type SetStateAction } from 'react'
 import { List } from 'antd'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch.ts'
 import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
@@ -9,13 +9,15 @@ import { CSpinner } from '@coreui/react-pro'
 import { StyledChatWrapper } from './Chat.styled.tsx'
 import Message from '../Message'
 import ChatBottom from '../ChatBottom'
+import PrimaryButton from '../../../kit/components/Buttons/PrimaryButton'
 
 interface Props {
     senderId: number | string | null
     receiverId: number | string | null
+    setIsShowSidebar: Dispatch<SetStateAction<boolean>>
 }
 
-const Chat: FC<Props> = ({ senderId, receiverId }) => {
+const Chat: FC<Props> = ({ senderId, receiverId, setIsShowSidebar }) => {
     const dispatch = useAppDispatch()
     const messages = useAppSelector((state) => state.chat.messages)
 
@@ -89,6 +91,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
 
     return (
         <StyledChatWrapper>
+            <PrimaryButton onClick={() => { setIsShowSidebar(true) }}>Назад</PrimaryButton>
             {receiverId !== null ? <>
                 {!isLoading ? (
                     <Flex direction="column" justifyContent="space-between" className='wrapper-chat' ref={wrapper}>

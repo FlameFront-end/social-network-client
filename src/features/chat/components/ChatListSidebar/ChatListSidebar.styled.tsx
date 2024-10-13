@@ -12,6 +12,12 @@ export const StyledChatListWrapper = styled.div`
     border-right: none;
     border-radius: 10px 0 0 10px;
 
+    @media screen and (max-width: 800px){
+        width: 100%;
+        max-width: 100%;
+        border-radius: 10px;
+    }
+
     .spinner-wrapper {
         height: 100%;
         display: flex;
