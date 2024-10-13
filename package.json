@@ -4,10 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 42420 --host 0.0.0.0",
-    "prod": "vite --port 42430 --host 0.0.0.0",
-    "preview": "vite preview --port 42430 --host 0.0.0.0",
-    "buildTsc": "tsc && vite build",
+    "dev": "cross-env NODE_ENV=development vite",
+    "prod": "cross-env NODE_ENV=production vite",
     "build": "vite build",
     "init": "npm install && npm run prepare",
     "lint": "eslint --ext .tsx --ext .ts src/"
@@ -22,6 +20,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "antd": "^5.12.1",
     "axios": "^1.7.7",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.13",
     "emoji-mart": "^5.6.0",
     "eslint-import-resolver-typescript": "^3.6.3",

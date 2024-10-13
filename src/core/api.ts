@@ -1,10 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import Cookies from 'js-cookie'
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
 export const api = createApi({
     reducerPath: 'base',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: BACKEND_URL,
         prepareHeaders: (headers) => {
             const token = Cookies.get('token')
             if (token != null) {
