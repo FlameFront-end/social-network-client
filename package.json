@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development vite",
-    "prod": "cross-env NODE_ENV=production vite",
+    "dev": "vite",
+    "prod": "vite preview",
     "build": "vite build",
     "init": "npm install && npm run prepare",
     "lint": "eslint --ext .tsx --ext .ts src/"
