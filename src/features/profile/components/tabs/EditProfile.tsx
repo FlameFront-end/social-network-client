@@ -5,7 +5,7 @@ import type { RegisterDataForm } from '../../../auth/types/register.types.ts'
 import Flex from '../../../kit/components/Flex'
 import { useLocation } from 'react-router-dom'
 import dayjs from 'dayjs'
-import { useGetUserQuery, useUpdateUserMutation } from '../../api/profile.api.ts'
+import { useGetFullUserQuery, useUpdateUserMutation } from '../../api/profile.api.ts'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { normalizeRepeatableFormGet, normalizeRepeatableFormPost } from '../../../../utils/normalizeRepeatableForm.ts'
 import { toast } from 'react-toastify'
@@ -18,7 +18,7 @@ const EditProfile: FC = () => {
 
     const [updateUser, { isLoading }] = useUpdateUserMutation()
 
-    const { data: user } = useGetUserQuery(state.userId)
+    const { data: user } = useGetFullUserQuery(state.userId)
 
     const handleFinish = async (payload: any): Promise<void> => {
         const newPayload = {
@@ -40,12 +40,12 @@ const EditProfile: FC = () => {
         if (user != null) {
             form.setFieldsValue({
                 ...user,
-                grandparents: normalizeRepeatableFormGet(user.grandparents, 'grandparent'),
-                parents: normalizeRepeatableFormGet(user.parents, 'parent'),
-                siblings: normalizeRepeatableFormGet(user.siblings, 'sibling'),
-                children: normalizeRepeatableFormGet(user.children, 'child'),
-                grandsons: normalizeRepeatableFormGet(user.grandsons, 'grandson'),
-                birthdate: dayjs(user?.birthdate, 'DD.MM.YYYY')
+                grandparents: normalizeRepeatableFormGet(user?.details.grandparents, 'grandparent'),
+                parents: normalizeRepeatableFormGet(user?.details.parents, 'parent'),
+                siblings: normalizeRepeatableFormGet(user?.details.siblings, 'sibling'),
+                children: normalizeRepeatableFormGet(user?.details.children, 'child'),
+                grandsons: normalizeRepeatableFormGet(user?.details.grandsons, 'grandson'),
+                birthdate: dayjs(user?.details.birthdate, 'DD.MM.YYYY')
             })
         }
     }, [form, user])

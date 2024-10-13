@@ -37,15 +37,7 @@ declare namespace Collections {
         sender: Collections.User
     }
 
-    interface User {
-        id: number
-        patronymic: string | null
-        surname: string
-        name: string
-        email: string
-        ava: string | null
-        isAdmin: boolean
-        password: string
+    interface UserDetails {
         birthdate: string
         shortInfo: string | null
         city: string | null
@@ -71,5 +63,28 @@ declare namespace Collections {
         grandsons: string[]
         updatedAt: string
         createdAt: string
+    }
+
+    interface User {
+        id: number
+        patronymic: string | null
+        surname: string
+        name: string
+        email: string
+        ava: string | null
+        isAdmin: boolean
+        password: string
+    }
+
+    interface FullUser {
+        id: number
+        patronymic: string | null
+        surname: string
+        name: string
+        email: string
+        ava: string | null
+        isAdmin: boolean
+        password: string
+        details: Collections.UserDetails
     }
 }
