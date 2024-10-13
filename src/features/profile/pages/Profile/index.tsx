@@ -5,8 +5,7 @@ import { useAppSelector } from '../../../../hooks/useAppSelector.ts'
 import ProfileHeader from '../../components/ProfileHeader'
 import { QRCodeSVG } from 'qrcode.react'
 import Cookies from 'js-cookie'
-
-const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL
+import { FRONTEND_URL } from '../../../../core/variables.ts'
 
 const Profile: FC = () => {
     const { state } = useLocation()
@@ -22,7 +21,7 @@ const Profile: FC = () => {
                 <ProfileHeader user={user} isMyProfile={isMyProfile}/>
             )}
             {(isMyProfile && token) && (
-                <QRCodeSVG value={`${FRONTEND_URL as string}/auth/login?token=${token}`} />
+                <QRCodeSVG value={`${FRONTEND_URL}/auth/login?token=${token}`} />
             )}
         </>
     )

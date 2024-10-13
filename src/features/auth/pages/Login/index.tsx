@@ -11,6 +11,7 @@ import Card from '../../../kit/components/Card'
 import { StyledAuthWrapper } from '../styled/Auth.styled.tsx'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { BACKEND_URL } from '../../../../core/variables.ts'
 
 const Login: FC = () => {
     const navigate = useNavigate()
@@ -24,7 +25,7 @@ const Login: FC = () => {
         const token = params.get('token')
 
         if (token) {
-            axios.get(`http://localhost:3000/auth/validate-token/${token}`)
+            axios.get(`${BACKEND_URL}/auth/validate-token/${token}`)
                 .then(response => {
                     toast.success('Успешный вход в аккаунт')
                     setUser(response.data)

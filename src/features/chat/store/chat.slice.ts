@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Message = Collections.Message
+import { BACKEND_URL } from '../../../core/variables.ts'
 
 interface ChatState {
     messages: Message[]
@@ -15,7 +16,7 @@ const initialState: ChatState = {
 export const fetchMessages = createAsyncThunk(
     'chat/fetchMessages',
     async (userIds: { userId1: number, userId2: number }) => {
-        const response = await axios.get(`http://localhost:3000/chat/${userIds.userId1}/${userIds.userId2}`)
+        const response = await axios.get(`${BACKEND_URL}/chat/${userIds.userId1}/${userIds.userId2}`)
         return response.data
     }
 )

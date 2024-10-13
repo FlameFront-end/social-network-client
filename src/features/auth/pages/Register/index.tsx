@@ -12,6 +12,7 @@ import TextButton from '../../../kit/components/Buttons/TextButton'
 import { authPaths } from '../../routes/auth.paths.ts'
 import Card from '../../../kit/components/Card'
 import { StyledAuthWrapper } from '../styled/Auth.styled.tsx'
+import { BACKEND_URL } from '../../../../core/variables.ts'
 
 const Register: FC = () => {
     const navigate = useNavigate()
@@ -142,7 +143,7 @@ const Register: FC = () => {
                             listType="picture-card"
                             className="avatar-uploader"
                             onChange={handleChange}
-                            action='http://localhost:3000/upload/image'
+                            action={`${BACKEND_URL}/upload/image`}
                             accept="image/jpeg, image/png, image/gif"
                         >
                             {(imageUrl != null) ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }}/> : uploadButton}
