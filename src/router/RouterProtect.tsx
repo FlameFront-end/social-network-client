@@ -7,6 +7,7 @@ import { useAppAction } from '../hooks/useAppAction.ts'
 import { useNotification } from '../features/notification/hooks/useNotification.tsx'
 import { useAuth } from '../features/auth/hooks/useAuth'
 import { useConnectSocket } from '../hooks/useConnectSocket.ts'
+import MobileNavBottom from '../components/MobileNavBottom'
 
 const RouterProtect = (): JSX.Element => {
     const { isAuth } = useAuth()
@@ -38,6 +39,7 @@ const RouterProtect = (): JSX.Element => {
             {contextHolder}
             <Outlet />
             <FloatButton.BackTop />
+            <MobileNavBottom/>
         </>
     )
 }

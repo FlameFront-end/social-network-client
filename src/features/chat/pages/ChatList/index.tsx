@@ -52,7 +52,7 @@ const ChatList: FC = () => {
 
     return (
         <Flex style={styles.wrapper} gap={0}>
-            {windowWidth <= 700 ? <>
+            {windowWidth <= 800 ? <>
                 {isShowSidebar && <ChatListSidebar
                     setActiveChatId={setActiveChatId}
                     activeChatId={activeChatId}
@@ -68,7 +68,7 @@ const ChatList: FC = () => {
                 setIsShowSidebar={setIsShowSidebar}
             />}
 
-            {windowWidth <= 700 ? <>
+            {windowWidth <= 800 ? <>
                 {!isShowSidebar && <Chat
                     senderId={userId ?? null}
                     receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}

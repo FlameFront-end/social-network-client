@@ -10,9 +10,9 @@ import { FRONTEND_URL } from '../../../../core/variables.ts'
 const Profile: FC = () => {
     const { state } = useLocation()
     const userId = useAppSelector(state => state.auth.user.id)
-    const { data: user } = useGetUserQuery(state.userId)
+    const { data: user } = useGetUserQuery(state?.userId)
 
-    const isMyProfile = state.userId === userId
+    const isMyProfile = state?.userId === userId
     const token = Cookies.get('token')
 
     return (
