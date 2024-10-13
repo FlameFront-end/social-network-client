@@ -10,6 +10,7 @@ export const StyledChatWrapper = styled.div`
 
     @media screen and (max-width: 800px){
         border-radius: 10px;
+        padding: 10px;
     }
     
     .wrapper-chat {
@@ -26,6 +27,10 @@ export const StyledChatWrapper = styled.div`
     
     .list {
         padding: 0 30px;
+
+        @media screen and (max-width: 800px){
+           padding: 0;
+        }
     }
     
     .bottom {

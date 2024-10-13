@@ -11,6 +11,10 @@ export const StyledChatBottom = styled(Flex)`
     border-radius: 12px;
     -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
+
+    @media screen and (max-width: 800px){
+        width: calc(100% - 20px);
+    }
     
     .wrapper {
         width: 100%;
