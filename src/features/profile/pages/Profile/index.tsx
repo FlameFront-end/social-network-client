@@ -23,17 +23,19 @@ const Profile: FC = () => {
     }
 
     return (
-        <div>
+        <>
             {user && (
                 <ProfileHeader user={user} isMyProfile={isMyProfile}/>
             )}
-            <LogoutButton collapsed={false} onClick={handleLogoutClick}>
-                <LogoutButtonLabel collapsed={false} >Выход</LogoutButtonLabel>
-            </LogoutButton>
+            {isMyProfile && (
+                <LogoutButton collapsed={false} onClick={handleLogoutClick}>
+                    <LogoutButtonLabel collapsed={false} >Выход</LogoutButtonLabel>
+                </LogoutButton>
+            )}
             {(isMyProfile && token) && (
                 <QRCodeSVG value={`${FRONTEND_URL}/auth/login?token=${token}`} />
             )}
-        </div>
+        </>
     )
 }
 
