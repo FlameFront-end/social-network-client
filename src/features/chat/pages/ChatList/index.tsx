@@ -2,17 +2,9 @@ import { type FC, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ChatListSidebar from '../../components/ChatListSidebar'
 import Chat from '../../components/Chat'
-import type { Styles } from '../../../../types/global.types.ts'
 import { useGetChatsListQuery } from '../../api/chat.api.ts'
 import { useAppSelector, useWindowWidth } from '@/hooks'
-import { Flex } from '@/kit'
-
-const styles: Styles = {
-    wrapper: {
-        width: '100%',
-        height: 'calc(100vh - 165px)'
-    }
-}
+import { ChatListStyledWrapper } from './ChatList.styled.tsx'
 
 const findOtherUserInChat = (activeChat: Collections.Chat | undefined, userId: number): Collections.User | undefined => {
     return activeChat?.user1.id === userId ? activeChat?.user2 : activeChat?.user1
@@ -24,8 +16,6 @@ const ChatList: FC = () => {
     const userId = useAppSelector(state => state.auth.user.id)
     const [activeChatId, setActiveChatId] = useState(0)
     const { data: chatsList, isFetching, refetch } = useGetChatsListQuery(null)
-
-    const [isShowSidebar, setIsShowSidebar] = useState(true)
 
     useEffect(() => {
         void refetch()
@@ -50,36 +40,21 @@ const ChatList: FC = () => {
     }
 
     return (
-        <Flex style={styles.wrapper} gap={0}>
-            {windowWidth <= 800 ? <>
-                {isShowSidebar && <ChatListSidebar
-                    setActiveChatId={setActiveChatId}
-                    activeChatId={activeChatId}
-                    chatList={chatsList ?? []}
-                    isFetching={isFetching}
-                    setIsShowSidebar={setIsShowSidebar}
-                />}
-            </> : <ChatListSidebar
+        <ChatListStyledWrapper gap={0}>
+            <ChatListSidebar
                 setActiveChatId={setActiveChatId}
                 activeChatId={activeChatId}
                 chatList={chatsList ?? []}
                 isFetching={isFetching}
-                setIsShowSidebar={setIsShowSidebar}
-            />}
+            />
 
-            {windowWidth <= 800 ? <>
-                {!isShowSidebar && <Chat
+            {windowWidth >= 800 &&
+                <Chat
                     senderId={userId ?? null}
                     receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}
-                    setIsShowSidebar={setIsShowSidebar}
-                />}
-            </> : <Chat
-                senderId={userId ?? null}
-                receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}
-                setIsShowSidebar={setIsShowSidebar}
-            />}
-
-        </Flex>
+                />
+            }
+        </ChatListStyledWrapper>
     )
 }
 

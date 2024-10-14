@@ -1,19 +1,22 @@
 import type { Dispatch, FC, SetStateAction } from 'react'
-import { useAppSelector } from '@/hooks'
+import { useAppSelector, useWindowWidth } from '@/hooks'
 import { Avatar } from 'antd'
 import ava from '../../../../../public/ava.png'
 import { StyledChatItemSidebarWrapper } from './ChatItemSidebar.styled.tsx'
 import { Flex } from '@/kit'
+import { useNavigate } from 'react-router-dom'
+import { chatPaths } from '../../routes/chat.paths.ts'
 
 interface Props {
     chat: Collections.Chat
     isActive: boolean
     setActiveChatId: Dispatch<SetStateAction<number>>
-    setIsShowSidebar: Dispatch<SetStateAction<boolean>>
     isLastItem: boolean
 }
 
-const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastItem, setIsShowSidebar }) => {
+const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastItem }) => {
+    const navigate = useNavigate()
+    const windowWidth = useWindowWidth()
     const user = useAppSelector(state => state.auth.user)
 
     const getInterlocutor = (user1: Collections.User, user2: Collections.User): Collections.User => {
@@ -21,8 +24,11 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
     }
 
     const handleClick = (): void => {
-        setActiveChatId(chat.id)
-        setIsShowSidebar(false)
+        if (windowWidth >= 800) {
+            setActiveChatId(chat.id)
+        } else {
+            navigate(chatPaths.chat, { state: { receiverId: chat.user1Id, senderId: chat.user2Id } })
+        }
     }
 
     const interlocutor = getInterlocutor(chat.user1, chat.user2)

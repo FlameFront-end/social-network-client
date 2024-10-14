@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 import { Avatar, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
+// import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { getFullName } from '@/utils'
 import { profilePaths } from '../../routes/profile.paths.ts'
 import { Flex } from '@/kit'
@@ -25,20 +25,20 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile }) => {
                         <div><Avatar size={128} src={user.ava ?? ava}/></div>
                         <Flex direction='column' gap={4}>
                             <Title level={4}>{getFullName(user.surname, user.name, null)}</Title>
-                            <Flex>
-                                <Flex alignItems='center' gap={4} className="item">
-                                    <EnvironmentOutlined/>
-                                    Калуга
-                                </Flex>
-                                <Flex alignItems='center' gap={4} className="item">
-                                    <EnvironmentOutlined/>
-                                    BSO Real Estate Management (Dubai)
-                                </Flex>
-                                <Flex alignItems='center' gap={4} className="item detail">
-                                    <InfoCircleOutlined/>
-                                    Подробнее
-                                </Flex>
-                            </Flex>
+                            {/* <Flex> */}
+                            {/*    <Flex alignItems='center' gap={4} className="item"> */}
+                            {/*        <EnvironmentOutlined/> */}
+                            {/*        Калуга */}
+                            {/*    </Flex> */}
+                            {/*    <Flex alignItems='center' gap={4} className="item"> */}
+                            {/*        <EnvironmentOutlined/> */}
+                            {/*        BSO Real Estate Management (Dubai) */}
+                            {/*    </Flex> */}
+                            {/*    <Flex alignItems='center' gap={4} className="item detail"> */}
+                            {/*        <InfoCircleOutlined/> */}
+                            {/*        Подробнее */}
+                            {/*    </Flex> */}
+                            {/* </Flex> */}
                         </Flex>
                     </Flex>
                     {isMyProfile &&

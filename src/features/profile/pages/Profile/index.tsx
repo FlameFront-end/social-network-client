@@ -23,7 +23,7 @@ const Profile: FC = () => {
     }
 
     return (
-        <>
+        <div>
             {user && (
                 <ProfileHeader user={user} isMyProfile={isMyProfile}/>
             )}
@@ -33,7 +33,7 @@ const Profile: FC = () => {
             {(isMyProfile && token) && (
                 <QRCodeSVG value={`${FRONTEND_URL}/auth/login?token=${token}`} />
             )}
-        </>
+        </div>
     )
 }
 

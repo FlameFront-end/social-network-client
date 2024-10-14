@@ -1,17 +1,22 @@
 import { type FC } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { pathsConfig } from '../../router/entities/paths.config.ts'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { pathsConfig } from '@/pathsConfig'
 import { StyledMobileNavBottomWrapper } from './MobileNavBottom.styled.tsx'
+import { useAppSelector } from '@/hooks'
+import { profilePaths } from '../../features/profile/routes/profile.paths.ts'
 
 const MobileNavBottom: FC = () => {
     const loc = useLocation()
     const locName = loc.pathname.split('/')[1]
 
+    const navigate = useNavigate()
+    const user = useAppSelector(state => state.auth.user)
+
     return (
         <StyledMobileNavBottomWrapper>
-            <Link to={pathsConfig.root} className={`link ${locName === '' ? 'active' : ''}`}>
+            <Link to={pathsConfig.friends} className={`link ${locName === 'friends' ? 'active' : ''}`}>
                 <div className='content'>
-                    Главная
+                    Друзья
                 </div>
             </Link>
 
@@ -21,11 +26,12 @@ const MobileNavBottom: FC = () => {
                 </div>
             </Link>
 
-            <Link to={pathsConfig.friends} className={`link ${locName === 'friends' ? 'active' : ''}`}>
+            <button onClick={() => { navigate(profilePaths.profile, { state: { userId: user.id } }) }} className={`link ${locName === '' ? 'active' : ''}`}>
                 <div className='content'>
-                    Друзья
+                    Профиль
                 </div>
-            </Link>
+            </button>
+
         </StyledMobileNavBottomWrapper>
     )
 }

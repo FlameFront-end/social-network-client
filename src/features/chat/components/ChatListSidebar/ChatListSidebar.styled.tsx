@@ -2,8 +2,8 @@ import styled from 'styled-components'
 
 export const StyledChatListWrapper = styled.div`
     overflow-y: auto;
-    min-width: 300px;
-    max-width: 300px;
+    width: 100%;
+    height: 100%;
     padding: 0 8px;
 
     background-color: ${({ theme }) => theme.card.background};
@@ -11,11 +11,11 @@ export const StyledChatListWrapper = styled.div`
 
     border-right: none;
     border-radius: 10px 0 0 10px;
-
+    
     @media screen and (max-width: 800px){
         width: 100%;
-        max-width: 100%;
-        border-radius: 10px;
+        border-radius: 0;
+        border: none;
     }
 
     .spinner-wrapper {

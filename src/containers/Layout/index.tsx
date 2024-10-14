@@ -1,13 +1,12 @@
 import { type FC } from 'react'
 import { Outlet } from 'react-router-dom'
 import { StyledContent, StyledLayout } from './Layout.styled.tsx'
-import { MainHeader } from '@/kit'
 import { Sidebar } from '@/components'
 
 const Layout: FC = () => {
     return (
         <>
-            <MainHeader/>
+            {/* <MainHeader/> */}
             <StyledLayout hasSider>
                 <Sidebar />
                 <StyledContent>

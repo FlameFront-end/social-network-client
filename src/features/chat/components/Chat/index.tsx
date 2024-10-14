@@ -1,4 +1,4 @@
-import { useState, useEffect, type FC, useRef, type MutableRefObject, type Dispatch, type SetStateAction } from 'react'
+import { useState, useEffect, type FC, useRef, type MutableRefObject } from 'react'
 import { List } from 'antd'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { chatActions, fetchMessages } from '../../store/chat.slice.ts'
@@ -7,15 +7,14 @@ import { StyledChatWrapper } from './Chat.styled.tsx'
 import Message from '../Message'
 import ChatBottom from '../ChatBottom'
 import { SocketApi } from '@/core'
-import { Flex, PrimaryButton } from '@/kit'
+import { Flex } from '@/kit'
 
 interface Props {
     senderId: number | string | null
     receiverId: number | string | null
-    setIsShowSidebar: Dispatch<SetStateAction<boolean>>
 }
 
-const Chat: FC<Props> = ({ senderId, receiverId, setIsShowSidebar }) => {
+const Chat: FC<Props> = ({ senderId, receiverId }) => {
     const dispatch = useAppDispatch()
     const messages = useAppSelector((state) => state.chat.messages)
 
@@ -89,7 +88,6 @@ const Chat: FC<Props> = ({ senderId, receiverId, setIsShowSidebar }) => {
 
     return (
         <StyledChatWrapper>
-            <PrimaryButton onClick={() => { setIsShowSidebar(true) }} className='back'>Назад</PrimaryButton>
             {receiverId !== null ? <>
                 {!isLoading ? (
                     <Flex direction="column" justifyContent="space-between" className='wrapper-chat' ref={wrapper}>

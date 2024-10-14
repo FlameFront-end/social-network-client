@@ -15,11 +15,12 @@ const RouterProtect = (): JSX.Element => {
     if (!isAuth && (pathname !== pathsConfig.login && pathname !== pathsConfig.register)) {
         return <Navigate to={pathsConfig.login} replace />
     }
+
     if (isAuth && (pathname === pathsConfig.login)) {
         return <Navigate to={pathsConfig.root} replace />
     }
 
-    const showNavBottom = pathname !== pathsConfig.login && pathname !== pathsConfig.register
+    const showNavBottom = pathname !== pathsConfig.login && pathname !== pathsConfig.register && pathname !== pathsConfig.chat
 
     return (
         <>
