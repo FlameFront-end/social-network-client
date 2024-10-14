@@ -7,6 +7,10 @@ export const StyledFriendsWrapper = styled.div`
     .card {
         width: 100%;
         height: 100%;
+
+        @media screen and (max-width: 800px) {
+            border: none;
+        }
     }
     
     .card-wrapper {
