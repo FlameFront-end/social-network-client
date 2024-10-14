@@ -6,9 +6,10 @@ import { useCreateChatMutation, useGetChatsListQuery } from '../../../chat/api/c
 import { useNavigate } from 'react-router-dom'
 import { chatPaths } from '../../../chat/routes/chat.paths.ts'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
-import { useAppSelector } from '@/hooks'
+import { useAppSelector, useWindowWidth } from '@/hooks'
 import { AccentButton, Flex, TextButton } from '@/kit'
 import ava from '../../../../../public/ava.png'
+import { MessageOutlined } from '@ant-design/icons'
 
 interface Props {
     user: Collections.User
@@ -19,6 +20,7 @@ interface Props {
 
 const IncomingCard: FC<Props> = ({ user, refetchFriends, refetchIncoming, refetchPossible }) => {
     const navigate = useNavigate()
+    const windowWidth = useWindowWidth()
     const myUserId = useAppSelector(state => state.auth.user.id)
     const [declineFriendRequest] = useDeclineFriendRequestMutation()
     const [acceptFriendRequest] = useAcceptFriendRequestMutation()
@@ -46,43 +48,57 @@ const IncomingCard: FC<Props> = ({ user, refetchFriends, refetchIncoming, refetc
         })
     }
 
-    const handleCreateChat = async (): Promise<void> => {
-        await createChat(user.id).then(() => {
+    const handleCreateChat = (): void => {
+        void createChat(user.id).then(() => {
             setIsUserInChat(true)
+        }).then(() => {
+            if (windowWidth >= 800) {
+                navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })
+            } else {
+                navigate(chatPaths.chat, { state: { senderId: myUserId, receiverId: user.id } })
+            }
         })
+    }
+
+    const handleRedirectToChat = (): void => {
+        if (windowWidth >= 800) {
+            navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })
+        } else {
+            navigate(chatPaths.chat, { state: { senderId: myUserId, receiverId: user.id } })
+        }
     }
 
     return (
         <StyledUserCard>
             <Flex alignItems='center' >
                 <div><Avatar size={64} src={user.ava ?? ava}/></div>
-                <Flex direction='column'>
-                    <div className='full_name' onClick={() => {
-                        navigate(profilePaths.profile, { state: { userId: user.id } })
-                    }}>
-                        {user.name} {user.surname}
+                <div className='info'>
+                    <div className="column">
+                        <div className='full_name' onClick={() => {
+                            navigate(profilePaths.profile, { state: { userId: user.id } })
+                        }}>
+                            {user.name} {user.surname}
+                        </div>
+                        <Flex>
+                            <AccentButton onClick={() => {
+                                void handleAcceptFriendRequest()
+                            }}>
+                                Принять
+                            </AccentButton>
+                            <AccentButton onClick={() => {
+                                void handleDeclineFriendRequest()
+                            }}>
+                                Отклонить
+                            </AccentButton>
+                        </Flex>
                     </div>
-                    <AccentButton onClick={() => {
-                        void handleAcceptFriendRequest()
-                    }}>
-                        Принять запрос
-                    </AccentButton>
-                    <AccentButton onClick={() => {
-                        void handleDeclineFriendRequest()
-                    }}>
-                        Отклонить запрос
-                    </AccentButton>
 
-                    {!isUserInChat ? <TextButton onClick={() => {
-                        void handleCreateChat()
-                    }}>
-                        Создать чат
-                    </TextButton> : <TextButton onClick={() => {
-                        navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })
-                    }}>
-                        Перейти в чат
+                    {!isUserInChat ? <TextButton onClick={handleCreateChat}>
+                        <MessageOutlined className='icon'/>
+                    </TextButton> : <TextButton onClick={handleRedirectToChat}>
+                        <MessageOutlined className='icon'/>
                     </TextButton>}
-                </Flex>
+                </div>
             </Flex>
         </StyledUserCard>
     )

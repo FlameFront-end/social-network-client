@@ -5,11 +5,12 @@ import { useCreateChatMutation, useGetChatsListQuery } from '../../../chat/api/c
 import { chatPaths } from '../../../chat/routes/chat.paths.ts'
 import { StyledUserCard } from './UserCard.styled.tsx'
 import { useRemoveFriendMutation } from '../../api/friends.api.ts'
-import { profilePaths } from '../../../profile/routes/profile.paths.ts'
-import { useAppSelector } from '@/hooks'
-import { AccentButton, Flex, TextButton } from '@/kit'
+import { useAppSelector, useWindowWidth } from '@/hooks'
+import { Flex, TextButton } from '@/kit'
 
 import ava from '../../../../../public/ava.png'
+import { MessageOutlined } from '@ant-design/icons'
+import { profilePaths } from '../../../profile/routes/profile.paths.ts'
 
 interface Props {
     user: Collections.User
@@ -19,6 +20,7 @@ interface Props {
 
 const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
     const navigate = useNavigate()
+    const windowWidth = useWindowWidth()
     const myUserId = useAppSelector(state => state.auth.user.id)
     const [createChat] = useCreateChatMutation()
     const [removeFriend] = useRemoveFriendMutation()
@@ -30,11 +32,26 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
         setIsUserInChat(chatsList?.some((chat) => chat.user1Id === user.id || chat.user2Id === user.id) ?? false)
     }, [])
 
-    const handleCreateChat = async (): Promise<void> => {
-        await createChat(user.id).then(() => {
+    const handleCreateChat = (): void => {
+        void createChat(user.id).then(() => {
             setIsUserInChat(true)
+        }).then(() => {
+            if (windowWidth >= 800) {
+                navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })
+            } else {
+                navigate(chatPaths.chat, { state: { senderId: myUserId, receiverId: user.id } })
+            }
         })
     }
+
+    const handleRedirectToChat = (): void => {
+        if (windowWidth >= 800) {
+            navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })
+        } else {
+            navigate(chatPaths.chat, { state: { senderId: myUserId, receiverId: user.id } })
+        }
+    }
+
     const handleDeleteFriend = async (): Promise<void> => {
         await removeFriend(user.id).then(() => {
             refetchPossible()
@@ -42,28 +59,23 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
         })
     }
 
+    console.log('handleDeleteFriend', handleDeleteFriend)
+
     return (
         <StyledUserCard>
             <Flex alignItems='center' >
-                <div><Avatar size={64} src={user.ava ?? ava}/></div>
-                <Flex direction='column'>
-                    <div className='full_name' onClick={() => {
-                        navigate(profilePaths.profile, { state: { userId: user.id } })
-                    }}>
+                <div><Avatar size={44} src={user.ava ?? ava}/></div>
+                <div className='info'>
+                    <div className='full_name' onClick={() => { navigate(profilePaths.profile, { state: { userId: user.id } }) }}>
                         {user.name} {user.surname}
                     </div>
-                    <AccentButton onClick={() => { void handleDeleteFriend() }}>
-                       Удалить из друзей
-                    </AccentButton>
 
-                    {!isUserInChat ? <TextButton onClick={() => { void handleCreateChat() }}>
-                        Создать чат
-                    </TextButton> : <TextButton onClick={() => {
-                        navigate(chatPaths.chat_list, { state: { senderId: myUserId, receiverId: user.id } })
-                    }}>
-                        Перейти в чат
+                    {!isUserInChat ? <TextButton onClick={handleCreateChat}>
+                        <MessageOutlined className='icon'/>
+                    </TextButton> : <TextButton onClick={handleRedirectToChat}>
+                        <MessageOutlined className='icon'/>
                     </TextButton>}
-                </Flex>
+                </div>
             </Flex>
         </StyledUserCard>
     )

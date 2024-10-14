@@ -9,6 +9,13 @@ export const StyledFriendsWrapper = styled.div`
         height: 100%;
     }
     
+    .card-wrapper {
+        @media screen and (max-width: 800px) {
+            border: none;
+            padding: 0;
+        }
+    }
+    
     .spinner-wrapper {
         height: 100%;
         display: flex;
@@ -16,10 +23,14 @@ export const StyledFriendsWrapper = styled.div`
         align-items: center
     }
     
-    h3 {
-        font-size: 20px;
-        color: ${({ theme }) => theme.text};
-        margin-bottom: 15px;
+    .card-header {
+        margin-bottom: 10px;
+        padding: 0;
+        
+        h3 {
+            font-size: 20px;
+            color: ${({ theme }) => theme.text};
+        }
     }
 
     p {

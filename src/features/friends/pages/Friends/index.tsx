@@ -13,6 +13,7 @@ import FriendCard from '../../components/Cards/FriendCard.tsx'
 import PossibleCard from '../../components/Cards/PossibleCard.tsx'
 import OutgoingCard from '../../components/Cards/OutgoingCard.tsx'
 import IncomingCard from '../../components/Cards/IncomingCard.tsx'
+import { TextButton } from '@/kit'
 
 const Friends: FC = () => {
     const { data: possibleList, isFetching: isPossibleFetching, refetch: refetchPossible } = useGetPossibleFriendsQuery(null)
@@ -23,9 +24,11 @@ const Friends: FC = () => {
     return (
         <StyledFriendsWrapper>
             <Card className='card'>
-                <Flex direction='column' gap={12}>
-                    {!isIncomingFetching && incomingList?.length !== 0 ? <Card>
-                        <h3>Входящие запросы дружбы</h3>
+                <Flex direction='column' gap={16}>
+                    {!isIncomingFetching && incomingList?.length !== 0 ? <Card className='card-wrapper'>
+                        <Flex className='card-header' justifyContent='space-between' alignItems='center'>
+                            <h3>Входящие запросы дружбы</h3>
+                        </Flex>
                         <Flex flexWrap='wrap'>{incomingList?.map((user, index) => (
                             <IncomingCard
                                 user={user}
@@ -37,8 +40,10 @@ const Friends: FC = () => {
                         ))}</Flex>
                     </Card> : null}
 
-                    {!isOutgoingFetching && outgoingList?.length !== 0 ? <Card>
-                        <h3>Исходящие запросы дружбы</h3>
+                    {!isOutgoingFetching && outgoingList?.length !== 0 ? <Card className='card-wrapper'>
+                        <Flex className='card-header' justifyContent='space-between' alignItems='center'>
+                            <h3>Исходящие запросы дружбы</h3>
+                        </Flex>
                         <Flex flexWrap='wrap'>{outgoingList?.map((user, index) => (
                             <OutgoingCard
                                 user={user}
@@ -49,8 +54,27 @@ const Friends: FC = () => {
                         ))}</Flex>
                     </Card> : null}
 
-                    <Card>
-                        <h3>Мои друзья</h3>
+                    {possibleList?.length !== 0 && <Card className='card-wrapper'>
+                        <Flex className='card-header' justifyContent='space-between' alignItems='center'>
+                            <h3>Возможные друзья</h3>
+                            <TextButton onClick={() => { console.log('show all') }}>Показать все</TextButton>
+                        </Flex>
+                        {!isPossibleFetching ? <Flex flexWrap='wrap'>{possibleList?.map((user, index) => (
+                            <PossibleCard
+                                user={user}
+                                key={index}
+                                refetchPossible={() => { void refetchPossible() }}
+                                refetchOutgoing={() => { void refetchOutgoing() }}
+                            />
+                        ))}</Flex> : <Flex justifyContent='center' alignItems='center'>
+                            <div className='spinner-wrapper'><CSpinner color="secondary"/></div>
+                        </Flex>}
+                    </Card>}
+
+                    <Card className='card-wrapper'>
+                        <Flex className='card-header' justifyContent='space-between' alignItems='center'>
+                            <h3>Мои друзья</h3>
+                        </Flex>
                         {!isFriendsFetching ? <>
                             {((friendsList?.length) !== 0) ? <Flex flexWrap='wrap'>{friendsList?.map((friend, index) => (
                                 <FriendCard
@@ -61,20 +85,6 @@ const Friends: FC = () => {
                                 />
                             ))}</Flex> : <p>Вы ещё не добавили ни одного друга</p>}
                         </> : <Flex justifyContent='center' alignItems='center'>
-                            <div className='spinner-wrapper'><CSpinner color="secondary"/></div>
-                        </Flex>}
-                    </Card>
-
-                    <Card>
-                        <h3>Возможные друзья</h3>
-                        {!isPossibleFetching ? <Flex flexWrap='wrap'>{possibleList?.map((user, index) => (
-                            <PossibleCard
-                                user={user}
-                                key={index}
-                                refetchPossible={() => { void refetchPossible() }}
-                                refetchOutgoing={() => { void refetchOutgoing() }}
-                            />
-                        ))}</Flex> : <Flex justifyContent='center' alignItems='center'>
                             <div className='spinner-wrapper'><CSpinner color="secondary"/></div>
                         </Flex>}
                     </Card>
