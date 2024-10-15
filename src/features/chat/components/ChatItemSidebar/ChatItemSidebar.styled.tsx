@@ -37,12 +37,14 @@ export const StyledChatItemSidebarWrapper = styled.div`
     &.last {
         border-bottom: none;
     }
+    
+    @media screen and (min-width: 800px){
+        &.active {
+            background-color: rgba(255, 255, 255, 0.04);
 
-    &.active {
-        background-color: rgba(255, 255, 255, 0.04);
-
-        .last_message {
-            color: ${({ theme }) => theme.text};
-        }
+            .last_message {
+                color: ${({ theme }) => theme.text};
+            }
+        } 
     }
 `

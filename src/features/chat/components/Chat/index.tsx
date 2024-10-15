@@ -87,37 +87,33 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }, [messages, setReplyToMessage])
 
     return (
-        <div>
+        <StyledChatWrapper ref={wrapper}>
             <ChatHeader receiverId={receiverId} senderId={senderId}/>
+            {receiverId !== null ? <>
+                <Flex direction="column" justifyContent="space-between" className='wrapper-chat'>
+                    <List
+                        className='list'
+                        loading={isLoading}
+                        dataSource={messages}
+                        renderItem={() => null}
+                    >
+                        {memoizedMessages}
+                    </List>
 
-            <StyledChatWrapper ref={wrapper}>
-                <ChatHeader receiverId={receiverId} senderId={senderId}/>
-                {receiverId !== null ? <>
-                    <Flex direction="column" justifyContent="space-between" className='wrapper-chat'>
-                        <List
-                            className='list'
-                            loading={isLoading}
-                            dataSource={messages}
-                            renderItem={() => null}
-                        >
-                            {memoizedMessages}
-                        </List>
+                    <ChatBottom
+                        setReplyToMessage={setReplyToMessage}
+                        replyToMessage={replyToMessage}
+                        senderId={senderId}
+                        receiverId={receiverId}
+                        scrollBottom={scrollBottom}
+                    />
+                </Flex>
 
-                        <ChatBottom
-                            setReplyToMessage={setReplyToMessage}
-                            replyToMessage={replyToMessage}
-                            senderId={senderId}
-                            receiverId={receiverId}
-                            scrollBottom={scrollBottom}
-                        />
-                    </Flex>
-
-                    {scrollPosition > 200 && (
-                        <button onClick={() => { scrollToBottom('smooth') }} className='btn scroll-btn'/>
-                    )}
-                </> : <div className='no_select_chat'><h3>Выберите кому <br/> вы хотите написать</h3></div>}
-            </StyledChatWrapper>
-        </div>
+                {scrollPosition > 200 && (
+                    <button onClick={() => { scrollToBottom('smooth') }} className='btn scroll-btn'/>
+                )}
+            </> : <div className='no_select_chat'><h3>Выберите кому <br/> вы хотите написать</h3></div>}
+        </StyledChatWrapper>
     )
 }
 

@@ -3,10 +3,10 @@ import styled from 'styled-components'
 export const StyledChatHeader = styled.div`
     position: fixed;
     z-index: 999;
-    top: 0;
+    top: 20px;
     padding: 20px;
-    width: calc(100% - 270px);
-    max-width: 900px;
+    width: calc(100% - 520px);
+    max-width: 650px;
     background-color: ${({ theme }) => theme.card.background};
 
 
@@ -20,8 +20,10 @@ export const StyledChatHeader = styled.div`
     }
     
     @media screen and (max-width: 800px){
+        top: 0;
         left: 0;
         width: 100%;
+        max-width: 100%;
         
         .back-mobile {
             display: block ;

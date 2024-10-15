@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const StyledChatWrapper = styled.div`
     position: relative;
+    width: 100%;
     padding: 20px;
     background-color: ${({ theme }) => theme.card.background};
     border: 1px solid ${({ theme }) => theme.card.border};
