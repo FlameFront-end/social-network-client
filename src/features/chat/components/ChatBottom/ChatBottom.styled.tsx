@@ -2,19 +2,21 @@ import styled from 'styled-components'
 import Flex from '../../../kit/components/Flex'
 
 export const StyledChatBottom = styled(Flex)`
-    width: calc(100% - 290px);
-    max-width: calc(920px - 20px - 20px);
+    width: calc(100% - 540px);
+    max-width: calc(670px - 20px - 20px);
     position: fixed;
     margin: 10px 0;
-    bottom: 0;
+    bottom: 30px;
     padding: 10px;
     background-color: #292929;
     border-radius: 12px;
     -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.30), 0 4px 16px 0 rgba(0, 0, 0, 0.30);
 
-    @media screen and (max-width: 800px){
+    @media screen and (max-width: 800px) {
+        bottom: 0;
         width: calc(100% - 20px);
+        max-width: 100%;
     }
     
     .wrapper {
