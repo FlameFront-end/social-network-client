@@ -40,8 +40,6 @@ const RouterProtect = (): JSX.Element => {
         }
     }, [token])
 
-    console.log('userData', userData)
-
     if (!isAuth && (pathname !== pathsConfig.login && pathname !== pathsConfig.register)) {
         return <Navigate to={pathsConfig.login} replace />
     }

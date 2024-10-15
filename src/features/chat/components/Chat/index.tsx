@@ -41,7 +41,7 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
 
     const scrollToBottom = useCallback((behavior: 'smooth' | 'auto'): void => {
         const list = wrapper.current?.querySelector('.list')
-        list?.scrollTo({ top: document.body.scrollHeight, behavior })
+        list?.scrollTo({ top: list.scrollHeight, behavior })
     }, [])
 
     useEffect(() => {
@@ -82,10 +82,10 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }, [wrapper?.current])
 
     useEffect(() => {
-        if (wrapper?.current) {
+        if (wrapper?.current && messages.length) {
             scrollToBottom('auto')
         }
-    }, [messages, scrollToBottom, wrapper?.current])
+    }, [wrapper?.current, messages?.length])
 
     const memoizedMessages = useMemo(() => {
         return messages.map((message) => (
