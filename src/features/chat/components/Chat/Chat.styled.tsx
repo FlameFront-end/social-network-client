@@ -106,7 +106,7 @@ export const StyledChatWrapper = styled.div`
         
         width: 38px;
         height: 38px;
-        position: fixed;
+        position: absolute;
         right: 40px;
         bottom: 100px;
         border: 1px solid #363738;

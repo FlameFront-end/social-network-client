@@ -20,11 +20,11 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
         return Number(receiverId === senderId ? senderId : receiverId)
     }, [receiverId, senderId])
 
-    const { data: user } = useGetUserQuery(interlocutorId)
+    const { data: user, isFetching } = useGetUserQuery(interlocutorId)
 
     return (
         <StyledChatHeader>
-            <Flex gap={12}>
+            {!isFetching && <Flex gap={12}>
                 <button className='back-mobile' onClick={() => { navigate(pathsConfig.chat_list) }}>
                     <ArrowLeftOutlined/>
                 </button>
@@ -38,7 +38,8 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
                     </div>
                 </Flex>
 
-            </Flex>
+            </Flex>}
+
         </StyledChatHeader>
     )
 }

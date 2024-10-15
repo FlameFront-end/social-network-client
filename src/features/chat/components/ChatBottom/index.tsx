@@ -1,7 +1,6 @@
 import {
     type Dispatch,
     type FC,
-    type MutableRefObject,
     type SetStateAction,
     memo,
     useEffect,
@@ -21,14 +20,14 @@ interface Props {
     replyToMessage: Collections.Message | null
     senderId: number | string | null
     receiverId: number | string | null
-    scrollBottom: MutableRefObject<HTMLDivElement | null>
+    scrollToBottom: (behavior: 'smooth' | 'auto') => void
 }
 
 interface Emoji {
     native: string
 }
 
-const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, receiverId, scrollBottom }) => {
+const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, receiverId, scrollToBottom }) => {
     const [content, setContent] = useState('')
     const [isRecording, setIsRecording] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
@@ -44,10 +43,6 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
 
     const handleMouseLeave = (): void => {
         setIsHovered(false)
-    }
-
-    const scrollToBottom = (behavior: 'smooth' | 'auto'): void => {
-        scrollBottom.current?.scrollIntoView({ behavior, block: 'end' })
     }
 
     const addEmoji = (emoji: Emoji): void => {
@@ -177,6 +172,6 @@ export default memo(ChatBottom, (prevProps, nextProps) => {
         prevProps.senderId === nextProps.senderId &&
         prevProps.receiverId === nextProps.receiverId &&
         prevProps.replyToMessage === nextProps.replyToMessage &&
-        prevProps.scrollBottom.current === nextProps.scrollBottom.current
+        prevProps.scrollToBottom === nextProps.scrollToBottom
     )
 })

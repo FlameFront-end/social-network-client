@@ -5,9 +5,9 @@ import { chatActions, fetchMessages } from '../../store/chat.slice.ts'
 import { StyledChatWrapper } from './Chat.styled.tsx'
 import { SocketApi } from '@/core'
 import { Flex } from '@/kit'
-import ChatHeader from '../ChatHeader'
 import Message from '../Message'
 import ChatBottom from '../ChatBottom'
+import ChatHeader from '../ChatHeader'
 
 interface Props {
     senderId: number | string | null
@@ -21,23 +21,27 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [replyToMessage, setReplyToMessage] = useState<Collections.Message | null>(null)
 
-    const scrollBottom: MutableRefObject<HTMLDivElement | null> = useRef(null)
     const wrapper: MutableRefObject<HTMLDivElement | null> = useRef(null)
     const [scrollPosition, setScrollPosition] = useState(0)
 
     const handleScroll = useCallback((): void => {
-        const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
-        const scrollTop = window.scrollY || window.pageYOffset
-        const clientHeight = document.documentElement.clientHeight || window.innerHeight
-        const maxScrollPosition = scrollHeight - clientHeight
+        const list = wrapper.current?.querySelector('.list')
 
-        const newScrollPosition = maxScrollPosition - scrollTop
+        if (list) {
+            const scrollHeight = list.scrollHeight
+            const scrollTop = list.scrollTop
+            const clientHeight = list.clientHeight
+            const maxScrollPosition = scrollHeight - clientHeight
 
-        setScrollPosition(newScrollPosition)
+            const newScrollPosition = maxScrollPosition - scrollTop
+
+            setScrollPosition(newScrollPosition)
+        }
     }, [])
 
     const scrollToBottom = useCallback((behavior: 'smooth' | 'auto'): void => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior })
+        const list = wrapper.current?.querySelector('.list')
+        list?.scrollTo({ top: document.body.scrollHeight, behavior })
     }, [])
 
     useEffect(() => {
@@ -69,12 +73,13 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }, [dispatch, senderId, receiverId])
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
+        const list = wrapper.current?.querySelector('.list')
+        list?.addEventListener('scroll', handleScroll)
 
         return () => {
-            window.removeEventListener('scroll', handleScroll)
+            list?.removeEventListener('scroll', handleScroll)
         }
-    }, [handleScroll])
+    }, [wrapper?.current])
 
     useEffect(() => {
         scrollToBottom('auto')
@@ -87,10 +92,10 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }, [messages, setReplyToMessage])
 
     return (
-        <StyledChatWrapper ref={wrapper}>
+        <StyledChatWrapper>
             <ChatHeader receiverId={receiverId} senderId={senderId}/>
             {receiverId !== null ? <>
-                <Flex direction="column" justifyContent="space-between" className='wrapper-chat'>
+                <Flex direction="column" justifyContent="space-between" className='wrapper-chat' ref={wrapper}>
                     <List
                         className='list'
                         loading={isLoading}
@@ -105,11 +110,11 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
                         replyToMessage={replyToMessage}
                         senderId={senderId}
                         receiverId={receiverId}
-                        scrollBottom={scrollBottom}
+                        scrollToBottom={scrollToBottom}
                     />
                 </Flex>
 
-                {scrollPosition > 200 && (
+                {scrollPosition > 600 && (
                     <button onClick={() => { scrollToBottom('smooth') }} className='btn scroll-btn'/>
                 )}
             </> : <div className='no_select_chat'><h3>Выберите кому <br/> вы хотите написать</h3></div>}
