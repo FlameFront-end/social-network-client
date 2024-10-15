@@ -10,6 +10,8 @@ export const StyledChatWrapper = styled.div`
     height: 100%;
     overflow: hidden !important;
     
+   margin-top: 70px;
+    
 
     @media screen and (max-width: 800px){
         padding: 10px;
