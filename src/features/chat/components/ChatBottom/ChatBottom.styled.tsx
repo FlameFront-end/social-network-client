@@ -3,7 +3,7 @@ import Flex from '../../../kit/components/Flex'
 
 export const StyledChatBottom = styled(Flex)`
     width: calc(100% - 40px);
-    position: absolute;
+    position: fixed;
     margin: 10px 0;
     bottom: 0;
     padding: 10px;

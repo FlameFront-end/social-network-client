@@ -4,6 +4,7 @@ export const StyledChatListWrapper = styled.div`
     overflow-y: auto;
     width: 100%;
     height: 100%;
+    max-width: 250px;
     padding: 0 8px;
 
     background-color: ${({ theme }) => theme.card.background};
@@ -13,7 +14,7 @@ export const StyledChatListWrapper = styled.div`
     border-radius: 10px 0 0 10px;
     
     @media screen and (max-width: 800px){
-        width: 100%;
+        max-width: 100%;
         border-radius: 0;
         border: none;
     }

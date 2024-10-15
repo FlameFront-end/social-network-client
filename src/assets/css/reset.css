@@ -27,3 +27,7 @@ ul {
     box-shadow: none;
 }
 
+.ant-float-btn-default {
+    display: none !important;
+}
+

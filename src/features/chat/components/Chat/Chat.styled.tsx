@@ -8,8 +8,9 @@ export const StyledChatWrapper = styled.div`
     border-radius: 0 10px 10px 0;
     width: 100%;
     height: 100%;
-    
-    
+    overflow: hidden !important;
+
+
     @media screen and (max-width: 800px){
         padding: 10px;
         border: none;
@@ -30,13 +31,16 @@ export const StyledChatWrapper = styled.div`
         justify-content: space-between;
         width: 100%;
         height: 100%;
-        overflow-y: auto;
         scrollbar-width: none;
         -ms-overflow-style: none;
         padding-bottom: 50px;
+
+        overflow: hidden !important;
+
     }
     
     .list {
+        overflow: hidden !important;
         padding: 0 30px;
 
         @media screen and (max-width: 800px){
@@ -103,7 +107,7 @@ export const StyledChatWrapper = styled.div`
         
         width: 38px;
         height: 38px;
-        position: absolute;
+        position: fixed;
         right: 40px;
         bottom: 100px;
         border: 1px solid #363738;
