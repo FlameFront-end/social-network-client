@@ -5,6 +5,7 @@ import type { LoginResponse } from '../types/login.types'
 interface AuthState {
     user: {
         isAuth: boolean
+        isOnline: boolean
         token: string | undefined | null
         id: number | undefined
         ava: string | undefined
@@ -21,10 +22,12 @@ const user = JSON.parse(Cookies.get('user') ?? '{}') as {
     name?: string
     surname?: string
     patronymic?: string | null
+    isOnline?: boolean
 }
 
 const initialState: AuthState = {
     user: {
+        isOnline: false,
         isAuth: user?.token != null,
         token: user?.token,
         id: user?.id,
@@ -45,7 +48,8 @@ export const authSlice = createSlice({
 
             state.user = {
                 ...payload,
-                isAuth: true
+                isAuth: true,
+                isOnline: true
             }
         },
         removeUser(state) {
@@ -59,6 +63,7 @@ export const authSlice = createSlice({
             state.user.patronymic = undefined
             state.user.isAuth = false
             state.user.ava = undefined
+            state.user.isOnline = false
         }
     }
 })
