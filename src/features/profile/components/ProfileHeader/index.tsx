@@ -1,16 +1,13 @@
 import { type FC, useEffect, useState } from 'react'
-import { Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
-// import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { getFullName } from '@/utils'
 import { profilePaths } from '../../routes/profile.paths.ts'
-import { Flex, Avatar } from '@/kit'
+import { Flex, Avatar, GreyButton } from '@/kit'
 import { StyledProfileHeader } from './ProfileHeader.styled.tsx'
 import { SocketApi } from '@/core'
 import Cookies from 'js-cookie'
 import { useAppSelector } from '@/hooks'
-
-const { Title } = Typography
+import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
 
 interface Props {
     user: Collections.User
@@ -42,40 +39,50 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile }) => {
     }, [isMyProfile, token, isOnlineMy, lastSeenMy])
 
     return (
-        <StyledProfileHeader>
+        <>
             {(user != null) && (
-                <Flex alignItems='center' justifyContent='space-between'>
-                    <Flex alignItems='center'>
+                <StyledProfileHeader>
+                    <div className='left'>
                         <Avatar size='large' ava={user.ava} status={onlineStatus} lastSeen={lastSeen}/>
-                        <Flex direction='column' gap={4}>
-                            <Title level={4}>{getFullName(user.surname, user.name, null)}</Title>
-                            {/* <Flex> */}
-                            {/*    <Flex alignItems='center' gap={4} className="item"> */}
-                            {/*        <EnvironmentOutlined/> */}
-                            {/*        Калуга */}
-                            {/*    </Flex> */}
-                            {/*    <Flex alignItems='center' gap={4} className="item"> */}
-                            {/*        <EnvironmentOutlined/> */}
-                            {/*        BSO Real Estate Management (Dubai) */}
-                            {/*    </Flex> */}
-                            {/*    <Flex alignItems='center' gap={4} className="item detail"> */}
-                            {/*        <InfoCircleOutlined/> */}
-                            {/*        Подробнее */}
-                            {/*    </Flex> */}
-                            {/* </Flex> */}
-                        </Flex>
-                    </Flex>
-                    {isMyProfile &&
-                        <button
-                            className='edit'
-                            onClick={() => { navigate(profilePaths.edit, { state: { userId: user.id } }) }}
-                        >
-                            Редактировать профиль
-                        </button>
-                    }
-                </Flex>
+                        <div className='info'>
+                            <h2 className='name'>{getFullName(user.surname, user.name, null)}</h2>
+                            <div className='status'>тут статус</div>
+                            <div className='list'>
+                                <Flex alignItems='center' gap={4} className="item">
+                                    <EnvironmentOutlined/>
+                                    Калуга
+                                </Flex>
+                                <Flex alignItems='center' gap={4} className="item">
+                                    <EnvironmentOutlined/>
+                                    BSO
+                                </Flex>
+                                <Flex alignItems='center' gap={4} className="item detail">
+                                    <InfoCircleOutlined/>
+                                    Подробнее
+                                </Flex>
+                            </div>
+                            <GreyButton
+                                onClick={() => { console.log('опубликовать') }}
+                                className='public'
+                            >
+                                Опубликовать
+                            </GreyButton>
+                        </div>
+                    </div>
+
+                    <div className="right">
+                        {isMyProfile &&
+                            <button
+                                className='edit'
+                                onClick={() => { navigate(profilePaths.edit, { state: { userId: user.id } }) }}
+                            >
+                                Редактировать профиль
+                            </button>
+                        }
+                    </div>
+                </StyledProfileHeader>
             )}
-        </StyledProfileHeader>
+        </>
     )
 }
 

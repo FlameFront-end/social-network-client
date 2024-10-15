@@ -18,22 +18,19 @@ const Profile: FC = () => {
     const isMyProfile = state?.userId === userId
     const token = Cookies.get('token')
 
-    const handleLogoutClick = (): void => {
-        logout()
-    }
-
     return (
         <>
             {user && (
                 <ProfileHeader user={user} isMyProfile={isMyProfile}/>
             )}
-            {isMyProfile && (
-                <LogoutButton collapsed={false} onClick={handleLogoutClick}>
-                    <LogoutButtonLabel collapsed={false} >Выход</LogoutButtonLabel>
-                </LogoutButton>
-            )}
+
             {(isMyProfile && token) && (
-                <QRCodeSVG value={`${FRONTEND_URL}/auth/login?token=${token}`} />
+                <>
+                    <LogoutButton collapsed={false} onClick={logout}>
+                        <LogoutButtonLabel collapsed={false}>Выход</LogoutButtonLabel>
+                    </LogoutButton>
+                    <QRCodeSVG value={`${FRONTEND_URL}/auth/login?token=${token}`} />
+                </>
             )}
         </>
     )

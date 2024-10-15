@@ -5,4 +5,9 @@ export const CardWrapper = styled.div`
     background-color: ${({ theme }) => theme.card.background};
     border: 1px solid ${({ theme }) => theme.card.border};
     border-radius: 10px;
+
+    @media screen and (max-width: 800px) {
+        border: none;
+        background-color: #19191a;
+    }
 `

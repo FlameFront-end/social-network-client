@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const AvatarStyledWrapper = styled.div`
     position: relative;
+    width: max-content;
     
     .absolute-content {
         position: absolute;
