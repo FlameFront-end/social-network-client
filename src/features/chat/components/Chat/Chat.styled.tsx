@@ -34,21 +34,24 @@ export const StyledChatWrapper = styled.div`
         -ms-overflow-style: none;
         padding-bottom: 50px;
     }
-    
+
     .list {
         margin-top: 60px;
-
-        overflow-y: scroll !important;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+        overflow-y: scroll !important; 
         padding: 0 30px;
 
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+            display: none; 
+        }
+
         @media screen and (max-width: 800px){
-           padding: 0;
+            padding: 0;
         }
     }
     
-
     .reply {
         padding: 0 11px;
         
