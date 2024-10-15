@@ -6,10 +6,9 @@ export const StyledChatWrapper = styled.div`
     background-color: ${({ theme }) => theme.card.background};
     border: 1px solid ${({ theme }) => theme.card.border};
     border-radius: 0 10px 10px 0;
-    width: 100%;
     height: 100%;
     overflow: hidden !important;
-
+    
 
     @media screen and (max-width: 800px){
         padding: 10px;

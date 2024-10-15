@@ -1,4 +1,13 @@
-import { type Dispatch, type FC, type MutableRefObject, type SetStateAction, useEffect, useRef, useState } from 'react'
+import {
+    type Dispatch,
+    type FC,
+    type MutableRefObject,
+    type SetStateAction,
+    memo,
+    useEffect,
+    useRef,
+    useState
+} from 'react'
 import { StyledChatBottom } from './ChatBottom.styled.tsx'
 import { AudioMutedOutlined, AudioOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons'
 import { Input } from 'antd'
@@ -163,4 +172,11 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
     )
 }
 
-export default ChatBottom
+export default memo(ChatBottom, (prevProps, nextProps) => {
+    return (
+        prevProps.senderId === nextProps.senderId &&
+        prevProps.receiverId === nextProps.receiverId &&
+        prevProps.replyToMessage === nextProps.replyToMessage &&
+        prevProps.scrollBottom.current === nextProps.scrollBottom.current
+    )
+})
