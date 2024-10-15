@@ -82,8 +82,10 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }, [wrapper?.current])
 
     useEffect(() => {
-        scrollToBottom('auto')
-    }, [messages, scrollToBottom])
+        if (wrapper?.current) {
+            scrollToBottom('auto')
+        }
+    }, [messages, scrollToBottom, wrapper?.current])
 
     const memoizedMessages = useMemo(() => {
         return messages.map((message) => (
