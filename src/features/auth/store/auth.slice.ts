@@ -6,6 +6,7 @@ interface AuthState {
     user: {
         isAuth: boolean
         isOnline: boolean
+        lastSeen: string | undefined
         token: string | undefined | null
         id: number | undefined
         ava: string | undefined
@@ -23,11 +24,13 @@ const user = JSON.parse(Cookies.get('user') ?? '{}') as {
     surname?: string
     patronymic?: string | null
     isOnline?: boolean
+    lastSeen?: string
 }
 
 const initialState: AuthState = {
     user: {
         isOnline: false,
+        lastSeen: user?.lastSeen,
         isAuth: user?.token != null,
         token: user?.token,
         id: user?.id,
@@ -48,8 +51,7 @@ export const authSlice = createSlice({
 
             state.user = {
                 ...payload,
-                isAuth: true,
-                isOnline: true
+                isAuth: true
             }
         },
         removeUser(state) {

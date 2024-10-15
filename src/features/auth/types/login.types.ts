@@ -10,4 +10,6 @@ export interface LoginResponse {
     name: string
     surname: string
     patronymic: string | null
+    isOnline: boolean
+    lastSeen: string
 }

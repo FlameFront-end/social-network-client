@@ -1,12 +1,11 @@
 import { type FC, useEffect, useState } from 'react'
-import { Avatar, Typography } from 'antd'
+import { Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 // import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { getFullName } from '@/utils'
 import { profilePaths } from '../../routes/profile.paths.ts'
-import { Flex, OnlineStatus } from '@/kit'
+import { Flex, Avatar } from '@/kit'
 import { StyledProfileHeader } from './ProfileHeader.styled.tsx'
-import ava from '../../../../../public/ava.png'
 import { SocketApi } from '@/core'
 import Cookies from 'js-cookie'
 import { useAppSelector } from '@/hooks'
@@ -22,31 +21,34 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile }) => {
     const navigate = useNavigate()
 
     const [onlineStatus, setOnlineStatus] = useState(false)
-    const isOnline = useAppSelector(state => state.auth.user.isOnline)
+    const [lastSeen, setLastSeen] = useState('')
+    const isOnlineMy = useAppSelector(state => state.auth.user.isOnline)
+    const lastSeenMy = useAppSelector(state => state.auth.user.lastSeen)
 
     const token = Cookies.get('token')
 
     useEffect(() => {
         if (isMyProfile) {
-            setOnlineStatus(isOnline)
+            setOnlineStatus(isOnlineMy)
+            setLastSeen(lastSeenMy ?? '')
         } else {
             SocketApi?.socket?.on('user-status', (data) => {
                 if (data.userId === user.id) {
-                    setOnlineStatus(Boolean(data.online))
+                    setOnlineStatus(Boolean(data.data.isOnline))
+                    setLastSeen(data.data.lastSeen)
                 }
             })
         }
-    }, [isMyProfile, token])
+    }, [isMyProfile, token, isOnlineMy, lastSeenMy])
 
     return (
         <StyledProfileHeader>
             {(user != null) && (
                 <Flex alignItems='center' justifyContent='space-between'>
                     <Flex alignItems='center'>
-                        <div><Avatar size={128} src={user.ava ?? ava}/></div>
+                        <Avatar size='large' ava={user.ava} status={onlineStatus} lastSeen={lastSeen}/>
                         <Flex direction='column' gap={4}>
                             <Title level={4}>{getFullName(user.surname, user.name, null)}</Title>
-                            <OnlineStatus status={onlineStatus}/>
                             {/* <Flex> */}
                             {/*    <Flex alignItems='center' gap={4} className="item"> */}
                             {/*        <EnvironmentOutlined/> */}

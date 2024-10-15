@@ -16,8 +16,6 @@ const RouterProtect = (): JSX.Element => {
 
     const userData = useAppSelector(state => state.auth.user)
 
-    console.log('userData', userData)
-
     useConnectSocket()
 
     const token = Cookies.get('token')
@@ -31,7 +29,8 @@ const RouterProtect = (): JSX.Element => {
             socket.on('user-status', (data) => {
                 setUser({
                     ...userData,
-                    isOnline: data.online
+                    isOnline: data.data.isOnline,
+                    lastSeen: data.data.lastSeen
                 })
             })
 
@@ -40,6 +39,8 @@ const RouterProtect = (): JSX.Element => {
             }
         }
     }, [token])
+
+    console.log('userData', userData)
 
     if (!isAuth && (pathname !== pathsConfig.login && pathname !== pathsConfig.register)) {
         return <Navigate to={pathsConfig.login} replace />
