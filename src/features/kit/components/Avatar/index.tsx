@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 
 interface Props {
     ava: string | null | undefined
-    size: 'small' | 'medium' | 'large'
+    size: 'ultraSmall' | 'small' | 'medium' | 'large'
     status: boolean | null
     lastSeen: string | null
     showStatus?: boolean
@@ -22,6 +22,7 @@ const Avatar: FC<Props> = ({
     showLastSeen = true
 }) => {
     const sizes = {
+        ultraSmall: 35,
         small: 48,
         medium: 72,
         large: 128
@@ -43,7 +44,7 @@ const Avatar: FC<Props> = ({
     }
 
     return (
-        <AvatarStyledWrapper>
+        <AvatarStyledWrapper size={size}>
             {showStatus && (
                 <div className='absolute-content'>
                     {status ? (

@@ -1,6 +1,17 @@
 import styled from 'styled-components'
 
-export const AvatarStyledWrapper = styled.div`
+interface WrapperProps {
+    size: 'ultraSmall' | 'small' | 'medium' | 'large'
+}
+
+const statusSizes = {
+    ultraSmall: '8px',
+    small: '10px',
+    medium: '15px',
+    large: '20px'
+}
+
+export const AvatarStyledWrapper = styled.div<WrapperProps>`
     position: relative;
     width: max-content;
     
@@ -13,8 +24,8 @@ export const AvatarStyledWrapper = styled.div`
     }
     
     .online {
-        width: 20px;
-        height: 20px;
+        width: ${({ size }) => statusSizes[size]};
+        height: ${({ size }) => statusSizes[size]};
         border-radius: 50%;
         background-color: #4bb34b;
     }
@@ -26,5 +37,4 @@ export const AvatarStyledWrapper = styled.div`
         font-size: 12px;
         padding: 2px 4px 2px;
     }
-    
 `

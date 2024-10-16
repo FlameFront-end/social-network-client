@@ -53,7 +53,7 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
             }
         }
 
-        socket.on(USER_STATUS, handleUserStatusResponse)
+        socket.on(USER_STATUS_RESPONSE, handleUserStatusResponse)
 
         return () => {
             socket?.off(USER_STATUS_RESPONSE, handleUserStatusResponse)
