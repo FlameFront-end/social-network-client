@@ -12,6 +12,7 @@ import { io } from 'socket.io-client'
 import { BACKEND_URL } from '@/core'
 import { USER_STATUS } from '@/constants'
 import { getFullName } from '@/utils'
+import { type OnlineStatusResponse } from '../../../../types/global.types.ts'
 
 interface Props {
     user: Collections.User
@@ -68,7 +69,7 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
 
         if (!userId) return
 
-        const handleUserStatus = (data: any): void => {
+        const handleUserStatus = (data: OnlineStatusResponse): void => {
             if (data.userId === userId) {
                 setOnlineStatus(!!data.data.isOnline)
             }

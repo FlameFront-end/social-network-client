@@ -10,6 +10,7 @@ import { BACKEND_URL } from '@/core'
 import { USER_STATUS } from '@/constants'
 import { useAppSelector } from '@/hooks'
 import { io } from 'socket.io-client'
+import { type OnlineStatusResponse } from '../../../../types/global.types.ts'
 
 interface Props {
     senderId: number | string | null
@@ -37,7 +38,7 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
 
         if (!userId) return
 
-        const handleUserStatus = (data: any): void => {
+        const handleUserStatus = (data: OnlineStatusResponse): void => {
             if (data.userId === userId) {
                 setOnlineStatus(!!data.data.isOnline)
             }

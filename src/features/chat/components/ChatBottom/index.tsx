@@ -17,6 +17,7 @@ import { Flex } from '@/kit'
 import { io, type Socket } from 'socket.io-client'
 import { useAppSelector } from '@/hooks'
 import { BACKEND_URL } from '@/core'
+import { type TypingMessageResponse } from '../../../../types/global.types.ts'
 
 interface Props {
     setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
@@ -163,7 +164,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
     }, [audioBlob])
 
     useEffect(() => {
-        socketRef.current?.on('typing', (data: any) => {
+        socketRef.current?.on('typing', (data: TypingMessageResponse) => {
             setTypingUserName(data.senderName)
             setTypingUserId(data.senderId)
         })
