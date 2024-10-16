@@ -1,12 +1,11 @@
 import styled from 'styled-components'
+import { Card } from '@/kit'
 
-export const StyledProfileFriendsWrapper = styled.div`
-    background-color: #19191a;
+export const StyledProfileFriendsWrapper = styled(Card)`
     display: flex;
     justify-content: space-between;
     height: 100%;
     padding: 20px;
-    border-radius: 12px;
     
     cursor: pointer;
 

@@ -5,9 +5,9 @@ export const StyledProfileHeader = styled(Card)`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    
     @media screen and (max-width: 800px) {
         justify-content: center;
     }
