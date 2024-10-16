@@ -66,7 +66,7 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
                 <Avatar
                     ava={interlocutor.ava}
                     size='small'
-                    showLastSeen={true}
+                    showLastSeen={false}
                     showStatus={true}
                     status={onlineStatus}
                     lastSeen={lastSeen}

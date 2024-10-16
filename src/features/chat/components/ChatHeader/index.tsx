@@ -60,7 +60,7 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
                     <Avatar
                         ava={user?.ava}
                         size='ultraSmall'
-                        showLastSeen={true}
+                        showLastSeen={false}
                         showStatus={true}
                         status={onlineStatus}
                         lastSeen={lastSeen}
