@@ -7,6 +7,7 @@ import { Avatar } from 'antd'
 import ava from '../../../../../public/ava.png'
 import { useNavigate } from 'react-router-dom'
 import { pathsConfig } from '@/pathsConfig'
+import { getFullName } from '@/utils'
 
 interface Props {
     senderId: number | string | null
@@ -34,7 +35,7 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
                         <Avatar size={36} src={user?.ava ?? ava}/>
                     </div>
                     <div className='name'>
-                        {user?.name} {user?.surname}
+                        {getFullName(user?.surname ?? '', user?.name ?? '', null)}
                     </div>
                 </Flex>
 

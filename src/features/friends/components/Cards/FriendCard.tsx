@@ -7,7 +7,6 @@ import { StyledUserCard } from './UserCard.styled.tsx'
 import { useRemoveFriendMutation } from '../../api/friends.api.ts'
 import { useAppSelector, useWindowWidth } from '@/hooks'
 import { Flex, TextButton } from '@/kit'
-
 import ava from '../../../../../public/ava.png'
 import { MessageOutlined } from '@ant-design/icons'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
@@ -59,8 +58,6 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
         })
     }
 
-    console.log('handleDeleteFriend', handleDeleteFriend)
-
     return (
         <StyledUserCard>
             <Flex alignItems='center' >
@@ -75,6 +72,8 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
                     </TextButton> : <TextButton onClick={handleRedirectToChat}>
                         <MessageOutlined className='icon'/>
                     </TextButton>}
+
+                    <button style={{ display: 'none' }} onClick={() => { void handleDeleteFriend() }}></button>
                 </div>
             </Flex>
         </StyledUserCard>

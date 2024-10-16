@@ -8,6 +8,7 @@ import { pathsConfig } from '@/pathsConfig'
 import Cookies from 'js-cookie'
 import { io } from 'socket.io-client'
 import { BACKEND_URL } from '@/core'
+import { MY_STATUS } from '@/constants'
 
 const RouterProtect = (): JSX.Element => {
     const { isAuth } = useAuth()
@@ -26,7 +27,7 @@ const RouterProtect = (): JSX.Element => {
                 query: { token }
             })
 
-            socket.on('user-status', (data) => {
+            socket.on(MY_STATUS, (data) => {
                 setUser({
                     ...userData,
                     isOnline: data.data.isOnline,
@@ -35,7 +36,7 @@ const RouterProtect = (): JSX.Element => {
             })
 
             return () => {
-                socket.off('user-status')
+                socket.off(MY_STATUS)
             }
         }
     }, [token])

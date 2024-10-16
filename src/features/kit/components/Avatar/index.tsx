@@ -8,7 +8,7 @@ interface Props {
     ava: string | null | undefined
     size: 'small' | 'medium' | 'large'
     status: boolean | null
-    lastSeen: string
+    lastSeen: string | null
     showStatus?: boolean
     showLastSeen?: boolean
 }

@@ -5,10 +5,10 @@ import { profilePaths } from '../../../../routes/profile.paths.ts'
 import { Flex, Avatar, GreyButton } from '@/kit'
 import { StyledProfileHeader } from './ProfileHeader.styled.tsx'
 import { SocketApi } from '@/core'
-import Cookies from 'js-cookie'
 import { useAppSelector } from '@/hooks'
 import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import MySkeleton from '../../../../../kit/components/MySkeleton'
+import { USER_STATUS, USER_STATUS_RESPONSE } from '@/constants'
 
 interface Props {
     user: Collections.User | undefined
@@ -24,21 +24,32 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile, isFetchingUser }) => {
     const isOnlineMy = useAppSelector(state => state.auth.user.isOnline)
     const lastSeenMy = useAppSelector(state => state.auth.user.lastSeen)
 
-    const token = Cookies.get('token')
-
     useEffect(() => {
         if (isMyProfile) {
             setOnlineStatus(isOnlineMy)
             setLastSeen(lastSeenMy ?? '')
         } else {
-            SocketApi?.socket?.on('user-status', (data) => {
-                if (data.userId === user?.id) {
-                    setOnlineStatus(Boolean(data.data.isOnline))
-                    setLastSeen(data.data.lastSeen)
+            const userId = user?.id
+
+            if (!SocketApi?.socket || !userId) return
+
+            SocketApi.socket.emit(USER_STATUS, { userId })
+
+            const handleUserStatusResponse = (data: any): void => {
+                if (data.userId === userId) {
+                    const { isOnline, lastSeen } = data.data
+                    setOnlineStatus(!!isOnline)
+                    setLastSeen(lastSeen)
                 }
-            })
+            }
+
+            SocketApi.socket.on(USER_STATUS, handleUserStatusResponse)
+
+            return () => {
+                SocketApi.socket?.off(USER_STATUS_RESPONSE, handleUserStatusResponse)
+            }
         }
-    }, [isMyProfile, token, isOnlineMy, lastSeenMy])
+    }, [isMyProfile, isOnlineMy, lastSeenMy, user?.id])
 
     return (
         <>

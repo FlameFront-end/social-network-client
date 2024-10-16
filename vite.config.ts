@@ -12,7 +12,8 @@ export default defineConfig({
       '@/kit': path.resolve(__dirname, './src/features/kit/components'),
       '@/utils': path.resolve(__dirname, './src/utils'),
       '@/hooks': path.resolve(__dirname, './src/hooks'),
-      '@/pathsConfig': path.resolve(__dirname, './src/router/entities/paths.config.ts')
+      '@/pathsConfig': path.resolve(__dirname, './src/router/entities/paths.config.ts'),
+      '@/constants': path.resolve(__dirname, './src/constants')
     }
   },
   plugins: [react()]
