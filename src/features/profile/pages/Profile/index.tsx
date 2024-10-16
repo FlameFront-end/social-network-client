@@ -13,12 +13,17 @@ import ProfilePhotos from './components/ProfilePhotos'
 import { StyledProfileWrapper } from './Profile.styled.tsx'
 import ProfileFriendsMobile from './components/ProfileFriendsMobile'
 import ProfileFriendsDesktop from './components/ProfileFriendsDesktop'
+import Post from '../../../posts/components/Post/Post.tsx'
+import { useGetMyPostsQuery } from '../../../posts/api/posts.api.ts'
+import { CSpinner } from '@coreui/react-pro'
 
 const Profile: FC = () => {
     const { state } = useLocation()
     const { logout } = useAuth()
     const userId = useAppSelector(state => state.auth.user.id)
+
     const { data: user, isFetching: isFetchingUser } = useGetUserQuery(state?.userId)
+    const { data: postsList, isFetching: isFetchingPostsList } = useGetMyPostsQuery(null)
 
     const isMyProfile = state?.userId === userId
     const token = Cookies.get('token')
@@ -33,6 +38,12 @@ const Profile: FC = () => {
                 <div className="grid">
                     <div className="left">
                         <ProfilePhotos/>
+
+                        {!isFetchingPostsList ? <Flex direction='column' gap={12}>
+                            {postsList?.map((post) => <Post post={post} key={post.id}/>)}</Flex> : <Flex justifyContent='center' alignItems='center'>
+                            <div><CSpinner color="secondary"/></div>
+                        </Flex>}
+
                     </div>
 
                     <div className="right">

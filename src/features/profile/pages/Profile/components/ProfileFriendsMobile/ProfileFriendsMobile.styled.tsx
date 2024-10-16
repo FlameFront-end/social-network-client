@@ -9,7 +9,7 @@ export const StyledProfileFriendsMobileWrapper = styled(Card)`
     
     cursor: pointer;
 
-    .left {
+    .left-friends-mobile {
         position: relative; 
         display: flex;
         align-items: center;
@@ -22,7 +22,7 @@ export const StyledProfileFriendsMobileWrapper = styled(Card)`
         }
     }
 
-    .right {
+    .right-friends-mobile {
         position: relative;
         display: flex;
     }

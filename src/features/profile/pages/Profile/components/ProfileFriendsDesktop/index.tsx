@@ -20,14 +20,7 @@ const ProfileFriendsDesktop: FC<Props> = ({ userId }) => {
                 <ul className="list">
                     {friendsList?.map((user, index) => (
                         <li key={index} className='friend' onClick={() => { navigate(profilePaths.profile, { state: { userId: user.id } }) }}>
-                            <Avatar
-                                ava={user.ava}
-                                size='medium'
-                                status={null}
-                                showStatus={false}
-                                lastSeen={null}
-                                showLastSeen={false}
-                            />
+                            <Avatar ava={user.ava} size='medium' />
                             <div className="name">{user.name}</div>
                         </li>
                     ))}

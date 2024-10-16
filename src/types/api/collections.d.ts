@@ -93,4 +93,13 @@ declare namespace Collections {
         createdAt: string
         details: Collections.UserDetails
     }
+
+    interface Post {
+        id: number
+        files: string[]
+        description: string | null
+        createdAt: string
+        likes: Collections.User[]
+        creator: Collections.User
+    }
 }

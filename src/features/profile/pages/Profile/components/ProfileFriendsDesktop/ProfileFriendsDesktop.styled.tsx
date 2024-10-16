@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import { Card } from '@/kit'
 
 export const StyledProfileFriendsDesktopWrapper = styled(Card)`
+    position: sticky;
+    top: 12px;
     height: 260px;
     width: 345px;
     display: flex;

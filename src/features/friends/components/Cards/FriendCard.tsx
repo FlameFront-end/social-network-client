@@ -86,13 +86,7 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
     return (
         <StyledUserCard>
             <Flex alignItems='center' >
-                <Avatar
-                    ava={user.ava}
-                    size='small'
-                    status={onlineStatus}
-                    lastSeen={null}
-                    showLastSeen={false}
-                />
+                <Avatar ava={user.ava} size='small' status={onlineStatus} showStatus />
                 <div className='info'>
                     <div className='full_name' onClick={() => { navigate(profilePaths.profile, { state: { userId: user.id } }) }}>
                         {getFullName(user?.surname ?? '', user?.name ?? '', null)}

@@ -13,22 +13,12 @@ const ProfileFriendsMobile: FC<Props> = ({ userId }) => {
     return (
         <>
             {!isFriendsFetching ? <StyledProfileFriendsMobileWrapper>
-                <div className="left">
+                <div className="left-friends-mobile">
                     <div className="count">{friendsList?.length} {friendsList?.length === 1 ? 'друг' : 'друга'}</div>
                     <div className='mutual'>Нет общих</div>
                 </div>
-                <div className="right">
-                    {friendsList?.map((user, index) => (
-                        <Avatar
-                            key={index}
-                            ava={user.ava}
-                            size='ultraSmall'
-                            status={null}
-                            showStatus={false}
-                            lastSeen={null}
-                            showLastSeen={false}
-                        />
-                    ))}
+                <div className="right-friends-mobile">
+                    {friendsList?.map((user, index) => <Avatar key={index} ava={user.ava} size='ultraSmall' />)}
                 </div>
             </StyledProfileFriendsMobileWrapper> : <MySkeleton height={63}/>}
         </>

@@ -7,8 +7,8 @@ import dayjs from 'dayjs'
 interface Props {
     ava: string | null | undefined
     size: 'ultraSmall' | 'small' | 'medium' | 'large'
-    status: boolean | null
-    lastSeen: string | null
+    status?: boolean | null
+    lastSeen?: string | null
     showStatus?: boolean
     showLastSeen?: boolean
 }
@@ -18,8 +18,8 @@ const Avatar: FC<Props> = ({
     size,
     status,
     lastSeen,
-    showStatus = true,
-    showLastSeen = true
+    showStatus = false,
+    showLastSeen = false
 }) => {
     const sizes = {
         ultraSmall: 35,

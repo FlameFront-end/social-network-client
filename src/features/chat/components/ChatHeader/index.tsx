@@ -68,8 +68,7 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
                         ava={user?.ava}
                         size='ultraSmall'
                         status={onlineStatus}
-                        lastSeen={null}
-                        showLastSeen={false}
+                        showStatus
                     />}
 
                     <div className='name'>

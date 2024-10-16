@@ -12,8 +12,9 @@ export const StyledProfileHeader = styled(Card)`
         border-top-right-radius: 0;
     }
     
-    .left {
+    .left-header {
         display: flex;
+        align-items: center;
         gap: 12px;
 
         @media screen and (max-width: 800px) {
@@ -40,6 +41,14 @@ export const StyledProfileHeader = styled(Card)`
                 font-weight: 400;
             }
 
+            .public {
+                display: none;
+
+                @media screen and (max-width: 800px) {
+                    display: block;
+                }
+            }
+            
             .list {
                 display: flex;
                 gap: 10px;
@@ -48,10 +57,6 @@ export const StyledProfileHeader = styled(Card)`
                     color: #939393;
                 }
                 
-                .public {
-                    display: none;
-                }
-
                 @media screen and (max-width: 1000px) {
                     flex-direction: column;
                 }
@@ -59,10 +64,6 @@ export const StyledProfileHeader = styled(Card)`
                 @media screen and (max-width: 800px) {
                     flex-direction: row;
                     justify-content: center;
-                    
-                    .public {
-                        display: block;
-                    }
                 }
             }
         }   

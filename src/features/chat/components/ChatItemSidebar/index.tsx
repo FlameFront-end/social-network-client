@@ -65,8 +65,7 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
                     ava={interlocutor.ava}
                     size='small'
                     status={onlineStatus}
-                    lastSeen={null}
-                    showLastSeen={false}
+                    showStatus
                 />
                 <Flex direction='column'>
                     <div className='full_name'>

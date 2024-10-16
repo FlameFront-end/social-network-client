@@ -57,8 +57,15 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile, isFetchingUser }) => {
         <>
             {!isFetchingUser ? (
                 <StyledProfileHeader>
-                    <div className='left'>
-                        <Avatar size='large' ava={user?.ava} status={onlineStatus} lastSeen={lastSeen}/>
+                    <div className='left-header'>
+                        <Avatar
+                            size='large'
+                            ava={user?.ava}
+                            status={onlineStatus}
+                            lastSeen={lastSeen}
+                            showLastSeen
+                            showStatus
+                        />
                         <div className='info'>
                             <h2 className='name'>{getFullName(user?.surname ?? '', user?.name ?? '', null)}</h2>
                             <div className='status'>тут статус</div>
