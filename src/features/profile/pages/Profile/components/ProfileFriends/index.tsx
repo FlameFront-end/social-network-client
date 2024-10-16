@@ -16,7 +16,7 @@ const ProfileFriends: FC<Props> = ({ userId }) => {
         <>
             {!isFriendsFetching ? <StyledProfileFriendsWrapper>
                 <div className="left">
-                    <div className="count">{friendsList?.length} друга</div>
+                    <div className="count">{friendsList?.length} {friendsList?.length === 1 ? 'друг' : 'друга'}</div>
                     <div className='mutual'>Нет общих</div>
                 </div>
                 <div className="right">

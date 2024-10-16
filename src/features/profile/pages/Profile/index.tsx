@@ -25,7 +25,7 @@ const Profile: FC = () => {
             {(user && userId) && (
                 <Flex direction='column' gap={12}>
                     <ProfileHeader user={user} isMyProfile={isMyProfile} isFetchingUser={isFetchingUser}/>
-                    <ProfileFriends userId={userId}/>
+                    <ProfileFriends userId={state?.userId}/>
                 </Flex>
             )}
 
