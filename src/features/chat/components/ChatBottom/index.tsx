@@ -5,7 +5,8 @@ import {
     memo,
     useEffect,
     useRef,
-    useState
+    useState,
+    type ChangeEvent
 } from 'react'
 import { StyledChatBottom } from './ChatBottom.styled.tsx'
 import { AudioMutedOutlined, AudioOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons'
@@ -14,7 +15,8 @@ import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
 import { Flex } from '@/kit'
 import { BACKEND_URL } from '@/core'
-import { io } from 'socket.io-client'
+import { io, type Socket } from 'socket.io-client'
+import { useAppSelector } from '@/hooks'
 
 interface Props {
     setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
@@ -29,14 +31,32 @@ interface Emoji {
 }
 
 const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, receiverId, scrollToBottom }) => {
+    const userId = useAppSelector(state => state.auth.user.id)
+
     const [content, setContent] = useState('')
     const [isRecording, setIsRecording] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
-
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
     const [audioUrl, setAudioUrl] = useState<string | null>(null)
 
+    const [typingUserName, setTypingUserName] = useState<string | null>(null)
+    const [typingUserId, setTypingUserId] = useState<number | null>(null)
+
     const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+    const socketRef = useRef<Socket | null>(null)
+    const typingTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+    const notifyTyping = (): void => {
+        if (socketRef.current && content) {
+            socketRef.current.emit('typing', { senderId: userId })
+        }
+    }
+
+    const notifyTypingStopped = (): void => {
+        if (socketRef.current) {
+            socketRef.current.emit('typingStopped', { senderId: userId })
+        }
+    }
 
     const handleMouseEnter = (): void => {
         setIsHovered(true)
@@ -77,20 +97,13 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
         }
     }
 
-    useEffect(() => {
-        if (audioBlob != null) {
-            const url = URL.createObjectURL(audioBlob)
-            setAudioUrl(url)
-        }
-    }, [audioBlob])
-
     const sendMessage = (): void => {
-        const socket = io(BACKEND_URL)
+        notifyTypingStopped()
 
         if (senderId != null && receiverId != null) {
             if (audioBlob != null) {
                 void audioBlob.arrayBuffer().then((arrayBuffer) => {
-                    socket.emit('sendMessage', {
+                    socketRef.current?.emit('sendMessage', {
                         audio: arrayBuffer,
                         senderId,
                         receiverId,
@@ -105,7 +118,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                     scrollToBottom('smooth')
                 })
             } else if (content.trim() !== '') {
-                socket.emit('sendMessage', {
+                socketRef.current?.emit('sendMessage', {
                     senderId: senderId.toString(),
                     receiverId: receiverId.toString(),
                     content,
@@ -118,12 +131,62 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
         }
     }
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        setContent(e.target.value)
+        notifyTyping()
+
+        if (typingTimerRef.current) {
+            clearTimeout(typingTimerRef.current)
+        }
+
+        typingTimerRef.current = setTimeout(() => {
+            notifyTypingStopped()
+        }, 3000)
+    }
+
+    useEffect(() => {
+        socketRef.current = io(BACKEND_URL)
+
+        return () => {
+            socketRef.current?.disconnect()
+            if (typingTimerRef.current) {
+                clearTimeout(typingTimerRef.current)
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        if (audioBlob != null) {
+            const url = URL.createObjectURL(audioBlob)
+            setAudioUrl(url)
+        }
+    }, [audioBlob])
+
+    useEffect(() => {
+        const socket = io(BACKEND_URL)
+
+        socket.on('typing', (data: any) => {
+            setTypingUserName(data.senderName)
+            setTypingUserId(data.senderId)
+        })
+
+        socket.on('typingStopped', () => {
+            setTypingUserName(null)
+            setTypingUserId(null)
+        })
+
+        return () => {
+            socket.off('typing')
+            socket.off('typingStopped')
+        }
+    }, [])
+
     return (
         <StyledChatBottom direction='column'>
             {(replyToMessage != null) && (
                 <Flex justifyContent='space-between' alignItems='center' className='reply'>
                     <Flex>
-                        <div className="separator"/>
+                        <div className="separator" />
                         <Flex direction='column' gap={0}>
                             <div className='author'>{replyToMessage.sender.name} {replyToMessage.sender.surname}</div>
                             {replyToMessage.content !== null && <div>{replyToMessage.content}</div>}
@@ -135,12 +198,13 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                     </button>
                 </Flex>
             )}
+
+            {typingUserId && (userId !== typingUserId) && <div>{typingUserName} is typing...</div>}
+
             <Flex alignItems='center' className='wrapper'>
                 <Input
                     value={content}
-                    onChange={(e) => {
-                        setContent(e.target.value)
-                    }}
+                    onChange={handleChange}
                     onPressEnter={sendMessage}
                     placeholder="Напишите сообщение..."
                 />
@@ -148,22 +212,22 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                     <button className="btn">😊</button>
                     {isHovered && (
                         <div className="emoji-picker">
-                            <Picker data={data} onEmojiSelect={addEmoji}/>
+                            <Picker data={data} onEmojiSelect={addEmoji} />
                         </div>
                     )}
                 </div>
                 {isRecording ? (
                     <button className='btn' onClick={stopRecording}>
-                        <AudioMutedOutlined className='icon'/>
+                        <AudioMutedOutlined className='icon' />
                     </button>
                 ) : (
                     <button className='btn' onClick={startRecording}>
-                        <AudioOutlined className='icon'/>
+                        <AudioOutlined className='icon' />
                     </button>
                 )}
-                {audioUrl != null && <audio controls src={audioUrl}/>}
+                {audioUrl != null && <audio controls src={audioUrl} />}
                 <button className='btn send' onClick={sendMessage}>
-                    <SendOutlined/>
+                    <SendOutlined />
                 </button>
             </Flex>
         </StyledChatBottom>
