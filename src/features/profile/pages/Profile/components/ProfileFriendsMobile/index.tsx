@@ -1,8 +1,7 @@
 import { type FC } from 'react'
 import { StyledProfileFriendsMobileWrapper } from './ProfileFriendsMobile.styled.tsx'
 import { useGetFriendsByIdQuery } from '../../../../../friends/api/friends.api.ts'
-import { Avatar } from 'antd'
-import { MySkeleton } from '@/kit'
+import { Avatar, MySkeleton } from '@/kit'
 
 interface Props {
     userId: number
@@ -19,13 +18,15 @@ const ProfileFriendsMobile: FC<Props> = ({ userId }) => {
                     <div className='mutual'>Нет общих</div>
                 </div>
                 <div className="right">
-                    {friendsList?.map((item, index) => (
+                    {friendsList?.map((user, index) => (
                         <Avatar
                             key={index}
-                            src={item.ava}
-                            size={30}
-                            className="avatar"
-                            style={{ right: `${index * 25}px` }}
+                            ava={user.ava}
+                            size='ultraSmall'
+                            status={null}
+                            showStatus={false}
+                            lastSeen={null}
+                            showLastSeen={false}
                         />
                     ))}
                 </div>
