@@ -1,20 +1,22 @@
 import { type FC, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFullName } from '@/utils'
-import { profilePaths } from '../../routes/profile.paths.ts'
+import { profilePaths } from '../../../../routes/profile.paths.ts'
 import { Flex, Avatar, GreyButton } from '@/kit'
 import { StyledProfileHeader } from './ProfileHeader.styled.tsx'
 import { SocketApi } from '@/core'
 import Cookies from 'js-cookie'
 import { useAppSelector } from '@/hooks'
 import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import MySkeleton from '../../../../../kit/components/MySkeleton'
 
 interface Props {
     user: Collections.User
     isMyProfile: boolean
+    isFetchingUser: boolean
 }
 
-const ProfileHeader: FC<Props> = ({ user, isMyProfile }) => {
+const ProfileHeader: FC<Props> = ({ user, isMyProfile, isFetchingUser }) => {
     const navigate = useNavigate()
 
     const [onlineStatus, setOnlineStatus] = useState(false)
@@ -40,7 +42,7 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile }) => {
 
     return (
         <>
-            {(user != null) && (
+            {!isFetchingUser ? (
                 <StyledProfileHeader>
                     <div className='left'>
                         <Avatar size='large' ava={user.ava} status={onlineStatus} lastSeen={lastSeen}/>
@@ -81,7 +83,7 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile }) => {
                         }
                     </div>
                 </StyledProfileHeader>
-            )}
+            ) : <MySkeleton height={170} />}
         </>
     )
 }

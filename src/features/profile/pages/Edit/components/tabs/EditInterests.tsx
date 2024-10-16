@@ -1,10 +1,10 @@
 import { type FC, useEffect } from 'react'
 import { StyledEditProfileTab } from './styled/EditProfileTab.styled.tsx'
 import { Button, Form, Input, Typography } from 'antd'
-import type { RegisterDataForm } from '../../../auth/types/register.types.ts'
-import Flex from '../../../kit/components/Flex'
+import type { RegisterDataForm } from '../../../../../auth/types/register.types.ts'
+import Flex from '../../../../../kit/components/Flex'
 import { useLocation } from 'react-router-dom'
-import { useGetUserQuery, useUpdateUserMutation } from '../../api/profile.api.ts'
+import { useGetUserQuery, useUpdateUserMutation } from '../../../../api/profile.api.ts'
 import { toast } from 'react-toastify'
 
 const { TextArea } = Input

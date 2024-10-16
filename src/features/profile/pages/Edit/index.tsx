@@ -1,6 +1,6 @@
 import { type FC, type ReactNode, useState } from 'react'
-import EditProfileMenu from '../../components/EditProfileMenu'
-import { EditContacts, EditProfile, EditInterests } from '../../components/tabs'
+import EditProfileMenu from './components/EditProfileMenu'
+import { EditContacts, EditProfile, EditInterests } from './components/tabs'
 import { Flex } from '@/kit'
 
 const Edit: FC = () => {

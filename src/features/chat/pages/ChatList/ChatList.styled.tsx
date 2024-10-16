@@ -4,6 +4,8 @@ import { Flex } from 'antd'
 export const ChatListStyledWrapper = styled(Flex)`
     width: 100%;
     height: calc(100vh - 40px);
+    overflow-y: hidden !important;
+
 
     @media screen and (max-width: 800px) {
         height: calc(100vh - 70px);

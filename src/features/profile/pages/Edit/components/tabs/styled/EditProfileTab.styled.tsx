@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Card from '../../../../kit/components/Card'
+import Card from '../../../../../../kit/components/Card'
 
 export const StyledEditProfileTab = styled(Card)`
     width: 100%;

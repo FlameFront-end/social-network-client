@@ -51,6 +51,11 @@ export const friendsApi = api.injectEndpoints({
             query: () => ({
                 url: '/friends/outgoing-friendship-requests'
             })
+        }),
+        getFriendsById: builder.query<Collections.User[], number>({
+            query: (userId) => ({
+                url: `/friends/${userId}`
+            })
         })
     })
 })
@@ -64,5 +69,6 @@ export const {
     useGetPossibleFriendsQuery,
     useGetMyFriendsQuery,
     useGetIncomingFriendshipRequestsQuery,
-    useGetOutgoingFriendshipRequestsQuery
+    useGetOutgoingFriendshipRequestsQuery,
+    useGetFriendsByIdQuery
 } = friendsApi

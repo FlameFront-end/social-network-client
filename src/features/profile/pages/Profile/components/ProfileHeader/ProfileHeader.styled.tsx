@@ -1,10 +1,12 @@
 import styled from 'styled-components'
-import Card from '../../../kit/components/Card'
+import Card from '../../../../../kit/components/Card'
 
 export const StyledProfileHeader = styled(Card)`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 
     @media screen and (max-width: 800px) {
         justify-content: center;
