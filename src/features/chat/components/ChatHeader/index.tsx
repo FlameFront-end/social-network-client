@@ -63,13 +63,14 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
                 </button>
 
                 <Flex alignItems='center'>
-                    <Avatar
+                    {!!user && <Avatar
                         ava={user?.ava}
                         size='ultraSmall'
                         status={onlineStatus}
                         lastSeen={null}
                         showLastSeen={false}
-                    />
+                    />}
+
                     <div className='name'>
                         {getFullName(user?.surname ?? '', user?.name ?? '', null)}
                     </div>
