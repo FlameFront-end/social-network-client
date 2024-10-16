@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Card } from '@/kit'
 
-export const StyledProfileFriendsWrapper = styled(Card)`
+export const StyledProfileFriendsMobileWrapper = styled(Card)`
     display: flex;
     justify-content: space-between;
     height: 100%;

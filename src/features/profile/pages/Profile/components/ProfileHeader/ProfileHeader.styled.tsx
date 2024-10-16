@@ -5,11 +5,11 @@ export const StyledProfileHeader = styled(Card)`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
     
     @media screen and (max-width: 800px) {
         justify-content: center;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
     }
     
     .left {

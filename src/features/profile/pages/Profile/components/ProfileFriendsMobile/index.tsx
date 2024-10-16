@@ -1,20 +1,19 @@
 import { type FC } from 'react'
-import { StyledProfileFriendsWrapper } from './ProfileFriends.styled.tsx'
+import { StyledProfileFriendsMobileWrapper } from './ProfileFriendsMobile.styled.tsx'
 import { useGetFriendsByIdQuery } from '../../../../../friends/api/friends.api.ts'
 import { Avatar } from 'antd'
-import defaultAva from '../../../../../../../public/ava.png'
 import { MySkeleton } from '@/kit'
 
 interface Props {
     userId: number
 }
 
-const ProfileFriends: FC<Props> = ({ userId }) => {
+const ProfileFriendsMobile: FC<Props> = ({ userId }) => {
     const { data: friendsList, isFetching: isFriendsFetching } = useGetFriendsByIdQuery(userId)
 
     return (
         <>
-            {!isFriendsFetching ? <StyledProfileFriendsWrapper>
+            {!isFriendsFetching ? <StyledProfileFriendsMobileWrapper>
                 <div className="left">
                     <div className="count">{friendsList?.length} {friendsList?.length === 1 ? 'друг' : 'друга'}</div>
                     <div className='mutual'>Нет общих</div>
@@ -23,16 +22,16 @@ const ProfileFriends: FC<Props> = ({ userId }) => {
                     {friendsList?.map((item, index) => (
                         <Avatar
                             key={index}
-                            src={item.ava ?? defaultAva}
+                            src={item.ava}
                             size={30}
                             className="avatar"
                             style={{ right: `${index * 25}px` }}
                         />
                     ))}
                 </div>
-            </StyledProfileFriendsWrapper> : <MySkeleton height={63}/>}
+            </StyledProfileFriendsMobileWrapper> : <MySkeleton height={63}/>}
         </>
     )
 }
 
-export default ProfileFriends
+export default ProfileFriendsMobile
