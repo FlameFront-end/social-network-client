@@ -30,7 +30,6 @@ const ProfileFriends: FC<Props> = ({ userId }) => {
                         />
                     ))}
                 </div>
-
             </StyledProfileFriendsWrapper> : <MySkeleton height={63}/>}
         </>
     )
