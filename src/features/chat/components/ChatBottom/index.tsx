@@ -197,7 +197,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                 </Flex>
             )}
 
-            {typingUserId && (userId !== typingUserId) && <div>{typingUserName} is typing...</div>}
+            {typingUserId && (userId !== typingUserId) && <div className='typing'>{typingUserName} печатает...</div>}
 
             <Flex alignItems='center' className='wrapper'>
                 <Input

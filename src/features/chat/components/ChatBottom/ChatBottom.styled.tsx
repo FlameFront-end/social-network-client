@@ -46,6 +46,10 @@ export const StyledChatBottom = styled(Flex)`
         padding-bottom: 15px;
     }
     
+    .typing {
+        padding-left: 10px;
+    }
+    
     input {
         width: 100%;
         background-color: #292929 !important;
