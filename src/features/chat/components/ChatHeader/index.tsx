@@ -6,8 +6,10 @@ import { Avatar, Flex } from '@/kit'
 import { useNavigate } from 'react-router-dom'
 import { pathsConfig } from '@/pathsConfig'
 import { getFullName } from '@/utils'
-import { SocketApi } from '@/core'
-import { USER_STATUS, USER_STATUS_RESPONSE } from '@/constants'
+import { BACKEND_URL } from '@/core'
+import { USER_STATUS } from '@/constants'
+import { useAppSelector } from '@/hooks'
+import { io } from 'socket.io-client'
 
 interface Props {
     senderId: number | string | null
@@ -16,9 +18,9 @@ interface Props {
 
 const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
     const navigate = useNavigate()
+    const myId = useAppSelector(state => state.auth.user.id)
 
     const [onlineStatus, setOnlineStatus] = useState(false)
-    const [lastSeen, setLastSeen] = useState('')
 
     const interlocutorId = useMemo(() => {
         return Number(receiverId === senderId ? senderId : receiverId)
@@ -27,27 +29,31 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
     const { data: user, isFetching } = useGetUserQuery(interlocutorId)
 
     useEffect(() => {
-        const socket = SocketApi?.socket
-        const userId = user?.id
+        const socket = io(BACKEND_URL)
 
-        if (!socket || !userId) return
+        if (!receiverId || !senderId || !myId) return
 
-        socket.emit(USER_STATUS, { userId })
+        const userId = myId === receiverId ? Number(senderId) : Number(receiverId)
 
-        const handleUserStatusResponse = (data: any): void => {
+        if (!userId) return
+
+        const handleUserStatus = (data: any): void => {
             if (data.userId === userId) {
-                const { isOnline, lastSeen } = data.data
-                setOnlineStatus(!!isOnline)
-                setLastSeen(lastSeen)
+                setOnlineStatus(!!data.data.isOnline)
             }
         }
 
-        socket.on(USER_STATUS_RESPONSE, handleUserStatusResponse)
+        socket.emit(USER_STATUS, { userId })
+        socket.on(USER_STATUS, handleUserStatus)
 
         return () => {
-            socket?.off(USER_STATUS_RESPONSE, handleUserStatusResponse)
+            socket?.off(USER_STATUS, handleUserStatus)
         }
-    }, [user?.id, SocketApi?.socket])
+    }, [receiverId, senderId, myId])
+
+    useEffect(() => {
+        setOnlineStatus(!!user?.isOnline)
+    }, [user?.isOnline])
 
     return (
         <StyledChatHeader>
@@ -60,18 +66,15 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
                     <Avatar
                         ava={user?.ava}
                         size='ultraSmall'
-                        showLastSeen={false}
-                        showStatus={true}
                         status={onlineStatus}
-                        lastSeen={lastSeen}
+                        lastSeen={null}
+                        showLastSeen={false}
                     />
                     <div className='name'>
                         {getFullName(user?.surname ?? '', user?.name ?? '', null)}
                     </div>
                 </Flex>
-
             </Flex>}
-
         </StyledChatHeader>
     )
 }

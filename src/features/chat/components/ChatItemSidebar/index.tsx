@@ -5,8 +5,9 @@ import { Avatar, Flex } from '@/kit'
 import { useNavigate } from 'react-router-dom'
 import { chatPaths } from '../../routes/chat.paths.ts'
 import { getFullName } from '@/utils'
-import { SocketApi } from '@/core'
-import { USER_STATUS, USER_STATUS_RESPONSE } from '@/constants'
+import { BACKEND_URL } from '@/core'
+import { USER_STATUS } from '@/constants'
+import { io } from 'socket.io-client'
 
 interface Props {
     chat: Collections.Chat
@@ -21,7 +22,6 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
     const user = useAppSelector(state => state.auth.user)
 
     const [onlineStatus, setOnlineStatus] = useState(false)
-    const [lastSeen, setLastSeen] = useState('')
 
     const getInterlocutor = (user1: Collections.User, user2: Collections.User): Collections.User => {
         return user1.id === user.id ? user2 : user1
@@ -38,27 +38,24 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
     const interlocutor = getInterlocutor(chat.user1, chat.user2)
 
     useEffect(() => {
-        const socket = SocketApi?.socket
+        const socket = io(BACKEND_URL)
         const userId = interlocutor?.id
 
-        if (!socket || !userId) return
+        if (!userId) return
 
-        socket.emit(USER_STATUS, { userId })
-
-        const handleUserStatusResponse = (data: any): void => {
+        const handleUserStatus = (data: any): void => {
             if (data.userId === userId) {
-                const { isOnline, lastSeen } = data.data
-                setOnlineStatus(!!isOnline)
-                setLastSeen(lastSeen)
+                setOnlineStatus(!!data.data.isOnline)
             }
         }
 
-        socket.on(USER_STATUS_RESPONSE, handleUserStatusResponse)
+        socket.emit(USER_STATUS, { userId })
+        socket.on(USER_STATUS, handleUserStatus)
 
         return () => {
-            socket?.off(USER_STATUS_RESPONSE, handleUserStatusResponse)
+            socket?.off(USER_STATUS, handleUserStatus)
         }
-    }, [interlocutor?.id, SocketApi?.socket])
+    }, [interlocutor?.id])
 
     return (
         <StyledChatItemSidebarWrapper className={(isActive ? 'active ' : '') + (isLastItem ? 'last' : '') } onClick={handleClick}>
@@ -66,10 +63,9 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
                 <Avatar
                     ava={interlocutor.ava}
                     size='small'
-                    showLastSeen={false}
-                    showStatus={true}
                     status={onlineStatus}
-                    lastSeen={lastSeen}
+                    lastSeen={null}
+                    showLastSeen={false}
                 />
                 <Flex direction='column'>
                     <div className='full_name'>

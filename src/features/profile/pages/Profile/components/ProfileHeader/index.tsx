@@ -4,11 +4,12 @@ import { getFullName } from '@/utils'
 import { profilePaths } from '../../../../routes/profile.paths.ts'
 import { Flex, Avatar, GreyButton } from '@/kit'
 import { StyledProfileHeader } from './ProfileHeader.styled.tsx'
-import { SocketApi } from '@/core'
+import { BACKEND_URL, SocketApi } from '@/core'
 import { useAppSelector } from '@/hooks'
 import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import MySkeleton from '../../../../../kit/components/MySkeleton'
-import { USER_STATUS, USER_STATUS_RESPONSE } from '@/constants'
+import { USER_STATUS } from '@/constants'
+import { io } from 'socket.io-client'
 
 interface Props {
     user: Collections.User | undefined
@@ -29,27 +30,26 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile, isFetchingUser }) => {
             setOnlineStatus(isOnlineMy)
             setLastSeen(lastSeenMy ?? '')
         } else {
+            const socket = io(BACKEND_URL)
+
             const userId = user?.id
 
-            if (!SocketApi?.socket || !userId) return
+            if (!userId) return
 
-            SocketApi.socket.emit(USER_STATUS, { userId })
-
-            const handleUserStatusResponse = (data: any): void => {
+            const handleUserStatus = (data: any): void => {
                 if (data.userId === userId) {
-                    const { isOnline, lastSeen } = data.data
-                    setOnlineStatus(!!isOnline)
-                    setLastSeen(lastSeen)
+                    setOnlineStatus(!!data.data.isOnline)
                 }
             }
 
-            SocketApi.socket.on(USER_STATUS, handleUserStatusResponse)
+            socket.emit(USER_STATUS, { userId })
+            socket.on(USER_STATUS, handleUserStatus)
 
             return () => {
-                SocketApi.socket?.off(USER_STATUS_RESPONSE, handleUserStatusResponse)
+                socket?.off(USER_STATUS, handleUserStatus)
             }
         }
-    }, [isMyProfile, isOnlineMy, lastSeenMy, user?.id])
+    }, [SocketApi?.socket, isMyProfile, isOnlineMy, lastSeenMy, user?.id])
 
     return (
         <>

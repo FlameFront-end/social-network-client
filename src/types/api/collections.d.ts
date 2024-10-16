@@ -68,6 +68,7 @@ declare namespace Collections {
         email: string
         ava: string | null
         isAdmin: boolean
+        isOnline: boolean
         password: string
         friends: number[]
         incomingFriendRequests: number[]

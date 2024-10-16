@@ -1,15 +1,17 @@
 import { type FC, useEffect, useState } from 'react'
-import { Avatar } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useCreateChatMutation, useGetChatsListQuery } from '../../../chat/api/chat.api.ts'
 import { chatPaths } from '../../../chat/routes/chat.paths.ts'
 import { StyledUserCard } from './UserCard.styled.tsx'
 import { useRemoveFriendMutation } from '../../api/friends.api.ts'
 import { useAppSelector, useWindowWidth } from '@/hooks'
-import { Flex, TextButton } from '@/kit'
-import ava from '../../../../../public/ava.png'
+import { Avatar, Flex, TextButton } from '@/kit'
 import { MessageOutlined } from '@ant-design/icons'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
+import { io } from 'socket.io-client'
+import { BACKEND_URL } from '@/core'
+import { USER_STATUS } from '@/constants'
+import { getFullName } from '@/utils'
 
 interface Props {
     user: Collections.User
@@ -26,6 +28,8 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
     const { data: chatsList } = useGetChatsListQuery(null)
 
     const [isUserInChat, setIsUserInChat] = useState(false)
+
+    const [onlineStatus, setOnlineStatus] = useState(false)
 
     useEffect(() => {
         setIsUserInChat(chatsList?.some((chat) => chat.user1Id === user.id || chat.user2Id === user.id) ?? false)
@@ -58,13 +62,39 @@ const FriendCard: FC<Props> = ({ user, refetchPossible, refetchFriends }) => {
         })
     }
 
+    useEffect(() => {
+        const socket = io(BACKEND_URL)
+        const userId = user?.id
+
+        if (!userId) return
+
+        const handleUserStatus = (data: any): void => {
+            if (data.userId === userId) {
+                setOnlineStatus(!!data.data.isOnline)
+            }
+        }
+
+        socket.emit(USER_STATUS, { userId })
+        socket.on(USER_STATUS, handleUserStatus)
+
+        return () => {
+            socket?.off(USER_STATUS, handleUserStatus)
+        }
+    }, [user?.id])
+
     return (
         <StyledUserCard>
             <Flex alignItems='center' >
-                <div><Avatar size={44} src={user.ava ?? ava}/></div>
+                <Avatar
+                    ava={user.ava}
+                    size='small'
+                    status={onlineStatus}
+                    lastSeen={null}
+                    showLastSeen={false}
+                />
                 <div className='info'>
                     <div className='full_name' onClick={() => { navigate(profilePaths.profile, { state: { userId: user.id } }) }}>
-                        {user.name} {user.surname}
+                        {getFullName(user?.surname ?? '', user?.name ?? '', null)}
                     </div>
 
                     {!isUserInChat ? <TextButton onClick={handleCreateChat}>
