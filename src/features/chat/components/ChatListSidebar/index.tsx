@@ -3,7 +3,8 @@ import { CSpinner } from '@coreui/react-pro'
 import ChatItemSidebar from '../ChatItemSidebar'
 import { StyledChatListWrapper } from './ChatListSidebar.styled.tsx'
 import { useAppSelector } from '@/hooks'
-import { SocketApi } from '@/core'
+import { BACKEND_URL } from '@/core'
+import { io } from 'socket.io-client'
 
 interface ChatListSidebarProps {
     activeChatId: number
@@ -24,9 +25,11 @@ const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChat
     }, [chatList])
 
     useEffect(() => {
-        SocketApi.socket?.emit('join', userID)
+        const socket = io(BACKEND_URL)
 
-        SocketApi.socket?.on('updateChats', (updatedChats: Collections.Chat[]) => {
+        socket.emit('join', userID)
+
+        socket.on('updateChats', (updatedChats: Collections.Chat[]) => {
             setChats(updatedChats)
         })
     }, [])

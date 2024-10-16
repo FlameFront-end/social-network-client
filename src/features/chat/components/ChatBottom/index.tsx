@@ -13,7 +13,8 @@ import { Input } from 'antd'
 import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
 import { Flex } from '@/kit'
-import { SocketApi } from '@/core'
+import { BACKEND_URL } from '@/core'
+import { io } from 'socket.io-client'
 
 interface Props {
     setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
@@ -84,10 +85,12 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
     }, [audioBlob])
 
     const sendMessage = (): void => {
+        const socket = io(BACKEND_URL)
+
         if (senderId != null && receiverId != null) {
             if (audioBlob != null) {
                 void audioBlob.arrayBuffer().then((arrayBuffer) => {
-                    SocketApi.socket?.emit('sendMessage', {
+                    socket.emit('sendMessage', {
                         audio: arrayBuffer,
                         senderId,
                         receiverId,
@@ -102,7 +105,7 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                     scrollToBottom('smooth')
                 })
             } else if (content.trim() !== '') {
-                SocketApi.socket?.emit('sendMessage', {
+                socket.emit('sendMessage', {
                     senderId: senderId.toString(),
                     receiverId: receiverId.toString(),
                     content,

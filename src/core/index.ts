@@ -1,5 +1,4 @@
 export * from './antdTheme'
 export * from './api'
-export * from './socket-api'
 export * from './theme'
 export * from './variables'

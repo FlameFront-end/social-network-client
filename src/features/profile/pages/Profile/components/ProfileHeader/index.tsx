@@ -4,7 +4,7 @@ import { getFullName } from '@/utils'
 import { profilePaths } from '../../../../routes/profile.paths.ts'
 import { Flex, Avatar, GreyButton } from '@/kit'
 import { StyledProfileHeader } from './ProfileHeader.styled.tsx'
-import { BACKEND_URL, SocketApi } from '@/core'
+import { BACKEND_URL } from '@/core'
 import { useAppSelector } from '@/hooks'
 import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import MySkeleton from '../../../../../kit/components/MySkeleton'
@@ -49,7 +49,7 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile, isFetchingUser }) => {
                 socket?.off(USER_STATUS, handleUserStatus)
             }
         }
-    }, [SocketApi?.socket, isMyProfile, isOnlineMy, lastSeenMy, user?.id])
+    }, [isMyProfile, isOnlineMy, lastSeenMy, user?.id])
 
     return (
         <>

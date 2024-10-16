@@ -3,11 +3,12 @@ import { List } from 'antd'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { chatActions, fetchMessages } from '../../store/chat.slice.ts'
 import { StyledChatWrapper } from './Chat.styled.tsx'
-import { SocketApi } from '@/core'
+import { BACKEND_URL } from '@/core'
 import { Flex } from '@/kit'
 import Message from '../Message'
 import ChatBottom from '../ChatBottom'
 import ChatHeader from '../ChatHeader'
+import { io } from 'socket.io-client'
 
 interface Props {
     senderId: number | string | null
@@ -51,6 +52,8 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
     }, [receiverId])
 
     useEffect(() => {
+        const socket = io(BACKEND_URL)
+
         const fetchChatMessages = async (): Promise<void> => {
             if (senderId != null && receiverId != null) {
                 await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) })).then(() => {
@@ -63,12 +66,12 @@ const Chat: FC<Props> = ({ senderId, receiverId }) => {
 
         void fetchChatMessages()
 
-        SocketApi.socket?.on('receiveMessage', (message: Collections.Message) => {
+        socket.on('receiveMessage', (message: Collections.Message) => {
             dispatch(chatActions.addMessage(message))
         })
 
         return () => {
-            SocketApi.socket?.off('receiveMessage')
+            socket.off('receiveMessage')
         }
     }, [dispatch, senderId, receiverId])
 

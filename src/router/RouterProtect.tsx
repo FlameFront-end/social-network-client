@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { FloatButton } from 'antd'
 import { useAuth } from '../features/auth/hooks/useAuth'
 import MobileNavBottom from '../components/MobileNavBottom'
-import { useAppAction, useAppSelector, useConnectSocket } from '@/hooks'
+import { useAppAction, useAppSelector } from '@/hooks'
 import { pathsConfig } from '@/pathsConfig'
 import Cookies from 'js-cookie'
 import { io } from 'socket.io-client'
@@ -16,8 +16,6 @@ const RouterProtect = (): JSX.Element => {
     const { setUser } = useAppAction()
 
     const userData = useAppSelector(state => state.auth.user)
-
-    useConnectSocket()
 
     const token = Cookies.get('token')
 
