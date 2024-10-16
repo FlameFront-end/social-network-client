@@ -5,7 +5,7 @@ import defaultAva from '../../../../../public/ava.png'
 import dayjs from 'dayjs'
 
 interface Props {
-    ava: string | null
+    ava: string | null | undefined
     size: 'small' | 'medium' | 'large'
     status: boolean | null
     lastSeen: string

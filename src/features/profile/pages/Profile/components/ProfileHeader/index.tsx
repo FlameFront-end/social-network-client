@@ -11,7 +11,7 @@ import { EnvironmentOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import MySkeleton from '../../../../../kit/components/MySkeleton'
 
 interface Props {
-    user: Collections.User
+    user: Collections.User | undefined
     isMyProfile: boolean
     isFetchingUser: boolean
 }
@@ -32,7 +32,7 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile, isFetchingUser }) => {
             setLastSeen(lastSeenMy ?? '')
         } else {
             SocketApi?.socket?.on('user-status', (data) => {
-                if (data.userId === user.id) {
+                if (data.userId === user?.id) {
                     setOnlineStatus(Boolean(data.data.isOnline))
                     setLastSeen(data.data.lastSeen)
                 }
@@ -45,9 +45,9 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile, isFetchingUser }) => {
             {!isFetchingUser ? (
                 <StyledProfileHeader>
                     <div className='left'>
-                        <Avatar size='large' ava={user.ava} status={onlineStatus} lastSeen={lastSeen}/>
+                        <Avatar size='large' ava={user?.ava} status={onlineStatus} lastSeen={lastSeen}/>
                         <div className='info'>
-                            <h2 className='name'>{getFullName(user.surname, user.name, null)}</h2>
+                            <h2 className='name'>{getFullName(user?.surname ?? '', user?.name ?? '', null)}</h2>
                             <div className='status'>тут статус</div>
                             <div className='list'>
                                 <Flex alignItems='center' gap={4} className="item">
@@ -76,7 +76,7 @@ const ProfileHeader: FC<Props> = ({ user, isMyProfile, isFetchingUser }) => {
                         {isMyProfile &&
                             <button
                                 className='edit'
-                                onClick={() => { navigate(profilePaths.edit, { state: { userId: user.id } }) }}
+                                onClick={() => { navigate(profilePaths.edit, { state: { userId: user?.id } }) }}
                             >
                                 Редактировать профиль
                             </button>

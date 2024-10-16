@@ -22,12 +22,10 @@ const Profile: FC = () => {
 
     return (
         <>
-            {(user && userId) && (
-                <Flex direction='column' gap={12}>
-                    <ProfileHeader user={user} isMyProfile={isMyProfile} isFetchingUser={isFetchingUser}/>
-                    <ProfileFriends userId={state?.userId}/>
-                </Flex>
-            )}
+            <Flex direction='column' gap={12}>
+                <ProfileHeader user={user} isMyProfile={isMyProfile} isFetchingUser={isFetchingUser}/>
+                <ProfileFriends userId={state?.userId}/>
+            </Flex>
 
             {(isMyProfile && token) && (
                 <>
