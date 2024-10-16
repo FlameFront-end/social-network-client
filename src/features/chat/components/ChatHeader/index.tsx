@@ -24,7 +24,7 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
     const [onlineStatus, setOnlineStatus] = useState(false)
 
     const interlocutorId = useMemo(() => {
-        return Number(receiverId === senderId ? senderId : receiverId)
+        return Number(myId === senderId ? receiverId : senderId)
     }, [receiverId, senderId])
 
     const { data: user, isFetching } = useGetUserQuery(interlocutorId)
