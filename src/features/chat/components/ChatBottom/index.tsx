@@ -14,9 +14,9 @@ import { Input } from 'antd'
 import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
 import { Flex } from '@/kit'
-import { BACKEND_URL } from '@/core'
 import { io, type Socket } from 'socket.io-client'
 import { useAppSelector } from '@/hooks'
+import { BACKEND_URL } from '@/core'
 
 interface Props {
     setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
@@ -163,21 +163,19 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
     }, [audioBlob])
 
     useEffect(() => {
-        const socket = io(BACKEND_URL)
-
-        socket.on('typing', (data: any) => {
+        socketRef.current?.on('typing', (data: any) => {
             setTypingUserName(data.senderName)
             setTypingUserId(data.senderId)
         })
 
-        socket.on('typingStopped', () => {
+        socketRef.current?.on('typingStopped', () => {
             setTypingUserName(null)
             setTypingUserId(null)
         })
 
         return () => {
-            socket.off('typing')
-            socket.off('typingStopped')
+            socketRef.current?.off('typing')
+            socketRef.current?.off('typingStopped')
         }
     }, [])
 
