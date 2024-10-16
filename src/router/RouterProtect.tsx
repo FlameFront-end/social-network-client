@@ -44,7 +44,7 @@ const RouterProtect = (): JSX.Element => {
     }
 
     if (isAuth && (pathname === pathsConfig.login)) {
-        return <Navigate to={pathsConfig.root} replace />
+        return <Navigate to={pathsConfig.profile} replace state={{ userId: userData.id }} />
     }
 
     const showNavBottom = pathname !== pathsConfig.login && pathname !== pathsConfig.register && pathname !== pathsConfig.chat
