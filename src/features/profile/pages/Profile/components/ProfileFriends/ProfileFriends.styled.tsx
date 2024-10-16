@@ -7,8 +7,11 @@ export const StyledProfileFriendsWrapper = styled.div`
     height: 100%;
     padding: 20px;
     border-radius: 12px;
+    
+    cursor: pointer;
 
     .left {
+        position: relative; 
         display: flex;
         align-items: center;
         gap: 10px;
@@ -21,6 +24,11 @@ export const StyledProfileFriendsWrapper = styled.div`
     }
 
     .right {
+        position: relative;
         display: flex;
+    }
+
+    .avatar {
+        position: absolute;
     }
 `

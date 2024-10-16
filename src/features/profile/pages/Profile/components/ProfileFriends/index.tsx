@@ -21,9 +21,16 @@ const ProfileFriends: FC<Props> = ({ userId }) => {
                 </div>
                 <div className="right">
                     {friendsList?.map((item, index) => (
-                        <Avatar key={index} src={item.ava ?? defaultAva} size={30}/>
+                        <Avatar
+                            key={index}
+                            src={item.ava ?? defaultAva}
+                            size={30}
+                            className="avatar"
+                            style={{ right: `${index * 25}px` }}
+                        />
                     ))}
                 </div>
+
             </StyledProfileFriendsWrapper> : <MySkeleton height={63}/>}
         </>
     )
