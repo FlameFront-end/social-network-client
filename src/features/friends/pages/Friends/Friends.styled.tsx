@@ -22,7 +22,7 @@ export const StyledFriendsWrapper = styled.div`
         width: 100%;
         
         .full-height {
-            min-height: calc(100vh - 32px - 46px);
+            min-height: calc(100vh - 32px);
             margin-bottom: 16px;
         }
 
@@ -31,12 +31,6 @@ export const StyledFriendsWrapper = styled.div`
         }
     }
     
-    .spinner-wrapper {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center
-    }
     
     .card-header {
         margin-bottom: 10px;
@@ -61,12 +55,24 @@ export const StyledFriendsWrapper = styled.div`
         font-size: 24px;
     }
 
+    .spinner-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: calc(100vh - 180px);
+    }
+
     button {
         width: max-content;
     }
 
     @media screen and (max-width: 800px) {
         background-color: #19191a;
+
+        .full-height {
+            min-height: calc(100vh - 32px);
+        }
 
         .desktop {
             display: none;
