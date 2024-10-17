@@ -1,9 +1,13 @@
 import styled from 'styled-components'
-import Card from '../../../kit/components/Card'
 
-export const StyledUserCard = styled(Card)`
+export const StyledUserCard = styled.div`
     width: 100%;
-    flex-basis: calc(50% - 16px);
+    padding-bottom: 12px;
+    border-bottom: 1px solid ${({ theme }) => theme.card.border};
+    
+    &:last-child {
+        border-bottom: none;
+    }
     
     .info {
         width: 100%;
@@ -26,16 +30,6 @@ export const StyledUserCard = styled(Card)`
         padding: 10px 0;
     }
     
-    
-    @media screen and (max-width: 800px) {
-        flex-basis: 100%;
-    }
-
-    @media screen and (max-width: 800px) {
-        border: none;
-        padding: 0;
-    }
-
     .info {
         flex-direction: row;
         justify-content: space-between;

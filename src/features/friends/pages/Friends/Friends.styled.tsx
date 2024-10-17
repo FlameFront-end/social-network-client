@@ -4,21 +4,20 @@ export const StyledFriendsWrapper = styled.div`
     width: 100%;
     height: 100%;
     
-    .card {
+    .tabs-content {
+        max-width: 550px;
         width: 100%;
-        height: 100%;
+        
+        .full-height {
+            min-height: calc(100vh - 32px);
+            margin-bottom: 16px;
+        }
 
         @media screen and (max-width: 800px) {
-            border: none;
+            max-width: 100%;
         }
     }
     
-    .card-wrapper {
-        @media screen and (max-width: 800px) {
-            border: none;
-            padding: 0;
-        }
-    }
     
     .spinner-wrapper {
         height: 100%;
@@ -36,10 +35,4 @@ export const StyledFriendsWrapper = styled.div`
             color: ${({ theme }) => theme.text};
         }
     }
-
-    p {
-        font-size: 14px;
-        color: ${({ theme }) => theme.text};
-        margin-bottom: 0;
-    }   
 `
