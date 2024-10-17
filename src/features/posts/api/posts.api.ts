@@ -1,4 +1,5 @@
 import { api } from '@/core'
+import { type PostCreatePayload } from '../types/post.types.ts'
 
 export const postsApi = api.injectEndpoints({
     endpoints: builder => ({
@@ -6,10 +7,19 @@ export const postsApi = api.injectEndpoints({
             query: () => ({
                 url: '/posts/my'
             })
+        }),
+        createPost: builder.mutation<Collections.Post[], PostCreatePayload>({
+            query: (postPayload) => ({
+                method: 'POST',
+                url: '/posts',
+                body: postPayload
+            })
         })
+
     })
 })
 
 export const {
-    useGetMyPostsQuery
+    useGetMyPostsQuery,
+    useCreatePostMutation
 } = postsApi

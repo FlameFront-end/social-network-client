@@ -16,6 +16,7 @@ import ProfileFriendsDesktop from './components/ProfileFriendsDesktop'
 import Post from '../../../posts/components/Post/Post.tsx'
 import { useGetMyPostsQuery } from '../../../posts/api/posts.api.ts'
 import { CSpinner } from '@coreui/react-pro'
+import CreatePost from '../../../posts/components/CreatePost/CreatePost.tsx'
 
 const Profile: FC = () => {
     const { state } = useLocation()
@@ -38,12 +39,11 @@ const Profile: FC = () => {
                 <div className="grid">
                     <div className="left">
                         <ProfilePhotos/>
-
+                        <CreatePost/>
                         {!isFetchingPostsList ? <Flex direction='column' gap={12}>
                             {postsList?.map((post) => <Post post={post} key={post.id}/>)}</Flex> : <Flex justifyContent='center' alignItems='center'>
                             <div><CSpinner color="secondary"/></div>
                         </Flex>}
-
                     </div>
 
                     <div className="right">

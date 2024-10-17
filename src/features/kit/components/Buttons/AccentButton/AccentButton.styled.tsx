@@ -5,4 +5,8 @@ export const StyledAccentButton = styled.button`
     background-color: ${({ theme }) => theme.revert_background};
     border-radius: 10px;
     padding: 3px 10px;
+
+    display: flex;
+    align-items: center;    
+    gap: 7px;
 `
