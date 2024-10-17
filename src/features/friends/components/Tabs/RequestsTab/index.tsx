@@ -2,13 +2,14 @@ import { type FC, type ReactNode, useState } from 'react'
 import Flex from '../../../../kit/components/Flex'
 import {
     useGetIncomingFriendshipRequestsQuery,
-    useGetMyFriendsQuery,
+    useGetMyFriendsQuery, useGetOutgoingFriendshipRequestsQuery,
     useGetPossibleFriendsQuery
 } from '../../../api/friends.api.ts'
-import IncomingCard from './Card/IncomingCard.tsx'
 import { CSpinner } from '@coreui/react-pro'
 import { StyledRequestsTabWrapper } from './RequestsTab.styled.tsx'
 import { TransparentButton } from '@/kit'
+import IncomingCard from './Card/IncomingCard'
+import OutgoingCard from './Card/OutgoingCard'
 
 const RequestsTab: FC = () => {
     const [activeTabIndex, setActiveTabIndex] = useState(0)
@@ -18,7 +19,7 @@ const RequestsTab: FC = () => {
             case 0:
                 return <IncomingList/>
             case 1:
-                return <></>
+                return <OutgoingList/>
             default:
                 return <></>
         }
@@ -58,7 +59,29 @@ const IncomingList: FC = () => {
                         refetchPossible={() => { void refetchPossible() }}
                         refetchIncoming={() => { void refetchIncoming() }}
                     />
-                ))}</Flex> : <p>У вас нету входяших запросов дружбы</p>}
+                ))}</Flex> : <p className='no-data'>У вас нет входящих запросов дружбы</p>}
+            </> : <Flex justifyContent='center' alignItems='center'>
+                <div className='spinner-wrapper'><CSpinner color="secondary"/></div>
+            </Flex>}
+        </>
+    )
+}
+
+const OutgoingList: FC = () => {
+    const { data: outgoingList, isFetching: isOutgoingFetching, refetch: refetchOutgoing } = useGetOutgoingFriendshipRequestsQuery(null)
+    const { refetch: refetchPossible } = useGetPossibleFriendsQuery(null)
+
+    return (
+        <>
+            {!isOutgoingFetching ? <>
+                {((outgoingList?.length) !== 0) ? <Flex direction='column' gap={12}>{outgoingList?.map((user, index) => (
+                    <OutgoingCard
+                        user={user}
+                        key={index}
+                        refetchPossible={() => { void refetchPossible() }}
+                        refetchOutgoing={() => { void refetchOutgoing() }}
+                    />
+                ))}</Flex> : <p className='no-data'>У вас нет исходящих запросов дружбы</p>}
             </> : <Flex justifyContent='center' alignItems='center'>
                 <div className='spinner-wrapper'><CSpinner color="secondary"/></div>
             </Flex>}

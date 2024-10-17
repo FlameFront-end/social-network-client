@@ -1,19 +1,12 @@
 import { type FC, type ReactNode, useState } from 'react'
-import Flex from '../../../kit/components/Flex'
-import Card from '../../../kit/components/Card'
-import {
-    useGetOutgoingFriendshipRequestsQuery,
-    useGetPossibleFriendsQuery
-} from '../../api/friends.api.ts'
-import { CSpinner } from '@coreui/react-pro'
 import { StyledFriendsWrapper } from './Friends.styled.tsx'
-import PossibleCard from '../../components/Cards/PossibleCard.tsx'
-import OutgoingCard from '../../components/Cards/OutgoingCard.tsx'
-import { PrimaryButton, TextButton } from '@/kit'
-import { FriendsTab, RequestsTab } from '../../components/Tabs'
+import { AccentButton, Flex } from '@/kit'
+import { FriendsTab, PossibleTab, RequestsTab } from '../../components/Tabs'
+import FriendsMenu from '../../components/FriendsMenu'
 
 const Friends: FC = () => {
     const [activeTabIndex, setActiveTabIndex] = useState(0)
+    const [showSelect, setShowSelect] = useState(false)
 
     const getTabByIndex = (activeTabIndex: number): ReactNode => {
         switch (activeTabIndex) {
@@ -21,62 +14,54 @@ const Friends: FC = () => {
                 return <FriendsTab/>
             case 1:
                 return <RequestsTab/>
+            case 2:
+                return <PossibleTab/>
             default:
                 return <></>
         }
     }
 
-    const tabsBtns = [1, 2, 3, 4]
-
-    const { data: possibleList, isFetching: isPossibleFetching, refetch: refetchPossible } = useGetPossibleFriendsQuery(null)
-    const { data: outgoingList, isFetching: isOutgoingFetching, refetch: refetchOutgoing } = useGetOutgoingFriendshipRequestsQuery(null)
+    const getTabNameByIndex = (activeTabIndex: number): string => {
+        switch (activeTabIndex) {
+            case 0:
+                return 'Мои друзья'
+            case 1:
+                return 'Заявки в друзья'
+            case 2:
+                return 'Поиск друзей'
+            default:
+                return ''
+        }
+    }
 
     return (
         <StyledFriendsWrapper>
+            <div className="select-mobile">
+                <AccentButton onClick={() => { setShowSelect(prevState => !prevState) }}>
+                    {getTabNameByIndex(activeTabIndex)}
+                </AccentButton>
+
+                {showSelect && <FriendsMenu
+                    className='mobile-select-content'
+                    activeTabIndex={activeTabIndex}
+                    setActiveTabIndex={setActiveTabIndex}
+                    setShowSelect={setShowSelect}
+                />}
+            </div>
+
             <Flex gap={24}>
                 <div className="tabs-content">
                     {getTabByIndex(activeTabIndex)}
                 </div>
 
-                <Flex>
-                    {tabsBtns.map((_, index) => <PrimaryButton onClick={() => { setActiveTabIndex(index) }} key={index}>{index}</PrimaryButton>)}
-                </Flex>
+                <div className="desktop">
+                    <FriendsMenu
+                        activeTabIndex={activeTabIndex}
+                        setActiveTabIndex={setActiveTabIndex}
+                        setShowSelect={setShowSelect}
+                    />
+                </div>
             </Flex>
-
-            <Card className='card'>
-                <Flex direction='column' gap={16}>
-                    {!isOutgoingFetching && outgoingList?.length !== 0 ? <Card className='card-wrapper'>
-                        <Flex className='card-header' justifyContent='space-between' alignItems='center'>
-                            <h3>Исходящие запросы дружбы</h3>
-                        </Flex>
-                        <Flex flexWrap='wrap'>{outgoingList?.map((user, index) => (
-                            <OutgoingCard
-                                user={user}
-                                key={index}
-                                refetchPossible={() => { void refetchPossible() }}
-                                refetchOutgoing={() => { void refetchOutgoing() }}
-                            />
-                        ))}</Flex>
-                    </Card> : null}
-
-                    {possibleList?.length !== 0 && <Card className='card-wrapper'>
-                        <Flex className='card-header' justifyContent='space-between' alignItems='center'>
-                            <h3>Возможные друзья</h3>
-                            <TextButton onClick={() => { console.log('show all') }}>Показать все</TextButton>
-                        </Flex>
-                        {!isPossibleFetching ? <Flex flexWrap='wrap'>{possibleList?.map((user, index) => (
-                            <PossibleCard
-                                user={user}
-                                key={index}
-                                refetchPossible={() => { void refetchPossible() }}
-                                refetchOutgoing={() => { void refetchOutgoing() }}
-                            />
-                        ))}</Flex> : <Flex justifyContent='center' alignItems='center'>
-                            <div className='spinner-wrapper'><CSpinner color="secondary"/></div>
-                        </Flex>}
-                    </Card>}
-                </Flex>
-            </Card>
         </StyledFriendsWrapper>
     )
 }

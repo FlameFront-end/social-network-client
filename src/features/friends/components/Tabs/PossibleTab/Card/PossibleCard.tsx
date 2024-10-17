@@ -1,10 +1,9 @@
 import { type FC, useEffect, useState } from 'react'
-import { useAcceptFriendRequestMutation, useDeclineFriendRequestMutation } from '../../../../api/friends.api.ts'
+import { useSendFriendRequestMutation } from '../../../../api/friends.api.ts'
 import { useNavigate } from 'react-router-dom'
 import { profilePaths } from '../../../../../profile/routes/profile.paths.ts'
 import { AccentButton, Avatar, Flex } from '@/kit'
-import { StyledIncomingCard } from './IncomingCard.styled.tsx'
-import TransparentButton from '../../../../../kit/components/Buttons/TransparentButton'
+import { StyledPossibleCard } from './PossibleCard.styled.tsx'
 import { getFullName } from '@/utils'
 import { io } from 'socket.io-client'
 import { BACKEND_URL, USER_STATUS } from '@/constants'
@@ -12,30 +11,20 @@ import type { OnlineStatusResponse } from '../../../../../../types/global.types.
 
 interface Props {
     user: Collections.User
-    refetchFriends: () => void
-    refetchIncoming: () => void
     refetchPossible: () => void
+    refetchOutgoing: () => void
 }
 
-const IncomingCard: FC<Props> = ({ user, refetchFriends, refetchIncoming, refetchPossible }) => {
+const PossibleCard: FC<Props> = ({ user, refetchPossible, refetchOutgoing }) => {
     const navigate = useNavigate()
-    const [declineFriendRequest] = useDeclineFriendRequestMutation()
-    const [acceptFriendRequest] = useAcceptFriendRequestMutation()
+    const [sendFriendRequest] = useSendFriendRequestMutation()
 
     const [onlineStatus, setOnlineStatus] = useState(false)
 
-    const handleDeclineFriendRequest = async (): Promise<void> => {
-        await declineFriendRequest(user.id).then(() => {
-            refetchFriends()
-            refetchIncoming()
+    const handleSendFriendRequest = async (): Promise<void> => {
+        await sendFriendRequest(user.id).then(() => {
             refetchPossible()
-        })
-    }
-
-    const handleAcceptFriendRequest = async (): Promise<void> => {
-        await acceptFriendRequest(user.id).then(() => {
-            refetchFriends()
-            refetchIncoming()
+            refetchOutgoing()
         })
     }
 
@@ -60,7 +49,7 @@ const IncomingCard: FC<Props> = ({ user, refetchFriends, refetchIncoming, refetc
     }, [user?.id])
 
     return (
-        <StyledIncomingCard>
+        <StyledPossibleCard>
             <Flex alignItems='center' >
                 <Avatar ava={user.ava} size='medium' status={onlineStatus} showStatus />
                 <div className='info'>
@@ -68,19 +57,15 @@ const IncomingCard: FC<Props> = ({ user, refetchFriends, refetchIncoming, refetc
                         <div className='full_name' onClick={() => { navigate(profilePaths.profile, { state: { userId: user.id } }) }}>
                             {getFullName(user?.surname ?? '', user?.name ?? '', null)}
                         </div>
-                        <Flex>
-                            <AccentButton onClick={() => { void handleAcceptFriendRequest() }}>
-                                Принять заявку
-                            </AccentButton>
-                            <TransparentButton onClick={() => { void handleDeclineFriendRequest() }}>
-                                Оставить в подписчиках
-                            </TransparentButton>
-                        </Flex>
+
+                        <AccentButton onClick={() => { void handleSendFriendRequest() }}>
+                            Добавить в друзья
+                        </AccentButton>
                     </div>
                 </div>
             </Flex>
-        </StyledIncomingCard>
+        </StyledPossibleCard>
     )
 }
 
-export default IncomingCard
+export default PossibleCard

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StyledIncomingCard = styled.div`
+export const StyledPossibleCard = styled.div`
     width: 100%;
     padding-bottom: 12px;
     border-bottom: 1px solid ${({ theme }) => theme.card.border};
@@ -40,12 +40,12 @@ export const StyledIncomingCard = styled.div`
     .full_name {
         font-weight: 700;
         text-overflow: ellipsis;
-        color: #e1e3e6;
+        color: ${({ theme }) => theme.text};
         cursor: pointer;
     }
     
     .organization {
-        color: #939393;
+        color: ${({ theme }) => theme.gray_text};
         font-size: 13px;
     }
     

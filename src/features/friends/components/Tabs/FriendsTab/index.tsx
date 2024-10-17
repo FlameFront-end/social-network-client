@@ -19,7 +19,7 @@ const FriendsTab: FC = () => {
                         refetchPossible={() => { void refetchPossible() }}
                         refetchFriends={() => { void refetchFriends() }}
                     />
-                ))}</Flex> : <p>Вы ещё не добавили ни одного друга</p>}
+                ))}</Flex> : <p className='no-data'>Вы ещё не добавили ни одного друга</p>}
             </> : <Flex justifyContent='center' alignItems='center'>
                 <div className='spinner-wrapper'><CSpinner color="secondary"/></div>
             </Flex>}
