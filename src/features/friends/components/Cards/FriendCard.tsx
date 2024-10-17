@@ -9,8 +9,8 @@ import { Avatar, Flex, TextButton } from '@/kit'
 import { MessageOutlined } from '@ant-design/icons'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
 import { io } from 'socket.io-client'
-import { BACKEND_URL } from '@/core'
-import { USER_STATUS } from '@/constants'
+import { BACKEND_URL, USER_STATUS } from '@/constants'
+
 import { getFullName } from '@/utils'
 import { type OnlineStatusResponse } from '../../../../types/global.types.ts'
 

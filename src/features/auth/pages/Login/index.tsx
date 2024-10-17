@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '../../api/auth.api'
 import type { LoginPayload } from '../../types/login.types'
 import { authPaths } from '../../routes/auth.paths.ts'
-import { BACKEND_URL } from '@/core'
+import { BACKEND_URL } from '@/constants'
 import { Card, TextButton } from '@/kit'
 
 import { StyledAuthWrapper } from '../styled/Auth.styled.tsx'

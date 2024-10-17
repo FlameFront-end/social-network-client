@@ -5,8 +5,8 @@ import { Avatar, Flex } from '@/kit'
 import { useNavigate } from 'react-router-dom'
 import { chatPaths } from '../../routes/chat.paths.ts'
 import { getFullName } from '@/utils'
-import { BACKEND_URL } from '@/core'
-import { USER_STATUS } from '@/constants'
+import { BACKEND_URL, USER_STATUS } from '@/constants'
+
 import { io } from 'socket.io-client'
 import { type OnlineStatusResponse } from '../../../../types/global.types.ts'
 

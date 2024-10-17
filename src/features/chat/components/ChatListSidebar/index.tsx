@@ -3,7 +3,7 @@ import { CSpinner } from '@coreui/react-pro'
 import ChatItemSidebar from '../ChatItemSidebar'
 import { StyledChatListWrapper } from './ChatListSidebar.styled.tsx'
 import { useAppSelector } from '@/hooks'
-import { BACKEND_URL } from '@/core'
+import { BACKEND_URL } from '@/constants'
 import { io } from 'socket.io-client'
 
 interface ChatListSidebarProps {

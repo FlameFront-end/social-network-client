@@ -7,7 +7,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRegisterMutation } from '../../api/auth.api'
 import { type RegisterDataForm } from '../../types/register.types.ts'
 import { authPaths } from '../../routes/auth.paths.ts'
-import { BACKEND_URL } from '@/core'
+import { BACKEND_URL } from '@/constants'
 import { Card, Flex, TextButton } from '@/kit'
 import { pathsConfig } from '@/pathsConfig'
 

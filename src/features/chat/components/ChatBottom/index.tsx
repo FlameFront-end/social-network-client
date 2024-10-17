@@ -16,7 +16,7 @@ import data from '@emoji-mart/data'
 import { Flex } from '@/kit'
 import { io, type Socket } from 'socket.io-client'
 import { useAppSelector } from '@/hooks'
-import { BACKEND_URL } from '@/core'
+import { BACKEND_URL } from '@/constants'
 import { type TypingMessageResponse } from '../../../../types/global.types.ts'
 
 interface Props {

@@ -5,7 +5,7 @@ import { useAppSelector } from '@/hooks'
 import { useCreatePostMutation, useGetUserPostsQuery } from '../../api/posts.api.ts'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import { BACKEND_URL } from '@/core'
+import { BACKEND_URL } from '@/constants'
 
 const CreatePost: FC = () => {
     const user = useAppSelector(state => state.auth.user)

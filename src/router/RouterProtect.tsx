@@ -7,8 +7,7 @@ import { useAppAction, useAppSelector } from '@/hooks'
 import { pathsConfig } from '@/pathsConfig'
 import Cookies from 'js-cookie'
 import { io } from 'socket.io-client'
-import { BACKEND_URL } from '@/core'
-import { MY_STATUS } from '@/constants'
+import { MY_STATUS, BACKEND_URL } from '@/constants'
 
 const RouterProtect = (): JSX.Element => {
     const { isAuth } = useAuth()
