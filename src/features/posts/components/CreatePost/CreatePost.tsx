@@ -2,7 +2,7 @@ import { type ChangeEvent, type FC, useRef, useState } from 'react'
 import { StyledCreatePostWrapper } from './CreatePost.styled.tsx'
 import { AccentButton, Avatar } from '@/kit'
 import { useAppSelector } from '@/hooks'
-import { useCreatePostMutation, useGetMyPostsQuery } from '../../api/posts.api.ts'
+import { useCreatePostMutation, useGetUserPostsQuery } from '../../api/posts.api.ts'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { BACKEND_URL } from '@/core'
@@ -16,7 +16,8 @@ const CreatePost: FC = () => {
     const [description, setDescription] = useState<string>('')
 
     const [createPost] = useCreatePostMutation()
-    const { refetch: refetchPosts } = useGetMyPostsQuery(null)
+
+    const { refetch: refetchPosts } = useGetUserPostsQuery(user.id ?? 0)
 
     const [isLoading, setIsLoading] = useState(false)
 

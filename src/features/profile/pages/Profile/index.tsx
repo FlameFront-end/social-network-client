@@ -14,9 +14,9 @@ import { StyledProfileWrapper } from './Profile.styled.tsx'
 import ProfileFriendsMobile from './components/ProfileFriendsMobile'
 import ProfileFriendsDesktop from './components/ProfileFriendsDesktop'
 import Post from '../../../posts/components/Post/Post.tsx'
-import { useGetMyPostsQuery } from '../../../posts/api/posts.api.ts'
 import { CSpinner } from '@coreui/react-pro'
 import CreatePost from '../../../posts/components/CreatePost/CreatePost.tsx'
+import { useGetUserPostsQuery } from '../../../posts/api/posts.api.ts'
 
 const Profile: FC = () => {
     const { state } = useLocation()
@@ -24,7 +24,7 @@ const Profile: FC = () => {
     const userId = useAppSelector(state => state.auth.user.id)
 
     const { data: user, isFetching: isFetchingUser } = useGetUserQuery(state?.userId)
-    const { data: postsList, isFetching: isFetchingPostsList } = useGetMyPostsQuery(null)
+    const { data: postsList, isFetching: isFetchingPostsList } = useGetUserPostsQuery(state?.userId)
 
     const isMyProfile = state?.userId === userId
     const token = Cookies.get('token')
