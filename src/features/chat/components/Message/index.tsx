@@ -1,4 +1,4 @@
-import { type Dispatch, type FC, type SetStateAction } from 'react'
+import { useEffect, useState, useRef, type Dispatch, type FC, type SetStateAction } from 'react'
 import { Avatar } from 'antd'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
 import ava from '../../../../../public/ava.png'
@@ -6,6 +6,9 @@ import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { StyledMessage } from './Message.styled.tsx'
 import { Flex } from '@/kit'
+import { io, type Socket } from 'socket.io-client'
+import { BACKEND_URL, MESSAGE_READ } from '@/constants'
+import { useAppSelector } from '@/hooks'
 
 interface Props {
     message: Collections.Message
@@ -13,52 +16,95 @@ interface Props {
 }
 
 const Message: FC<Props> = ({ message, setReplyToMessage }) => {
+    const userId = useAppSelector(state => state.auth.user.id)
+    const [isRead, setIsRead] = useState(message.isRead)
+    const messageRef = useRef<HTMLDivElement | null>(null)
+    const socketRef = useRef<Socket | null>(null)
+
+    useEffect(() => {
+        socketRef.current = io(BACKEND_URL)
+    }, [])
+
+    useEffect(() => {
+        const socket = socketRef.current
+
+        const handleMessageReadUpdate = (updatedMessage: any): void => {
+            if (updatedMessage.id === message.id) {
+                setIsRead(updatedMessage.isRead)
+            }
+        }
+
+        if (socket) {
+            socket.on(MESSAGE_READ, handleMessageReadUpdate)
+
+            const handleIntersection = ([entry]: IntersectionObserverEntry[]): void => {
+                if (entry.isIntersecting && !isRead && message.receiverId === userId) {
+                    socket.emit(MESSAGE_READ, {
+                        messageId: message.id,
+                        receiverId: message.receiverId,
+                        senderId: message.senderId
+                    })
+                }
+            }
+
+            const observer = new IntersectionObserver(handleIntersection)
+            if (messageRef.current) {
+                observer.observe(messageRef.current)
+            }
+
+            return () => {
+                observer.disconnect()
+                socket.off(MESSAGE_READ)
+            }
+        }
+    }, [isRead, message.id, message.receiverId, userId])
+
     const navigate = useNavigate()
 
     return (
-        <StyledMessage key={message.id} onClick={() => { setReplyToMessage(message) }}>
+        <StyledMessage ref={messageRef} key={message.id} onClick={() => { setReplyToMessage(message) }}>
             <Flex className='wrapper' justifyContent='start'>
                 <Avatar size={60} src={message.sender.ava ?? ava} style={{ height: 'max-content' }}/>
 
                 <div className='full-width'>
                     <Flex alignItems='center' justifyContent='space-between'>
-                        <Flex alignItems='center' onClick={() => {
-                            navigate(profilePaths.profile, { state: { userId: message.senderId } })
-                        }}>
+                        <Flex alignItems='center' onClick={() => { navigate(profilePaths.profile, { state: { userId: message.senderId } }) }}>
                             <div className='nick'>
                                 {message.sender.name} {message.sender.surname}
                             </div>
+                            {isRead ? 'Read' : 'Unread'}
                         </Flex>
                         <div className='time'> {dayjs(message.createdAt)?.format('HH:mm')}</div>
                     </Flex>
 
-                    {message.replyToMessageId != null ? <Flex direction="column" className='reply-message'>
-                        <Flex>
-                            <div className="separator"/>
-                            <Flex direction='column' gap={0}>
-                                <div className='author'>{message.replyToMessage?.sender.name} {message.replyToMessage?.sender.surname}</div>
-                                {message.replyToMessage?.content !== null && <div className='message'>{message.replyToMessage?.content}</div>}
-                                {message.replyToMessage?.audioUrl !== null &&
-                                    <div className='audio-controls'>
-                                        <audio className='audio-player' src={message.replyToMessage?.audioUrl}></audio>
-                                        <div className="audio-controls">
-                                            <button className='play-pause'>Play</button>
-                                            <input type="range" className='seek-bar' value="0" max="100"/>
+                    {message.replyToMessageId != null ? (
+                        <Flex direction="column" className='reply-message'>
+                            <Flex>
+                                <div className="separator"/>
+                                <Flex direction='column' gap={0}>
+                                    <div className='author'>{message.replyToMessage?.sender.name} {message.replyToMessage?.sender.surname}</div>
+                                    {message.replyToMessage?.content && <div className='message'>{message.replyToMessage?.content}</div>}
+                                    {message.replyToMessage?.audioUrl && (
+                                        <div className='audio-controls'>
+                                            <audio className='audio-player' src={message.replyToMessage?.audioUrl}></audio>
+                                            <div className="audio-controls">
+                                                <button className='play-pause'>Play</button>
+                                                <input type="range" className='seek-bar' value="0" max="100"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
+                                    )}
+                                </Flex>
                             </Flex>
                         </Flex>
-                    </Flex> : null}
+                    ) : null}
 
                     <Flex direction="column">
-                        {message.content !== null && <div className='message'>{message.content}</div>}
-                        {message.audioUrl !== null && <audio controls src={message.audioUrl} className='message'/>}
+                        {message.content && <div className='message'>{message.content}</div>}
+                        {message.audioUrl && <audio controls src={message.audioUrl} className='message'/>}
                     </Flex>
                 </div>
             </Flex>
         </StyledMessage>
-
     )
 }
 

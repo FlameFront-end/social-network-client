@@ -46,10 +46,13 @@ const ChatList: FC = () => {
                 activeChatId={activeChatId}
                 chatList={chatsList ?? []}
                 isFetching={isFetching}
+                senderId={userId ?? null}
+                receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}
             />
 
             {windowWidth >= 800 &&
                 <Chat
+                    activeChatId={activeChatId}
                     senderId={userId ?? null}
                     receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}
                 />

@@ -14,10 +14,13 @@ interface Props {
     chat: Collections.Chat
     isActive: boolean
     setActiveChatId: Dispatch<SetStateAction<number>>
+    chatId: number
     isLastItem: boolean
+    senderId: number | null
+    receiverId: number | null
 }
 
-const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastItem }) => {
+const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastItem, chatId, senderId, receiverId }) => {
     const navigate = useNavigate()
     const windowWidth = useWindowWidth()
     const user = useAppSelector(state => state.auth.user)
@@ -32,7 +35,7 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
         if (windowWidth >= 800) {
             setActiveChatId(chat.id)
         } else {
-            navigate(chatPaths.chat, { state: { receiverId: chat.user1Id, senderId: chat.user2Id } })
+            navigate(chatPaths.chat, { state: { receiverId, senderId, chatId } })
         }
     }
 

@@ -16,12 +16,13 @@ import data from '@emoji-mart/data'
 import { Flex } from '@/kit'
 import { io, type Socket } from 'socket.io-client'
 import { useAppSelector } from '@/hooks'
-import { BACKEND_URL } from '@/constants'
+import { BACKEND_URL, SEND_MESSAGE, TYPING, TYPING_STOPPER } from '@/constants'
 import { type TypingMessageResponse } from '../../../../types/global.types.ts'
 
 interface Props {
     setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
     replyToMessage: Collections.Message | null
+    chatId: number
     senderId: number | string | null
     receiverId: number | string | null
     scrollToBottom: (behavior: 'smooth' | 'auto') => void
@@ -31,7 +32,7 @@ interface Emoji {
     native: string
 }
 
-const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, receiverId, scrollToBottom }) => {
+const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, receiverId, chatId, scrollToBottom }) => {
     const userId = useAppSelector(state => state.auth.user.id)
 
     const [content, setContent] = useState('')
@@ -49,13 +50,13 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
 
     const notifyTyping = (): void => {
         if (socketRef.current && content) {
-            socketRef.current.emit('typing', { senderId: userId })
+            socketRef.current.emit(TYPING, { chatId, senderId })
         }
     }
 
     const notifyTypingStopped = (): void => {
         if (socketRef.current) {
-            socketRef.current.emit('typingStopped', { senderId: userId })
+            socketRef.current.emit(TYPING_STOPPER, { chatId, senderId })
         }
     }
 
@@ -104,10 +105,11 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
         if (senderId != null && receiverId != null) {
             if (audioBlob != null) {
                 void audioBlob.arrayBuffer().then((arrayBuffer) => {
-                    socketRef.current?.emit('sendMessage', {
+                    socketRef.current?.emit(SEND_MESSAGE, {
                         audio: arrayBuffer,
-                        senderId,
-                        receiverId,
+                        senderId: userId,
+                        chatId,
+                        receiverId: receiverId === userId ? senderId : receiverId,
                         content: content.trim() !== '' ? content : null,
                         replyToMessageId: replyToMessage?.id
                     })
@@ -119,10 +121,11 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
                     scrollToBottom('smooth')
                 })
             } else if (content.trim() !== '') {
-                socketRef.current?.emit('sendMessage', {
-                    senderId: senderId.toString(),
-                    receiverId: receiverId.toString(),
+                socketRef.current?.emit(SEND_MESSAGE, {
+                    chatId,
                     content,
+                    senderId: userId,
+                    receiverId: receiverId === userId ? senderId : receiverId,
                     replyToMessageId: replyToMessage?.id
                 })
                 setContent('')
@@ -164,21 +167,26 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
     }, [audioBlob])
 
     useEffect(() => {
-        socketRef.current?.on('typing', (data: TypingMessageResponse) => {
-            setTypingUserName(data.senderName)
-            setTypingUserId(data.senderId)
+        socketRef.current?.on(TYPING, (data: TypingMessageResponse) => {
+            if (data.chatId === chatId) {
+                setTypingUserName(data.senderName)
+                setTypingUserId(data.senderId)
+            }
         })
 
-        socketRef.current?.on('typingStopped', () => {
+        socketRef.current?.on(TYPING_STOPPER, () => {
             setTypingUserName(null)
             setTypingUserId(null)
         })
 
         return () => {
-            socketRef.current?.off('typing')
-            socketRef.current?.off('typingStopped')
+            socketRef.current?.off(TYPING)
+            socketRef.current?.off(TYPING_STOPPER)
+
+            setTypingUserName(null)
+            setTypingUserId(null)
         }
-    }, [])
+    }, [chatId])
 
     return (
         <StyledChatBottom direction='column'>

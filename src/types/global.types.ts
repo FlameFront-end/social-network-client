@@ -13,4 +13,5 @@ export interface OnlineStatusResponse {
 export interface TypingMessageResponse {
     senderId: number
     senderName: string
+    chatId: number
 }

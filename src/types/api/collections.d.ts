@@ -23,6 +23,7 @@ declare namespace Collections {
         sender: Collections.User
         replyToMessage: Collections.ReplyToMessage | null
         replyToMessageId: number | null
+        isRead: boolean
     }
 
     interface ReplyToMessage {
