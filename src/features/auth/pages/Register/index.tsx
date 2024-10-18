@@ -43,7 +43,7 @@ const Register: FC = () => {
             return
         }
         if (info.file.status === 'done') {
-            setImageUrl(info.file.response.url)
+            setImageUrl(info.file.response.urls[0])
         }
     }
 
