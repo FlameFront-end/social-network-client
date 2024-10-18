@@ -19,6 +19,21 @@ export const StyledMessage = styled(List.Item)`
         background-color: rgba(255, 255, 255, 0.02);
     }
     
+    .marks-read {
+        position: relative;
+        
+        .last {
+            position: absolute;
+            top: 50%;
+            left: 7px;
+            transform: translateY(-50%);
+        }
+        
+        svg {   
+            fill: #0dcaf0;
+        }
+    }
+    
     .wrapper {
         width: 100%;
         padding: 0 10px

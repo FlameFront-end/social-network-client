@@ -7,6 +7,7 @@ import { Avatar, Flex } from '@/kit'
 import { io, type Socket } from 'socket.io-client'
 import { BACKEND_URL, MESSAGE_READ } from '@/constants'
 import { useAppSelector } from '@/hooks'
+import { CheckOutlined } from '@ant-design/icons'
 
 interface Props {
     message: Collections.Message
@@ -72,10 +73,12 @@ const Message: FC<Props> = ({ message, handleSelectMessage, selectedMessages }) 
                 <div className='full-width'>
                     <Flex alignItems='center' justifyContent='space-between'>
                         <Flex alignItems='center' onClick={() => { navigate(profilePaths.profile, { state: { userId: message.senderId } }) }}>
-                            <div className='nick'>
-                                {message.sender.name} {message.sender.surname}
-                            </div>
-                            {isRead ? 'Read' : 'Unread'}
+                            <div className='nick'>{message.sender.name}</div>
+
+                            {message.senderId === userId && <div className="marks-read">
+                                {isRead ? <><CheckOutlined color='#bae0ff'/> <CheckOutlined className='last'/></>
+                                    : <CheckOutlined/>}
+                            </div>}
                         </Flex>
                         <div className='time'>{dayjs(message.createdAt)?.format('HH:mm')}</div>
                     </Flex>
@@ -85,7 +88,7 @@ const Message: FC<Props> = ({ message, handleSelectMessage, selectedMessages }) 
                             <Flex>
                                 <div className="separator"/>
                                 <Flex direction='column' gap={0}>
-                                    <div className='author'>{message.replyToMessage?.sender.name} {message.replyToMessage?.sender.surname}</div>
+                                    <div className='author'>{message.replyToMessage?.sender.name}</div>
                                     {message.replyToMessage?.content && <div className='message'>{message.replyToMessage?.content}</div>}
                                     {message.replyToMessage?.audioUrl && (
                                         <div className='audio-controls'>
