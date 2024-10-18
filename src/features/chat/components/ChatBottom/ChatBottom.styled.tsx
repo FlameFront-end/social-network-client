@@ -62,4 +62,10 @@ export const StyledChatBottom = styled(Flex)`
             box-shadow: none !important;
         }
     }
+    
+    .selected-messages {
+        button {
+            padding: 5px;
+        }
+    }
 `

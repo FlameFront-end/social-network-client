@@ -2,19 +2,26 @@ import styled from 'styled-components'
 import { List } from 'antd'
 
 export const StyledMessage = styled(List.Item)`
+    position: relative;
     width: 100%;
     border: none !important;
     
     border-radius: 12px;
     margin-bottom: 5px;
     
-    &:hover {
+    @media screen and (hover: hover){
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+    }
+    
+    &.active {
         background-color: rgba(255, 255, 255, 0.02);
     }
     
     .wrapper {
         width: 100%;
-        padding: 5px !important;
+        padding: 0 10px
     }
     
     .full-width {
@@ -45,7 +52,7 @@ export const StyledMessage = styled(List.Item)`
         gap: 10px;
 
         .audio-player {
-            display: none !important; /* Скрыть стандартный плеер */
+            display: none !important;
         }
 
         .play-pause {
@@ -60,12 +67,11 @@ export const StyledMessage = styled(List.Item)`
         }
     }
     
-    
     .reply-message {
         margin-top: 5px;
 
         .message {
-            margin-top: 0px;
+            margin-top: 0;
         }
         
         .separator {
@@ -74,10 +80,20 @@ export const StyledMessage = styled(List.Item)`
             border-radius: 2px;
             background-color: ${({ theme }) => theme.accent};
         }
-
-
+        
         .author {
             color: ${({ theme }) => theme.accent};
         }
+    }
+    
+    .swipe-button {
+        width: 60px;
+        height: 30px;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        justify-content: center;
+        align-items: center;
+        transition: display 0.3s ease
     }
 `

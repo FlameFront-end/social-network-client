@@ -12,4 +12,8 @@ export const StyledAccentButton = styled.button`
     color: ${({ theme }) => theme.revert_text};
     font-size: 14px;
     font-weight: 500;
+    
+    &:disabled {
+        opacity: .6;
+    }
 `

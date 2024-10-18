@@ -13,7 +13,7 @@ import { AudioMutedOutlined, AudioOutlined, CloseOutlined, SendOutlined } from '
 import { Input } from 'antd'
 import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
-import { Flex } from '@/kit'
+import { AccentButton, Flex } from '@/kit'
 import { io, type Socket } from 'socket.io-client'
 import { useAppSelector } from '@/hooks'
 import { BACKEND_URL, SEND_MESSAGE, TYPING, TYPING_STOPPER } from '@/constants'
@@ -26,13 +26,24 @@ interface Props {
     senderId: number | string | null
     receiverId: number | string | null
     scrollToBottom: (behavior: 'smooth' | 'auto') => void
+    selectedMessages: Collections.Message[]
+    setSelectedMessages: Dispatch<SetStateAction<Collections.Message[]>>
 }
 
 interface Emoji {
     native: string
 }
 
-const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, receiverId, chatId, scrollToBottom }) => {
+const ChatBottom: FC<Props> = ({
+    replyToMessage,
+    setReplyToMessage,
+    senderId,
+    receiverId,
+    chatId,
+    scrollToBottom,
+    selectedMessages,
+    setSelectedMessages
+}) => {
     const userId = useAppSelector(state => state.auth.user.id)
 
     const [content, setContent] = useState('')
@@ -188,6 +199,21 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
         }
     }, [chatId])
 
+    const getMessageCountText = (count: number): string => {
+        if (count === 1) {
+            return `Выбрано ${count} сообщение`
+        } else if (count > 1 && count < 5) {
+            return `Выбраны ${count} сообщения`
+        } else {
+            return `Выбраны ${count} сообщений`
+        }
+    }
+
+    const handleClickReply = (): void => {
+        setReplyToMessage(selectedMessages[0])
+        setSelectedMessages([])
+    }
+
     return (
         <StyledChatBottom direction='column'>
             {(replyToMessage != null) && (
@@ -208,35 +234,55 @@ const ChatBottom: FC<Props> = ({ replyToMessage, setReplyToMessage, senderId, re
 
             {typingUserId && (userId !== typingUserId) && <div className='typing'>{typingUserName} печатает...</div>}
 
-            <Flex alignItems='center' className='wrapper'>
-                <Input
-                    value={content}
-                    onChange={handleChange}
-                    onPressEnter={sendMessage}
-                    placeholder="Напишите сообщение..."
-                />
-                <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <button className="btn">😊</button>
-                    {isHovered && (
-                        <div className="emoji-picker">
-                            <Picker data={data} onEmojiSelect={addEmoji} />
-                        </div>
+            {selectedMessages.length === 0
+                ? <Flex alignItems='center' className='wrapper'>
+                    <Input
+                        value={content}
+                        onChange={handleChange}
+                        onPressEnter={sendMessage}
+                        placeholder="Напишите сообщение..."
+                    />
+                    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                        <button className="btn">😊</button>
+                        {isHovered && (
+                            <div className="emoji-picker">
+                                <Picker data={data} onEmojiSelect={addEmoji} />
+                            </div>
+                        )}
+                    </div>
+                    {isRecording ? (
+                        <button className='btn' onClick={stopRecording}>
+                            <AudioMutedOutlined className='icon' />
+                        </button>
+                    ) : (
+                        <button className='btn' onClick={startRecording}>
+                            <AudioOutlined className='icon' />
+                        </button>
                     )}
-                </div>
-                {isRecording ? (
-                    <button className='btn' onClick={stopRecording}>
-                        <AudioMutedOutlined className='icon' />
+                    {audioUrl != null && <audio controls src={audioUrl} />}
+                    <button className='btn send' onClick={sendMessage}>
+                        <SendOutlined />
                     </button>
-                ) : (
-                    <button className='btn' onClick={startRecording}>
-                        <AudioOutlined className='icon' />
-                    </button>
-                )}
-                {audioUrl != null && <audio controls src={audioUrl} />}
-                <button className='btn send' onClick={sendMessage}>
-                    <SendOutlined />
-                </button>
-            </Flex>
+                </Flex>
+                : <Flex direction='column' className='selected-messages'>
+                    <Flex justifyContent='space-between' alignItems='center'>
+                        <div className="selected-count">{getMessageCountText(selectedMessages.length)}</div>
+                        <button className="cancel" onClick={() => {
+                            setSelectedMessages([])
+                        }}>x
+                        </button>
+                    </Flex>
+                    <Flex alignItems='center'>
+                        <AccentButton onClick={handleClickReply} disabled={selectedMessages.length > 1}>
+                            Ответить
+                        </AccentButton>
+
+                        <AccentButton onClick={() => { console.log('Переслать') }}>
+                            Переслать
+                        </AccentButton>
+                    </Flex>
+                </Flex>
+            }
         </StyledChatBottom>
     )
 }
@@ -246,6 +292,8 @@ export default memo(ChatBottom, (prevProps, nextProps) => {
         prevProps.senderId === nextProps.senderId &&
         prevProps.receiverId === nextProps.receiverId &&
         prevProps.replyToMessage === nextProps.replyToMessage &&
-        prevProps.scrollToBottom === nextProps.scrollToBottom
+        prevProps.scrollToBottom === nextProps.scrollToBottom &&
+        prevProps.selectedMessages.length === nextProps.selectedMessages.length &&
+        prevProps.setSelectedMessages === nextProps.setSelectedMessages
     )
 })

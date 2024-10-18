@@ -22,9 +22,22 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [replyToMessage, setReplyToMessage] = useState<Collections.Message | null>(null)
+    const [selectedMessages, setSelectedMessages] = useState<Collections.Message[]>([])
 
     const wrapper: MutableRefObject<HTMLDivElement | null> = useRef(null)
     const [scrollPosition, setScrollPosition] = useState(0)
+
+    const handleSelectMessage = (message: Collections.Message): void => {
+        setSelectedMessages((prevMessages) => {
+            const isAlreadySelected = prevMessages.some((msg) => msg.id === message.id)
+
+            if (isAlreadySelected) {
+                return prevMessages.filter((msg) => msg.id !== message.id)
+            } else {
+                return [...prevMessages, message]
+            }
+        })
+    }
 
     const handleScroll = useCallback((): void => {
         const list = wrapper.current?.querySelector('.list')
@@ -95,9 +108,9 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
 
     const memoizedMessages = useMemo(() => {
         return messages.map((message) => (
-            <Message key={message.id} message={message} setReplyToMessage={setReplyToMessage} />
+            <Message key={message.id} message={message} handleSelectMessage={handleSelectMessage} selectedMessages={selectedMessages}/>
         ))
-    }, [messages, setReplyToMessage])
+    }, [messages, handleSelectMessage, selectedMessages])
 
     return (
         <StyledChatWrapper>
@@ -120,6 +133,8 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
                         receiverId={receiverId}
                         scrollToBottom={scrollToBottom}
                         chatId={activeChatId}
+                        selectedMessages={selectedMessages}
+                        setSelectedMessages={setSelectedMessages}
                     />
                 </Flex>
 

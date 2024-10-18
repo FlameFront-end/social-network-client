@@ -1,21 +1,21 @@
-import { useEffect, useState, useRef, type Dispatch, type FC, type SetStateAction } from 'react'
-import { Avatar } from 'antd'
+import { useEffect, useState, useRef, type FC } from 'react'
 import { profilePaths } from '../../../profile/routes/profile.paths.ts'
-import ava from '../../../../../public/ava.png'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { StyledMessage } from './Message.styled.tsx'
-import { Flex } from '@/kit'
+import { Avatar, Flex } from '@/kit'
 import { io, type Socket } from 'socket.io-client'
 import { BACKEND_URL, MESSAGE_READ } from '@/constants'
 import { useAppSelector } from '@/hooks'
 
 interface Props {
     message: Collections.Message
-    setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
+    handleSelectMessage: (message: Collections.Message) => void
+    selectedMessages: Collections.Message[]
 }
 
-const Message: FC<Props> = ({ message, setReplyToMessage }) => {
+const Message: FC<Props> = ({ message, handleSelectMessage, selectedMessages }) => {
+    const navigate = useNavigate()
     const userId = useAppSelector(state => state.auth.user.id)
     const [isRead, setIsRead] = useState(message.isRead)
     const messageRef = useRef<HTMLDivElement | null>(null)
@@ -59,12 +59,15 @@ const Message: FC<Props> = ({ message, setReplyToMessage }) => {
         }
     }, [isRead, message.id, message.receiverId, userId])
 
-    const navigate = useNavigate()
-
     return (
-        <StyledMessage ref={messageRef} key={message.id} onClick={() => { setReplyToMessage(message) }}>
+        <StyledMessage
+            ref={messageRef}
+            key={message.id}
+            className={selectedMessages.some((msg) => msg.id === message.id) ? 'active' : ''}
+            onClick={() => { handleSelectMessage(message) }}
+        >
             <Flex className='wrapper' justifyContent='start'>
-                <Avatar size={60} src={message.sender.ava ?? ava} style={{ height: 'max-content' }}/>
+                <Avatar size='small' ava={message.sender.ava} />
 
                 <div className='full-width'>
                     <Flex alignItems='center' justifyContent='space-between'>
@@ -74,7 +77,7 @@ const Message: FC<Props> = ({ message, setReplyToMessage }) => {
                             </div>
                             {isRead ? 'Read' : 'Unread'}
                         </Flex>
-                        <div className='time'> {dayjs(message.createdAt)?.format('HH:mm')}</div>
+                        <div className='time'>{dayjs(message.createdAt)?.format('HH:mm')}</div>
                     </Flex>
 
                     {message.replyToMessageId != null ? (
