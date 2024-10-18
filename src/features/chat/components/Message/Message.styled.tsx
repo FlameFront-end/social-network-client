@@ -61,25 +61,10 @@ export const StyledMessage = styled(List.Item)`
         max-width: 700px;
     }
 
-    .audio-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        .audio-player {
-            display: none !important;
-        }
-
-        .play-pause {
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .seek-bar {
-            height: 1px;
-            width: 100%;
-        }
+    .audio-player {
+        width: 100%; 
+        height: 16px;
+        outline: none; 
     }
     
     .reply-message {

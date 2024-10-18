@@ -45,7 +45,7 @@ const CreatePost: FC = () => {
             const formData = new FormData()
             files.forEach(file => { formData.append('image', file) })
 
-            const { data } = await axios.post<{ urls: string[] }>(`${BACKEND_URL}/upload/image`, formData, {
+            const { data } = await axios.post<{ urls: string[] }>(`${BACKEND_URL}/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

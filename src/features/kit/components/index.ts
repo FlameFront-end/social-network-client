@@ -6,5 +6,6 @@ export { default as Tabs } from './Tabs'
 export { default as OnlineStatus } from './OnlineStatus'
 export { default as Avatar } from './Avatar'
 export { default as MySkeleton } from './MySkeleton'
+export { default as Audio } from './Audio'
 
 export * from './Buttons/index.ts'

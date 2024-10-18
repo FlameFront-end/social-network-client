@@ -142,7 +142,7 @@ const Register: FC = () => {
                             listType="picture-card"
                             className="avatar-uploader"
                             onChange={handleChange}
-                            action={`${BACKEND_URL}/upload/image`}
+                            action={`${BACKEND_URL}/upload`}
                             accept="image/jpeg, image/png, image/gif"
                         >
                             {(imageUrl != null) ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }}/> : uploadButton}

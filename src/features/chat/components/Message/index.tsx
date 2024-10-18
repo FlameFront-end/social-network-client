@@ -8,6 +8,7 @@ import { io, type Socket } from 'socket.io-client'
 import { BACKEND_URL, MESSAGE_READ } from '@/constants'
 import { useAppSelector } from '@/hooks'
 import { CheckOutlined } from '@ant-design/icons'
+import Audio from '../../../kit/components/Audio'
 
 interface Props {
     message: Collections.Message
@@ -93,10 +94,6 @@ const Message: FC<Props> = ({ message, handleSelectMessage, selectedMessages }) 
                                     {message.replyToMessage?.audioUrl && (
                                         <div className='audio-controls'>
                                             <audio className='audio-player' src={message.replyToMessage?.audioUrl}></audio>
-                                            <div className="audio-controls">
-                                                <button className='play-pause'>Play</button>
-                                                <input type="range" className='seek-bar' value="0" max="100"/>
-                                            </div>
                                         </div>
                                     )}
                                 </Flex>
@@ -106,7 +103,9 @@ const Message: FC<Props> = ({ message, handleSelectMessage, selectedMessages }) 
 
                     <Flex direction="column">
                         {message.content && <div className='message'>{message.content}</div>}
-                        {message.audioUrl && <audio controls src={message.audioUrl} className='message'/>}
+                        {message.audioUrl && <div className='audio-controls'>
+                            <Audio url={message.audioUrl} id={message.id}/>
+                        </div>}
                     </Flex>
                 </div>
             </Flex>
