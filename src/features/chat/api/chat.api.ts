@@ -8,11 +8,11 @@ export const chatApi = api.injectEndpoints({
             })
         }),
         createChat: builder.mutation<Collections.Chat, number>({
-            query: (receiverId) => ({
+            query: (user2Id) => ({
                 method: 'POST',
                 url: '/chat/create',
                 body: {
-                    receiverId
+                    user2Id
                 }
             })
         })

@@ -1,22 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-import Message = Collections.Message
 import { BACKEND_URL } from '@/constants'
 
 interface ChatState {
-    messages: Message[]
-    status: 'idle' | 'loading' | 'succeeded' | 'failed'
+    messages: Collections.Message[]
+    users: Collections.User []
 }
 
 const initialState: ChatState = {
     messages: [],
-    status: 'idle'
+    users: []
 }
 
-export const fetchMessages = createAsyncThunk(
-    'chat/fetchMessages',
-    async (userIds: { userId1: number, userId2: number }) => {
-        const response = await axios.get(`${BACKEND_URL}/chat/${userIds.userId1}/${userIds.userId2}`)
+export const fetchChatMessages = createAsyncThunk(
+    'chat/fetchChatMessages',
+    async (chatId: number) => {
+        const response = await axios.get(`${BACKEND_URL}/chat/${chatId}/messages`)
         return response.data
     }
 )
@@ -27,18 +26,13 @@ const chatSlice = createSlice({
     reducers: {
         addMessage: (state, action) => {
             state.messages.push(action.payload)
-        },
-        markMessagesAsRead(state, action) {
-            const chatId = action.payload
-            state.messages = state.messages.map(message =>
-                message.chatId === chatId ? { ...message, isRead: true } : message
-            )
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchMessages.fulfilled, (state, action) => {
-            state.messages = action.payload
-        })
+        builder
+            .addCase(fetchChatMessages.fulfilled, (state, action) => {
+                state.messages = action.payload
+            })
     }
 })
 
