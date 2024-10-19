@@ -6,8 +6,8 @@ import { useGetChatsListQuery } from '../../api/chat.api.ts'
 import { useAppSelector } from '@/hooks'
 import { ChatListStyledWrapper } from './ChatList.styled.tsx'
 
-const findOtherUserInChat = (activeChat: Collections.Chat | undefined, userId: number): Collections.User | undefined => {
-    return activeChat?.user1.id === userId ? activeChat?.user2 : activeChat?.user1
+const findOtherUserId = (activeChat: Collections.Chat | undefined, userId: number): number | undefined => {
+    return activeChat?.user1Id === userId ? activeChat?.user2Id : activeChat?.user1Id
 }
 
 const ChatList: FC = () => {
@@ -53,7 +53,7 @@ const ChatList: FC = () => {
                 <Chat
                     activeChatId={activeChatId}
                     senderId={userId ?? null}
-                    receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}
+                    receiverId={findOtherUserId(activeChat, userId ?? 0) ?? null}
                 />
             </div>
 

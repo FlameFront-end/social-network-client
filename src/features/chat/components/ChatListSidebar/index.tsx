@@ -15,19 +15,13 @@ interface ChatListSidebarProps {
 
 const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChatId, chatsList, setChatsList, isFetching }) => {
     useEffect(() => {
-        if (chatsList.length !== 0) {
-            setActiveChatId(chatsList[0]?.id)
-        }
-    }, [chatsList])
-
-    useEffect(() => {
         const socket = io(BACKEND_URL)
 
         socket.on(UPDATE_CHAT, (updatedChat: Collections.Chat) => {
             setChatsList(prevChats =>
                 prevChats.map(chat =>
                     chat.id === updatedChat.id
-                        ? { ...chat, lastMessage: updatedChat.lastMessage }
+                        ? { ...chat, updatedAt: updatedChat.updatedAt, lastMessage: updatedChat.lastMessage }
                         : chat
                 )
             )
@@ -38,16 +32,18 @@ const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChat
         }
     }, [])
 
+    const sortedChatsList = [...chatsList].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+
     return (
         <StyledChatListWrapper>
             {!isFetching ? <>
-                {chatsList.length !== 0 ? chatsList?.map((chat, index) => (
+                {sortedChatsList.length !== 0 ? sortedChatsList.map((chat, index) => (
                     <ChatItemSidebar
                         chat={chat}
                         key={index}
                         isActive={activeChatId === chat.id}
                         setActiveChatId={setActiveChatId}
-                        isLastItem={index === chatsList.length - 1}
+                        isLastItem={index === sortedChatsList.length - 1}
                     />
                 )) : <div className='no_chats'><h3>Чатов нет</h3></div>}
             </> : <div className='spinner-wrapper'><CSpinner color="secondary"/></div>}
