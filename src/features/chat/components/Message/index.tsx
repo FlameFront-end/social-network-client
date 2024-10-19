@@ -24,6 +24,10 @@ const Message: FC<Props> = ({ message, handleSelectMessage, selectedMessages }) 
     const socketRef = useRef<Socket | null>(null)
 
     useEffect(() => {
+        setIsRead(message.isRead)
+    }, [message])
+
+    useEffect(() => {
         socketRef.current = io(BACKEND_URL)
     }, [])
 
@@ -31,8 +35,10 @@ const Message: FC<Props> = ({ message, handleSelectMessage, selectedMessages }) 
         const socket = socketRef.current
 
         const handleMessageReadUpdate = (updatedMessage: any): void => {
-            if (updatedMessage.id === message.id) {
-                setIsRead(updatedMessage.isRead)
+            if (!message.isRead) {
+                if (updatedMessage.id === message.id) {
+                    setIsRead(updatedMessage.isRead)
+                }
             }
         }
 
