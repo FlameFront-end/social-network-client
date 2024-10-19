@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import ChatListSidebar from '../../components/ChatListSidebar'
 import Chat from '../../components/Chat'
 import { useGetChatsListQuery } from '../../api/chat.api.ts'
-import { useAppSelector, useWindowWidth } from '@/hooks'
+import { useAppSelector } from '@/hooks'
 import { ChatListStyledWrapper } from './ChatList.styled.tsx'
 
 const findOtherUserInChat = (activeChat: Collections.Chat | undefined, userId: number): Collections.User | undefined => {
@@ -11,21 +11,21 @@ const findOtherUserInChat = (activeChat: Collections.Chat | undefined, userId: n
 }
 
 const ChatList: FC = () => {
-    const windowWidth = useWindowWidth()
     const { state } = useLocation()
     const userId = useAppSelector(state => state.auth.user.id)
     const [activeChatId, setActiveChatId] = useState(0)
-    const { data: chatsList, isFetching, refetch } = useGetChatsListQuery(null)
+    const { data, isFetching } = useGetChatsListQuery(null)
+    const [chatsList, setChatsList] = useState<Collections.Chat[]>([])
 
     useEffect(() => {
-        void refetch()
-    }, [])
-
-    useEffect(() => {
-        if (chatsList != null && (Boolean(state?.senderId)) && (Boolean(state?.receiverId))) {
+        if (data != null && (Boolean(state?.senderId)) && (Boolean(state?.receiverId))) {
             setActiveChatId(getChatByUsersId())
         }
-    }, [state?.senderId, state?.receiverId])
+
+        if (data != null) {
+            setChatsList(data)
+        }
+    }, [data, state?.senderId, state?.receiverId])
 
     const activeChat = chatsList?.find(chat => chat.id === activeChatId)
 
@@ -44,19 +44,19 @@ const ChatList: FC = () => {
             <ChatListSidebar
                 setActiveChatId={setActiveChatId}
                 activeChatId={activeChatId}
-                chatList={chatsList ?? []}
+                chatsList={chatsList}
+                setChatsList={setChatsList}
                 isFetching={isFetching}
-                senderId={userId ?? null}
-                receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}
             />
 
-            {windowWidth >= 800 &&
+            <div className='chat'>
                 <Chat
                     activeChatId={activeChatId}
                     senderId={userId ?? null}
                     receiverId={findOtherUserInChat(activeChat, userId ?? 0)?.id ?? null}
                 />
-            }
+            </div>
+
         </ChatListStyledWrapper>
     )
 }

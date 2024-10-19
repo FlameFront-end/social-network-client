@@ -20,7 +20,6 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
     const dispatch = useAppDispatch()
     const messages = useAppSelector((state) => state.chat.messages)
 
-    const [isLoading, setIsLoading] = useState(true)
     const [replyToMessage, setReplyToMessage] = useState<Collections.Message | null>(null)
     const [selectedMessages, setSelectedMessages] = useState<Collections.Message[]>([])
 
@@ -70,11 +69,7 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
 
         const fetchChatMessages = async (): Promise<void> => {
             if (senderId != null && receiverId != null) {
-                await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) })).then(() => {
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 600)
-                })
+                await dispatch(fetchMessages({ userId1: Number(senderId), userId2: Number(receiverId) }))
             }
         }
 
@@ -115,11 +110,11 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
     return (
         <StyledChatWrapper>
             <ChatHeader receiverId={receiverId} senderId={senderId}/>
-            {receiverId !== null ? <>
+            {activeChatId !== null ? <>
                 <Flex direction="column" justifyContent="space-between" className='wrapper-chat' ref={wrapper}>
                     <List
                         className='list'
-                        loading={isLoading}
+                        loading={false}
                         dataSource={messages}
                         renderItem={() => null}
                     >

@@ -1,4 +1,4 @@
-import { type Dispatch, type FC, type SetStateAction, useEffect, useState } from 'react'
+import { type Dispatch, type FC, type SetStateAction, useEffect } from 'react'
 import { CSpinner } from '@coreui/react-pro'
 import ChatItemSidebar from '../ChatItemSidebar'
 import { StyledChatListWrapper } from './ChatListSidebar.styled.tsx'
@@ -8,27 +8,23 @@ import { io } from 'socket.io-client'
 interface ChatListSidebarProps {
     activeChatId: number
     setActiveChatId: Dispatch<SetStateAction<number>>
-    chatList: Collections.Chat[]
+    chatsList: Collections.Chat[]
+    setChatsList: Dispatch<SetStateAction<Collections.Chat[]>>
     isFetching: boolean
-    senderId: number | null
-    receiverId: number | null
 }
 
-const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChatId, chatList, isFetching, senderId, receiverId }) => {
-    const [chats, setChats] = useState<Collections.Chat[]>(chatList)
-
+const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChatId, chatsList, setChatsList, isFetching }) => {
     useEffect(() => {
-        if (chatList.length !== 0) {
-            setActiveChatId(chatList[0]?.id)
+        if (chatsList.length !== 0) {
+            setActiveChatId(chatsList[0]?.id)
         }
-        setChats(chatList)
-    }, [chatList])
+    }, [chatsList])
 
     useEffect(() => {
         const socket = io(BACKEND_URL)
 
         socket.on(UPDATE_CHAT, (updatedChat: Collections.Chat) => {
-            setChats(prevChats =>
+            setChatsList(prevChats =>
                 prevChats.map(chat =>
                     chat.id === updatedChat.id
                         ? { ...chat, lastMessage: updatedChat.lastMessage }
@@ -45,16 +41,13 @@ const ChatListSidebar: FC<ChatListSidebarProps> = ({ activeChatId, setActiveChat
     return (
         <StyledChatListWrapper>
             {!isFetching ? <>
-                {chats.length !== 0 ? chats?.map((chat, index) => (
+                {chatsList.length !== 0 ? chatsList?.map((chat, index) => (
                     <ChatItemSidebar
                         chat={chat}
                         key={index}
                         isActive={activeChatId === chat.id}
                         setActiveChatId={setActiveChatId}
-                        chatId={activeChatId}
-                        isLastItem={index === chats.length - 1}
-                        senderId={senderId}
-                        receiverId={receiverId}
+                        isLastItem={index === chatsList.length - 1}
                     />
                 )) : <div className='no_chats'><h3>Чатов нет</h3></div>}
             </> : <div className='spinner-wrapper'><CSpinner color="secondary"/></div>}

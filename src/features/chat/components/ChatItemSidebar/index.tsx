@@ -14,13 +14,10 @@ interface Props {
     chat: Collections.Chat
     isActive: boolean
     setActiveChatId: Dispatch<SetStateAction<number>>
-    chatId: number
     isLastItem: boolean
-    senderId: number | null
-    receiverId: number | null
 }
 
-const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastItem, chatId, senderId, receiverId }) => {
+const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastItem }) => {
     const navigate = useNavigate()
     const windowWidth = useWindowWidth()
     const user = useAppSelector(state => state.auth.user)
@@ -35,14 +32,19 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
         if (windowWidth >= 800) {
             setActiveChatId(chat.id)
         } else {
-            navigate(chatPaths.chat, { state: { receiverId, senderId, chatId } })
+            navigate(chatPaths.chat, { state: { receiverId: getInterlocutor(chat.user1, chat.user2).id, senderId: user.id, chatId: chat.id } })
         }
     }
 
     const interlocutor = getInterlocutor(chat.user1, chat.user2)
 
     useEffect(() => {
-        const socket = io(BACKEND_URL)
+        const socket = io(BACKEND_URL, {
+            query: {
+                userId: user.id
+            }
+        })
+
         const userId = interlocutor?.id
 
         if (!userId) return
@@ -52,14 +54,14 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
                 setOnlineStatus(!!data.data.isOnline)
             }
         }
-
         socket.emit(USER_STATUS, { userId })
         socket.on(USER_STATUS, handleUserStatus)
 
         return () => {
             socket?.off(USER_STATUS, handleUserStatus)
+            socket?.disconnect()
         }
-    }, [interlocutor?.id])
+    }, [interlocutor?.id, chat.id])
 
     return (
         <StyledChatItemSidebarWrapper className={(isActive ? 'active ' : '') + (isLastItem ? 'last' : '') } onClick={handleClick}>
@@ -74,9 +76,13 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
                     <div className='full_name'>
                         {getFullName(interlocutor?.surname ?? '', interlocutor?.name ?? '', null)}
                     </div>
-                    <div className='last_message'>{chat.lastMessage}</div>
+                    {chat.lastMessage !== null && <div className='last_message'>
+                        <strong>{chat.lastSenderId === user.id ? 'Вы' : chat.lastSenderName}: </strong>
+                        {chat.lastMessage}
+                    </div>}
                 </Flex>
             </Flex>
+            {!isActive && chat.unreadCount > 0 && <div className='unread-count'>{chat.unreadCount}</div>}
         </StyledChatItemSidebarWrapper>
     )
 }

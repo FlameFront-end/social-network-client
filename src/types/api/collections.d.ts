@@ -3,12 +3,15 @@ declare namespace Collections {
         id: number
         createdAt: string
         updatedAt: string
-        lastMessage: string
         messages: Collections.Message[]
         user1: Collections.User
         user2: Collections.User
         user1Id: number
         user2Id: number
+        unreadCount: number
+        lastMessage: string
+        lastSenderName: string
+        lastSenderId: number
     }
 
     interface Message {

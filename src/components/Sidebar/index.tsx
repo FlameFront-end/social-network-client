@@ -14,7 +14,7 @@ import {
     LogoutButtonLabel
 } from './Sidebar.styled'
 import { profilePaths } from '../../features/profile/routes/profile.paths.ts'
-import { useAppSelector } from '../../hooks/useAppSelector.ts'
+import { useAppSelector } from '@/hooks'
 
 const Sidebar: FC = () => {
     const { logout } = useAuth()
