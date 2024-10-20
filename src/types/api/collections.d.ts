@@ -4,6 +4,7 @@ declare namespace Collections {
         messages: Collections.Message[]
         user1Id: number
         user2Id: number
+        interlocutor: Collections.User
         unreadCount: number
         lastMessage: string
         lastSenderName: string

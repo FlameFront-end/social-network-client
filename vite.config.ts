@@ -13,7 +13,8 @@ export default defineConfig({
       '@/utils': path.resolve(__dirname, './src/utils'),
       '@/hooks': path.resolve(__dirname, './src/hooks'),
       '@/pathsConfig': path.resolve(__dirname, './src/router/entities/paths.config.ts'),
-      '@/constants': path.resolve(__dirname, './src/constants')
+      '@/constants': path.resolve(__dirname, './src/constants'),
+      '@/globalTypes': path.resolve(__dirname, './src/types/global.types.ts'),
     }
   },
   plugins: [react()]

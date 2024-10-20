@@ -1,14 +1,14 @@
-import { type FC, type MutableRefObject, useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import { type FC, type MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { List } from 'antd'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { chatActions, fetchChatMessages } from '../../store/chat.slice.ts'
+import { chatActions, fetchChatInfo } from '../../store/chat.slice.ts'
 import { StyledChatWrapper } from './Chat.styled.tsx'
 import { BACKEND_URL, RECEIVE_MESSAGE } from '@/constants'
 import { Flex } from '@/kit'
 import Message from '../Message'
 import ChatBottom from '../ChatBottom'
-import ChatHeader from '../ChatHeader'
 import { io } from 'socket.io-client'
+import ChatHeader from '../ChatHeader'
 
 interface Props {
     activeChatId: number
@@ -18,7 +18,9 @@ interface Props {
 
 const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
     const dispatch = useAppDispatch()
-    const messages = useAppSelector((state) => state.chat.messages)
+    const userId = useAppSelector(state => state.auth.user.id)
+    const chat = useAppSelector((state) => state.chat)
+    const messages = chat.messages
 
     const [replyToMessage, setReplyToMessage] = useState<Collections.Message | null>(null)
     const [selectedMessages, setSelectedMessages] = useState<Collections.Message[]>([])
@@ -71,7 +73,7 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
         const fetch = async (): Promise<void> => {
             if (activeChatId) {
                 setIsLoading(true)
-                await dispatch(fetchChatMessages(activeChatId)).then(() => {
+                await dispatch(fetchChatInfo({ chatId: activeChatId, userId: userId ?? 0 })).then(() => {
                     setIsLoading(false)
                 })
             }
@@ -113,7 +115,7 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
 
     return (
         <StyledChatWrapper>
-            <ChatHeader receiverId={receiverId} senderId={senderId}/>
+            {chat.interlocutor !== null && <ChatHeader interlocutor={chat.interlocutor}/>}
             {activeChatId !== null ? <>
                 <Flex direction="column" justifyContent="space-between" className='wrapper-chat' ref={wrapper}>
                     <List

@@ -1,14 +1,13 @@
 import { type Dispatch, type FC, type SetStateAction, useEffect, useState } from 'react'
-import { useAppSelector, useWindowWidth } from '@/hooks'
-import { StyledChatItemSidebarWrapper } from './ChatItemSidebar.styled.tsx'
-import { Avatar, Flex } from '@/kit'
 import { useNavigate } from 'react-router-dom'
-import { chatPaths } from '../../routes/chat.paths.ts'
+import { io } from 'socket.io-client'
+import { useAppSelector, useWindowWidth } from '@/hooks'
+import { Avatar, Flex } from '@/kit'
 import { getFullName } from '@/utils'
 import { BACKEND_URL, USER_STATUS } from '@/constants'
-
-import { io } from 'socket.io-client'
-import { type OnlineStatusResponse } from '../../../../types/global.types.ts'
+import { type OnlineStatusResponse } from '@/globalTypes'
+import { pathsConfig } from '@/pathsConfig'
+import { StyledChatItemSidebarWrapper } from './ChatItemSidebar.styled.tsx'
 
 interface Props {
     chat: Collections.Chat
@@ -24,19 +23,13 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
 
     const [onlineStatus, setOnlineStatus] = useState(false)
 
-    const getInterlocutor = (user1: Collections.User, user2: Collections.User): Collections.User => {
-        return user1.id === user.id ? user2 : user1
-    }
-
     const handleClick = (): void => {
         if (windowWidth >= 800) {
             setActiveChatId(chat.id)
         } else {
-            navigate(chatPaths.chat, { state: { receiverId: getInterlocutor(chat.user1, chat.user2).id, senderId: user.id, chatId: chat.id } })
+            navigate(pathsConfig.chat, { state: { senderId: user.id, userId: chat.interlocutor?.id, chatId: chat.id } })
         }
     }
-
-    const interlocutor = getInterlocutor(chat.user1, chat.user2)
 
     useEffect(() => {
         const socket = io(BACKEND_URL, {
@@ -45,7 +38,7 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
             }
         })
 
-        const userId = interlocutor?.id
+        const userId = chat.interlocutor?.id
 
         if (!userId) return
 
@@ -61,20 +54,20 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
             socket?.off(USER_STATUS, handleUserStatus)
             socket?.disconnect()
         }
-    }, [interlocutor?.id, chat.id])
+    }, [chat.interlocutor?.id, chat.id])
 
     return (
         <StyledChatItemSidebarWrapper className={(isActive ? 'active ' : '') + (isLastItem ? 'last' : '') } onClick={handleClick}>
             <Flex alignItems='center'>
                 <Avatar
-                    ava={interlocutor.ava}
+                    ava={chat?.interlocutor?.ava}
                     size='small'
                     status={onlineStatus}
                     showStatus
                 />
                 <Flex direction='column'>
                     <div className='full_name'>
-                        {getFullName(interlocutor?.surname ?? '', interlocutor?.name ?? '', null)}
+                        {getFullName(chat?.interlocutor?.surname ?? '', chat.interlocutor?.name ?? '', null)}
                     </div>
                     {chat.lastMessage !== null && <div className='last_message'>
                         <strong>{chat.lastSenderId === user.id ? 'Вы' : chat.lastSenderName}: </strong>

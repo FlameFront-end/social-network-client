@@ -1,40 +1,26 @@
-import { type FC, memo, useEffect, useMemo, useState } from 'react'
+import { type FC, memo, useEffect, useState } from 'react'
 import { StyledChatHeader } from './ChatHeader.styled.tsx'
-import { useGetUserQuery } from '../../../profile/api/profile.api.ts'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Avatar, Flex } from '@/kit'
 import { useNavigate } from 'react-router-dom'
 import { pathsConfig } from '@/pathsConfig'
 import { getFullName } from '@/utils'
 import { BACKEND_URL, USER_STATUS } from '@/constants'
-
-import { useAppSelector } from '@/hooks'
 import { io } from 'socket.io-client'
-import { type OnlineStatusResponse } from '../../../../types/global.types.ts'
+import { type OnlineStatusResponse } from '@/globalTypes'
 
 interface Props {
-    senderId: number | string | null
-    receiverId: number | string | null
+    interlocutor: Collections.User
 }
 
-const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
+const ChatHeader: FC<Props> = ({ interlocutor }) => {
     const navigate = useNavigate()
-    const myId = useAppSelector(state => state.auth.user.id)
-
     const [onlineStatus, setOnlineStatus] = useState(false)
-
-    const interlocutorId = useMemo(() => {
-        return Number(myId === senderId ? receiverId : senderId)
-    }, [receiverId, senderId])
-
-    const { data: user, isFetching } = useGetUserQuery(interlocutorId)
 
     useEffect(() => {
         const socket = io(BACKEND_URL)
 
-        if (!receiverId || !senderId || !myId) return
-
-        const userId = myId === receiverId ? Number(senderId) : Number(receiverId)
+        const userId = interlocutor.id
 
         if (!userId) return
 
@@ -50,36 +36,34 @@ const ChatHeader: FC<Props> = ({ senderId, receiverId }) => {
         return () => {
             socket?.off(USER_STATUS, handleUserStatus)
         }
-    }, [receiverId, senderId, myId])
+    }, [])
 
     useEffect(() => {
-        setOnlineStatus(!!user?.isOnline)
-    }, [user?.isOnline])
+        setOnlineStatus(!!interlocutor?.isOnline)
+    }, [interlocutor.isOnline])
 
     return (
         <StyledChatHeader>
-            {!isFetching && <Flex gap={12}>
+            <Flex gap={12}>
                 <button className='back-mobile' onClick={() => { navigate(pathsConfig.chat_list) }}>
                     <ArrowLeftOutlined/>
                 </button>
-
                 <Flex alignItems='center'>
-                    {!!user && <Avatar
-                        ava={user?.ava}
+                    <Avatar
+                        ava={interlocutor.ava}
                         size='ultraSmall'
                         status={onlineStatus}
                         showStatus
-                    />}
-
+                    />
                     <div className='name'>
-                        {getFullName(user?.surname ?? '', user?.name ?? '', null)}
+                        {getFullName(interlocutor.surname ?? '', interlocutor.name ?? '', null)}
                     </div>
                 </Flex>
-            </Flex>}
+            </Flex>
         </StyledChatHeader>
     )
 }
 
 export default memo(ChatHeader, (prevProps, nextProps) => {
-    return prevProps.senderId === nextProps.senderId && prevProps.receiverId === nextProps.receiverId
+    return prevProps.interlocutor.id === nextProps.interlocutor.id
 })
