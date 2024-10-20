@@ -11,16 +11,13 @@ import { io } from 'socket.io-client'
 import ChatHeader from '../ChatHeader'
 
 interface Props {
-    activeChatId: number
-    senderId: number | string | null
-    receiverId: number | string | null
+    chatId: number
 }
 
-const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
+const Chat: FC<Props> = ({ chatId }) => {
     const dispatch = useAppDispatch()
     const userId = useAppSelector(state => state.auth.user.id)
     const chat = useAppSelector((state) => state.chat)
-    const messages = chat.messages
 
     const [replyToMessage, setReplyToMessage] = useState<Collections.Message | null>(null)
     const [selectedMessages, setSelectedMessages] = useState<Collections.Message[]>([])
@@ -65,15 +62,15 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
         return () => {
             setReplyToMessage(null)
         }
-    }, [receiverId])
+    }, [chatId])
 
     useEffect(() => {
         const socket = io(BACKEND_URL)
 
         const fetch = async (): Promise<void> => {
-            if (activeChatId) {
+            if (chatId) {
                 setIsLoading(true)
-                await dispatch(fetchChatInfo({ chatId: activeChatId, userId: userId ?? 0 })).then(() => {
+                await dispatch(fetchChatInfo({ chatId, userId: userId ?? 0 })).then(() => {
                     setIsLoading(false)
                 })
             }
@@ -82,7 +79,7 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
         void fetch()
 
         socket.on(RECEIVE_MESSAGE, (message: Collections.Message) => {
-            if (message.chatId === activeChatId) {
+            if (message.chatId === chatId) {
                 dispatch(chatActions.addMessage(message))
             }
         })
@@ -90,7 +87,7 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
         return () => {
             socket.off(RECEIVE_MESSAGE)
         }
-    }, [dispatch, senderId, receiverId])
+    }, [dispatch, userId, chatId])
 
     useEffect(() => {
         const list = wrapper.current?.querySelector('.list')
@@ -102,38 +99,37 @@ const Chat: FC<Props> = ({ activeChatId, senderId, receiverId }) => {
     }, [wrapper?.current])
 
     useEffect(() => {
-        if (wrapper?.current && messages.length) {
+        if (wrapper?.current && chat.messages.length) {
             scrollToBottom('auto')
         }
-    }, [wrapper?.current, messages?.length])
+    }, [wrapper?.current, chat.messages?.length])
 
     const memoizedMessages = useMemo(() => {
-        return messages.map((message) => (
+        return chat.messages.map((message) => (
             <Message key={message.id} message={message} handleSelectMessage={handleSelectMessage} selectedMessages={selectedMessages}/>
         ))
-    }, [messages, handleSelectMessage, selectedMessages])
+    }, [chatId, chat.messages, handleSelectMessage, selectedMessages])
 
     return (
         <StyledChatWrapper>
             {chat.interlocutor !== null && <ChatHeader interlocutor={chat.interlocutor}/>}
-            {activeChatId !== null ? <>
+            {chatId !== null ? <>
                 <Flex direction="column" justifyContent="space-between" className='wrapper-chat' ref={wrapper}>
                     <List
                         className='list'
                         loading={isLoading}
-                        dataSource={messages}
+                        dataSource={chat.messages}
                         renderItem={() => null}
                     >
                         {memoizedMessages}
                     </List>
 
                     <ChatBottom
+                        chatId={chatId}
+                        receiverId={chat.interlocutor?.id ?? 0}
                         setReplyToMessage={setReplyToMessage}
                         replyToMessage={replyToMessage}
-                        senderId={senderId}
-                        receiverId={receiverId}
                         scrollToBottom={scrollToBottom}
-                        chatId={activeChatId}
                         selectedMessages={selectedMessages}
                         setSelectedMessages={setSelectedMessages}
                     />

@@ -2,11 +2,11 @@ import {
     type Dispatch,
     type FC,
     type SetStateAction,
-    memo,
+    type ChangeEvent,
     useEffect,
     useRef,
     useState,
-    type ChangeEvent
+    memo
 } from 'react'
 import { StyledChatBottom } from './ChatBottom.styled.tsx'
 import { AudioMutedOutlined, AudioOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons'
@@ -17,17 +17,16 @@ import { AccentButton, Flex } from '@/kit'
 import { io, type Socket } from 'socket.io-client'
 import { useAppSelector } from '@/hooks'
 import { BACKEND_URL, SEND_MESSAGE, TYPING, TYPING_STOPPER } from '@/constants'
-import { type TypingMessageResponse } from '../../../../types/global.types.ts'
+import { type TypingMessageResponse } from '@/globalTypes'
 
 interface Props {
-    setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
-    replyToMessage: Collections.Message | null
     chatId: number
-    senderId: number | string | null
-    receiverId: number | string | null
-    scrollToBottom: (behavior: 'smooth' | 'auto') => void
+    receiverId: number
+    replyToMessage: Collections.Message | null
+    setReplyToMessage: Dispatch<SetStateAction<Collections.Message | null>>
     selectedMessages: Collections.Message[]
     setSelectedMessages: Dispatch<SetStateAction<Collections.Message[]>>
+    scrollToBottom: (behavior: 'smooth' | 'auto') => void
 }
 
 interface Emoji {
@@ -35,11 +34,10 @@ interface Emoji {
 }
 
 const ChatBottom: FC<Props> = ({
+    chatId,
+    receiverId,
     replyToMessage,
     setReplyToMessage,
-    senderId,
-    receiverId,
-    chatId,
     scrollToBottom,
     selectedMessages,
     setSelectedMessages
@@ -51,7 +49,6 @@ const ChatBottom: FC<Props> = ({
     const [isHovered, setIsHovered] = useState(false)
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
     const [audioUrl, setAudioUrl] = useState<string | null>(null)
-
     const [typingUserName, setTypingUserName] = useState<string | null>(null)
     const [typingUserId, setTypingUserId] = useState<number | null>(null)
 
@@ -61,26 +58,14 @@ const ChatBottom: FC<Props> = ({
 
     const notifyTyping = (): void => {
         if (socketRef.current && content) {
-            socketRef.current.emit(TYPING, { chatId, senderId })
+            socketRef.current.emit(TYPING, { chatId, senderId: userId })
         }
     }
 
     const notifyTypingStopped = (): void => {
         if (socketRef.current) {
-            socketRef.current.emit(TYPING_STOPPER, { chatId, senderId })
+            socketRef.current.emit(TYPING_STOPPER, { chatId, senderId: userId })
         }
-    }
-
-    const handleMouseEnter = (): void => {
-        setIsHovered(true)
-    }
-
-    const handleMouseLeave = (): void => {
-        setIsHovered(false)
-    }
-
-    const addEmoji = (emoji: Emoji): void => {
-        setContent(content + emoji.native)
     }
 
     const startRecording = (): void => {
@@ -113,36 +98,34 @@ const ChatBottom: FC<Props> = ({
     const sendMessage = (): void => {
         notifyTypingStopped()
 
-        if (senderId != null && receiverId != null) {
-            if (audioBlob != null) {
-                void audioBlob.arrayBuffer().then((arrayBuffer) => {
-                    socketRef.current?.emit(SEND_MESSAGE, {
-                        audio: arrayBuffer,
-                        senderId: userId,
-                        chatId,
-                        receiverId: receiverId === userId ? senderId : receiverId,
-                        content: content.trim() !== '' ? content : null,
-                        replyToMessageId: replyToMessage?.id
-                    })
-                }).then(() => {
-                    setAudioUrl(null)
-                    setAudioBlob(null)
-                    setContent('')
-                    setReplyToMessage(null)
-                    scrollToBottom('smooth')
-                })
-            } else if (content.trim() !== '') {
+        if (audioBlob != null) {
+            void audioBlob.arrayBuffer().then((arrayBuffer) => {
                 socketRef.current?.emit(SEND_MESSAGE, {
-                    chatId,
-                    content,
+                    audio: arrayBuffer,
                     senderId: userId,
-                    receiverId: receiverId === userId ? senderId : receiverId,
+                    chatId,
+                    receiverId,
+                    content: content.trim() !== '' ? content : null,
                     replyToMessageId: replyToMessage?.id
                 })
+            }).then(() => {
+                setAudioUrl(null)
+                setAudioBlob(null)
                 setContent('')
                 setReplyToMessage(null)
                 scrollToBottom('smooth')
-            }
+            })
+        } else if (content.trim() !== '') {
+            socketRef.current?.emit(SEND_MESSAGE, {
+                chatId,
+                content,
+                senderId: userId,
+                receiverId,
+                replyToMessageId: replyToMessage?.id
+            })
+            setContent('')
+            setReplyToMessage(null)
+            scrollToBottom('smooth')
         }
     }
 
@@ -157,6 +140,21 @@ const ChatBottom: FC<Props> = ({
         typingTimerRef.current = setTimeout(() => {
             notifyTypingStopped()
         }, 3000)
+    }
+
+    const getMessageCountText = (count: number): string => {
+        if (count === 1) {
+            return `Выбрано ${count} сообщение`
+        } else if (count > 1 && count < 5) {
+            return `Выбраны ${count} сообщения`
+        } else {
+            return `Выбраны ${count} сообщений`
+        }
+    }
+
+    const handleClickReply = (): void => {
+        setReplyToMessage(selectedMessages[0])
+        setSelectedMessages([])
     }
 
     useEffect(() => {
@@ -199,21 +197,6 @@ const ChatBottom: FC<Props> = ({
         }
     }, [chatId])
 
-    const getMessageCountText = (count: number): string => {
-        if (count === 1) {
-            return `Выбрано ${count} сообщение`
-        } else if (count > 1 && count < 5) {
-            return `Выбраны ${count} сообщения`
-        } else {
-            return `Выбраны ${count} сообщений`
-        }
-    }
-
-    const handleClickReply = (): void => {
-        setReplyToMessage(selectedMessages[0])
-        setSelectedMessages([])
-    }
-
     return (
         <StyledChatBottom direction='column'>
             {(replyToMessage != null) && (
@@ -242,11 +225,11 @@ const ChatBottom: FC<Props> = ({
                         onPressEnter={sendMessage}
                         placeholder="Напишите сообщение..."
                     />
-                    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <div onMouseEnter={() => { setIsHovered(true) }} onMouseLeave={() => { setIsHovered(false) }}>
                         <button className="btn">😊</button>
                         {isHovered && (
                             <div className="emoji-picker">
-                                <Picker data={data} onEmojiSelect={addEmoji} />
+                                <Picker data={data} onEmojiSelect={(emoji: Emoji) => { setContent(content + emoji.native) }} />
                             </div>
                         )}
                     </div>
@@ -289,7 +272,6 @@ const ChatBottom: FC<Props> = ({
 
 export default memo(ChatBottom, (prevProps, nextProps) => {
     return (
-        prevProps.senderId === nextProps.senderId &&
         prevProps.receiverId === nextProps.receiverId &&
         prevProps.replyToMessage === nextProps.replyToMessage &&
         prevProps.scrollToBottom === nextProps.scrollToBottom &&

@@ -16,7 +16,7 @@ const ChatPage: FC = () => {
     }, [windowWidth])
 
     return (
-        <Chat receiverId={state?.receiverId} senderId={state?.senderId} activeChatId={state?.chatId}/>
+        <Chat chatId={state?.chatId}/>
     )
 }
 
