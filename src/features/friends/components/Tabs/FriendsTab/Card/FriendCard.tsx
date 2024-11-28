@@ -10,7 +10,7 @@ import { profilePaths } from '../../../../../profile/routes/profile.paths.ts'
 import { io } from 'socket.io-client'
 import { BACKEND_URL, USER_STATUS } from '@/constants'
 import { getFullName } from '@/utils'
-import { type OnlineStatusResponse } from '../../../../../../types/global.types.ts'
+import { type OnlineStatusResponse } from '@/globalTypes'
 import { StyledFriendCard } from './FriendCard.styled.tsx'
 
 interface Props {

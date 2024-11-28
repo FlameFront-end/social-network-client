@@ -1,10 +1,8 @@
 import { type FC } from 'react'
 import { useAuth } from '../../features/auth/hooks/useAuth.ts'
 import { useNavigate } from 'react-router-dom'
-import { pathsConfig } from '../../router/entities/paths.config.ts'
-import { friendsPaths } from '../../features/friends/routes/friends.paths.ts'
+import { pathsConfig } from '@/pathsConfig'
 import { MessageOutlined, HomeOutlined, TeamOutlined } from '@ant-design/icons'
-
 import {
     SidebarContainer,
     MenuItemContainer,
@@ -13,7 +11,6 @@ import {
     LogoutButton,
     LogoutButtonLabel
 } from './Sidebar.styled'
-import { profilePaths } from '../../features/profile/routes/profile.paths.ts'
 import { useAppSelector } from '@/hooks'
 
 const Sidebar: FC = () => {
@@ -22,18 +19,31 @@ const Sidebar: FC = () => {
     const userId = useAppSelector(state => state.auth.user.id)
     const collapsed = false
 
-    const handleLogoutClick = (): void => {
-        logout()
-    }
-
     const menuItems = [
+        {
+            label: 'Группы',
+            key: 'group_list',
+            icon: <HomeOutlined />,
+            onClick: () => { navigate(pathsConfig.group_list) }
+        },
+        {
+            label: 'Преподаватели',
+            key: 'teachers_list',
+            icon: <HomeOutlined />,
+            onClick: () => { navigate(pathsConfig.teachers_list) }
+        },
+        {
+            label: 'Студенты',
+            key: 'students_list',
+            icon: <HomeOutlined />,
+            onClick: () => { navigate(pathsConfig.students_list) }
+        },
         {
             label: 'Моя страница',
             key: 'root',
             icon: <HomeOutlined />,
-            onClick: () => { navigate(profilePaths.profile, { state: { userId } }) }
+            onClick: () => { navigate(pathsConfig.profile, { state: { userId } }) }
         },
-
         {
             label: 'Мессенджер',
             key: 'chat_list',
@@ -44,7 +54,7 @@ const Sidebar: FC = () => {
             label: 'Друзья',
             key: 'friends',
             icon: <TeamOutlined />,
-            onClick: () => { navigate(friendsPaths.friends) }
+            onClick: () => { navigate(pathsConfig.friends) }
         }
     ]
 
@@ -58,7 +68,7 @@ const Sidebar: FC = () => {
                     </MenuItemContainer>
                 ))}
             </div>
-            <LogoutButton collapsed={collapsed} onClick={handleLogoutClick}>
+            <LogoutButton collapsed={collapsed} onClick={logout}>
                 <LogoutButtonLabel collapsed={collapsed}>Выход</LogoutButtonLabel>
             </LogoutButton>
         </SidebarContainer>

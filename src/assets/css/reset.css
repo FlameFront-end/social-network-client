@@ -36,3 +36,7 @@ ul {
     display: none !important;
 }
 
+.ant-message-notice-content {
+    background-color: #222222 !important;
+    color: #e1e3e6 !important;
+}

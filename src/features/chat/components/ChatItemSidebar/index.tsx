@@ -47,8 +47,14 @@ const ChatItemSidebar: FC<Props> = ({ chat, isActive, setActiveChatId, isLastIte
                 setOnlineStatus(!!data.data.isOnline)
             }
         }
+
+        // const handleUpdateChat = (data: Collections.Chat): void => {
+        //     setOnlineStatus(!!data.data.isOnline)
+        // }
+
         socket.emit(USER_STATUS, { userId })
         socket.on(USER_STATUS, handleUserStatus)
+        // socket.on(USER_STATUS, handleUpdateChat)
 
         return () => {
             socket?.off(USER_STATUS, handleUserStatus)

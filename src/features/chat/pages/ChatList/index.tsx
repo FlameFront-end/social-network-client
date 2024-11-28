@@ -6,8 +6,12 @@ import { ChatListStyledWrapper } from './ChatList.styled.tsx'
 
 const ChatList: FC = () => {
     const [activeChatId, setActiveChatId] = useState(0)
-    const { data, isFetching } = useGetChatsListQuery(null)
+    const { data, isFetching, refetch } = useGetChatsListQuery(null)
     const [chatsList, setChatsList] = useState<Collections.Chat[]>([])
+
+    useEffect(() => {
+        void refetch()
+    }, [])
 
     useEffect(() => {
         if (data != null) {

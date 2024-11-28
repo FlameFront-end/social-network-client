@@ -106,4 +106,42 @@ declare namespace Collections {
         likes: Collections.User[]
         creator: Collections.User
     }
+
+    interface Lesson {
+        title: string
+        teacher: string
+        cabinet: string
+    }
+
+    type ScheduleData = Record<string, Lesson[]>
+
+    interface ScheduleItem {
+        index: number
+        time: string
+        [key: string]: Lesson[] | undefined | string | number
+    }
+
+    interface Group {
+        id: string
+        name: string
+        schedule: ScheduleData
+    }
+
+    type GroupedCourses = Array<[string, Group[]]>
+
+    interface Teacher {
+        id: string
+        name: string
+        discipline: string
+        group?: string
+    }
+
+    interface Student {
+        id: string
+        name: string
+        group: string
+        birthDate?: string
+        phone?: string
+        email?: string
+    }
 }

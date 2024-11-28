@@ -65,7 +65,9 @@ const Chat: FC<Props> = ({ chatId }) => {
     }, [chatId])
 
     useEffect(() => {
-        const socket = io(BACKEND_URL)
+        const socket = io(BACKEND_URL, {
+            query: { userId }
+        })
 
         const fetch = async (): Promise<void> => {
             if (chatId) {
@@ -85,7 +87,8 @@ const Chat: FC<Props> = ({ chatId }) => {
         })
 
         return () => {
-            socket.off(RECEIVE_MESSAGE)
+            socket.disconnect()
+            // socket.off(RECEIVE_MESSAGE)
         }
     }, [dispatch, userId, chatId])
 
@@ -124,6 +127,7 @@ const Chat: FC<Props> = ({ chatId }) => {
                         {memoizedMessages}
                     </List>
 
+                    {/* <VideoChat receiverId={chat.interlocutor?.id ?? 0} userId={userId}/> */}
                     <ChatBottom
                         chatId={chatId}
                         receiverId={chat.interlocutor?.id ?? 0}
