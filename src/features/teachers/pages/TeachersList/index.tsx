@@ -1,9 +1,10 @@
 import { type FC, useState } from 'react'
 import { Table, Input, Space, Button, message } from 'antd'
 import { useDeleteTeacherByIdMutation, useGetAllTeachersQuery } from '../../api/teachers.api.ts'
-import CreateTeacherModal from '../../components/CreateTeacherModal'
 import ConfirmDelete from '../../../kit/components/ConfirmDelete'
 import { StyledTeachersListWrapper } from './TeachersList.styled.tsx'
+import TeacherModal from '../../components/TeacherModal'
+import { EditOutlined } from '@ant-design/icons'
 
 const TeachersList: FC = () => {
     const { data: teachers, isLoading, refetch } = useGetAllTeachersQuery()
@@ -12,6 +13,7 @@ const TeachersList: FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filteredData, setFilteredData] = useState<Collections.Teacher[]>([])
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [editingTeacher, setEditingTeacher] = useState<Collections.Teacher | null>(null)
 
     const handleDelete = async (id: string): Promise<void> => {
         try {
@@ -25,9 +27,11 @@ const TeachersList: FC = () => {
 
     const handleModalClose = (): void => {
         setIsModalVisible(false)
+        setEditingTeacher(null)
     }
 
     const handleModalSuccess = (): void => {
+        setIsModalVisible(false)
         setIsModalVisible(false)
     }
 
@@ -41,6 +45,11 @@ const TeachersList: FC = () => {
         )
 
         setFilteredData(filtered ?? [])
+    }
+
+    const handleEdit = (teacher: Collections.Teacher): void => {
+        setEditingTeacher(teacher)
+        setIsModalVisible(true)
     }
 
     const dataSource = (searchText ? filteredData : teachers)?.map(record => ({
@@ -65,11 +74,16 @@ const TeachersList: FC = () => {
         },
         {
             title: 'Действия',
-            render: (_: any, teacher: any) => (
-                <ConfirmDelete
-                    handleDelete={async () => { await handleDelete(teacher.id) }}
-                    title='Вы уверены, что хотите удалить этого преподавателя?'
-                />
+            render: (_: any, teacher: Collections.Teacher) => (
+                <Space>
+                    <Button onClick={() => { handleEdit(teacher) }}>
+                        <EditOutlined />
+                    </Button>
+                    <ConfirmDelete
+                        handleDelete={async () => { await handleDelete(teacher.id) }}
+                        title='Вы уверены, что хотите удалить этого преподавателя?'
+                    />
+                </Space>
             )
         }
     ]
@@ -98,10 +112,11 @@ const TeachersList: FC = () => {
                 loading={isLoading}
                 rowKey="id"
             />
-            <CreateTeacherModal
+            <TeacherModal
                 open={isModalVisible}
                 onClose={handleModalClose}
                 onSuccess={handleModalSuccess}
+                teacher={editingTeacher}
             />
         </StyledTeachersListWrapper>
     )

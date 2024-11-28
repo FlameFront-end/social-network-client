@@ -8,13 +8,22 @@ export interface StudentCreatePayload {
     email?: string
 }
 
+export interface StudentUpdatePayload {
+    id: string
+    name: string
+    group: string
+    birthDate?: string
+    phone?: string
+    email?: string
+}
+
 export const studentsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         createStudent: builder.mutation<Collections.Student, StudentCreatePayload>({
-            query: (teacher) => ({
+            query: (student) => ({
                 url: '/students',
                 method: 'POST',
-                body: teacher
+                body: student
             })
         }),
         getAllStudents: builder.query<Collections.Student[], void>({
@@ -34,6 +43,13 @@ export const studentsApi = api.injectEndpoints({
                 url: `/students/${id}`,
                 method: 'DELETE'
             })
+        }),
+        updateStudent: builder.mutation<Collections.Student, StudentUpdatePayload>({
+            query: ({ id, ...data }) => ({
+                url: `/students/${id}`,
+                method: 'PATCH',
+                body: data
+            })
         })
     })
 })
@@ -42,5 +58,6 @@ export const {
     useCreateStudentMutation,
     useGetAllStudentsQuery,
     useGetStudentByIdQuery,
-    useDeleteStudentMutation
+    useDeleteStudentMutation,
+    useUpdateStudentMutation
 } = studentsApi

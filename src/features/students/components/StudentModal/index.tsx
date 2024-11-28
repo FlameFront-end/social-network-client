@@ -1,34 +1,67 @@
-import { type FC } from 'react'
+import { type FC, useEffect } from 'react'
 import { Button, DatePicker, Input, Modal, Form, message } from 'antd'
-import { type StudentCreatePayload, useCreateStudentMutation, useGetAllStudentsQuery } from '../../api/students.api.ts'
+import {
+    type StudentCreatePayload,
+    useCreateStudentMutation,
+    useGetAllStudentsQuery,
+    useUpdateStudentMutation
+} from '../../api/students.api.ts'
+import dayjs from 'dayjs'
 
 interface Props {
     open: boolean
     onClose: () => void
     onSuccess: () => void
+    student: Collections.Student | null
 }
 
-const CreateStudentModal: FC<Props> = ({ open, onClose, onSuccess }) => {
+const StudentModal: FC<Props> = ({ open, onClose, onSuccess, student }) => {
     const [form] = Form.useForm()
-    const [createStudent, { isLoading }] = useCreateStudentMutation()
+    const [createStudent, { isLoading: isLoadingCreate }] = useCreateStudentMutation()
+    const [updateStudent, { isLoading: isLoadingUpdate }] = useUpdateStudentMutation()
     const { refetch } = useGetAllStudentsQuery()
+
+    useEffect(() => {
+        if (student) {
+            const { birthDate, ...studentWithoutBirthDate } = student
+
+            const formattedStudent = {
+                ...studentWithoutBirthDate,
+                birthDate: birthDate ? dayjs(birthDate, 'DD.MM.YYYY') : null
+            }
+
+            form.setFieldsValue(formattedStudent)
+        } else {
+            form.resetFields()
+        }
+    }, [student])
 
     const handleSubmit = async (values: StudentCreatePayload): Promise<void> => {
         try {
-            await createStudent(values).unwrap()
-            void message.success('Студент успешно создан')
+            if (student) {
+                await updateStudent({ id: student.id, ...values }).unwrap()
+                void message.success('Студент успешно изменён')
+            } else {
+                await createStudent(values).unwrap()
+                void message.success('Студент успешно создан')
+            }
+
             void refetch()
             form.resetFields()
             onSuccess()
             onClose()
         } catch (error) {
-            void message.error('Ошибка при создании студента')
+            if (student) {
+                void message.error('Ошибка при редактировании студента')
+            } else {
+                void message.error('Ошибка при создании студента')
+            }
         }
     }
 
     return (
         <Modal
-            title="Создать студента"
+            title={student ? 'Изменить студента' : 'Создать студента'}
             open={open}
             onCancel={onClose}
             footer={null}
@@ -78,8 +111,8 @@ const CreateStudentModal: FC<Props> = ({ open, onClose, onSuccess }) => {
                     <Input type='email' placeholder="Введите email" />
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" loading={isLoading}>
-                        Создать
+                    <Button type="primary" htmlType="submit" loading={isLoadingCreate || isLoadingUpdate}>
+                        {student ? 'Изменить' : 'Создать'}
                     </Button>
                 </Form.Item>
             </Form>
@@ -87,4 +120,4 @@ const CreateStudentModal: FC<Props> = ({ open, onClose, onSuccess }) => {
     )
 }
 
-export default CreateStudentModal
+export default StudentModal

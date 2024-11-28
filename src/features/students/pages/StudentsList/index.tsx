@@ -2,10 +2,11 @@ import type React from 'react'
 import { useState } from 'react'
 import { Table, Input, Space, Button, message } from 'antd'
 import { StyledStudentsListWrapper } from './StudentsList.styled'
-import CreateStudentModal from '../../components/CreateStudentModal'
 import { useDeleteStudentMutation, useGetAllStudentsQuery } from '../../api/students.api.ts'
 import ConfirmDelete from '../../../kit/components/ConfirmDelete'
 import { getDateFormat } from '@/utils'
+import StudentModal from '../../components/StudentModal'
+import { EditOutlined } from '@ant-design/icons'
 
 const StudentsList: React.FC = () => {
     const { data: students, isLoading, refetch } = useGetAllStudentsQuery()
@@ -14,13 +15,16 @@ const StudentsList: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filteredData, setFilteredData] = useState<Collections.Student[]>([])
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [editingStudent, setEditingStudent] = useState<Collections.Student | null>(null)
 
     const handleModalClose = (): void => {
         setIsModalVisible(false)
+        setEditingStudent(null)
     }
 
     const handleModalSuccess = (): void => {
         setIsModalVisible(false)
+        setEditingStudent(null)
     }
 
     const handleDelete = async (id: string): Promise<void> => {
@@ -37,12 +41,17 @@ const StudentsList: React.FC = () => {
         setSearchText(value)
         const lowercasedValue = value.toLowerCase()
 
-        const filtered = students?.filter((teacher: Collections.Student) =>
-            teacher.name.toLowerCase().includes(lowercasedValue) ||
-            teacher.group?.toLowerCase().includes(lowercasedValue)
+        const filtered = students?.filter((student: Collections.Student) =>
+            student.name.toLowerCase().includes(lowercasedValue) ||
+            student.group?.toLowerCase().includes(lowercasedValue)
         )
 
         setFilteredData(filtered ?? [])
+    }
+
+    const handleEdit = (student: Collections.Student): void => {
+        setEditingStudent(student)
+        setIsModalVisible(true)
     }
 
     const dataSource = (searchText ? filteredData : students)?.map(record => ({
@@ -77,11 +86,16 @@ const StudentsList: React.FC = () => {
         },
         {
             title: 'Действия',
-            render: (_: any, teacher: any) => (
-                <ConfirmDelete
-                    handleDelete={async () => { await handleDelete(teacher.id) }}
-                    title='Вы уверены, что хотите удалить этого студента?'
-                />
+            render: (_: any, student: Collections.Student) => (
+                <Space>
+                    <Button onClick={() => { handleEdit(student) }}>
+                        <EditOutlined />
+                    </Button>
+                    <ConfirmDelete
+                        handleDelete={async () => { await handleDelete(student.id) }}
+                        title='Вы уверены, что хотите удалить этого студента?'
+                    />
+                </Space>
             )
         }
     ]
@@ -110,10 +124,11 @@ const StudentsList: React.FC = () => {
                 loading={isLoading}
                 rowKey="id"
             />
-            <CreateStudentModal
+            <StudentModal
                 open={isModalVisible}
                 onClose={handleModalClose}
                 onSuccess={handleModalSuccess}
+                student={editingStudent}
             />
         </StyledStudentsListWrapper>
     )
