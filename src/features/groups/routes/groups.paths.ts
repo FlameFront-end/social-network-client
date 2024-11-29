@@ -1,4 +1,5 @@
 export const groupsPaths = {
-    group_list: '/group_list',
-    group: '/group'
+    group_list: '/groups',
+    group: '/group',
+    create_group: '/groups/create'
 }

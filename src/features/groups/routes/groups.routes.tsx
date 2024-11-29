@@ -1,6 +1,7 @@
+import { groupsPaths } from './groups.paths.ts'
 import GroupList from '../pages/GroupList'
 import Group from '../pages/Group'
-import { groupsPaths } from './groups.paths.ts'
+import CreateGroup from '../pages/CreateGroup'
 
 export const groupsRoutes = [
     {
@@ -10,5 +11,9 @@ export const groupsRoutes = [
     {
         path: groupsPaths.group,
         element: <Group/>
+    },
+    {
+        path: groupsPaths.create_group,
+        element: <CreateGroup/>
     }
 ]

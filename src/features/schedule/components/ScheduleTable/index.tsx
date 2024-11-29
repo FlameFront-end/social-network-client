@@ -5,39 +5,6 @@ import type { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'
 import { StyledScheduleTableWrapper } from './ScheduleTable.styled.tsx'
 
-const scheduleData: Collections.ScheduleData = {
-    monday: [
-        { title: 'Математика', teacher: 'Иванов И.И.', cabinet: '24' },
-        { title: 'Русский', teacher: 'Петрова А.А.', cabinet: '25' },
-        { title: 'Английский', teacher: 'Смирнов А.А.', cabinet: '26' },
-        { title: 'История', teacher: 'Васильев В.В.', cabinet: '27' }
-    ],
-    tuesday: [
-        { title: 'Физика', teacher: 'Сидоров В.В.', cabinet: '14' },
-        { title: 'Химия', teacher: 'Кузнецова Е.В.', cabinet: '15' },
-        { title: 'Биология', teacher: 'Михайлова О.О.', cabinet: '16' },
-        { title: 'География', teacher: 'Романов Р.Р.', cabinet: '17' }
-    ],
-    wednesday: [
-        { title: 'Информатика', teacher: 'Ковалев Д.Д.', cabinet: '18' },
-        { title: 'Физкультура', teacher: 'Попова Н.Н.', cabinet: 'спортзал' },
-        { title: 'Литература', teacher: 'Тихонов А.А.', cabinet: '19' },
-        { title: 'Обществознание', teacher: 'Никитина В.В.', cabinet: '20' }
-    ],
-    thursday: [
-        { title: 'Алгебра', teacher: 'Иванова М.М.', cabinet: '21' },
-        { title: 'Геометрия', teacher: 'Смирнова Е.А.', cabinet: '22' },
-        { title: 'Физика', teacher: 'Сидоров В.В.', cabinet: '14' },
-        { title: 'Химия', teacher: 'Кузнецова Е.В.', cabinet: '15' }
-    ],
-    friday: [
-        { title: 'История', teacher: 'Васильев В.В.', cabinet: '27' },
-        { title: 'Английский', teacher: 'Смирнов А.А.', cabinet: '26' },
-        { title: 'Биология', teacher: 'Михайлова О.О.', cabinet: '16' },
-        { title: 'Физкультура', teacher: 'Попова Н.Н.', cabinet: 'спортзал' }
-    ]
-}
-
 const timeSlots = ['08:00 - 09:30', '09:40 - 11:10', '11:20 - 12:59', '13:00 - 14:30']
 
 const daysOfWeek = [
@@ -48,14 +15,19 @@ const daysOfWeek = [
     { en: 'friday', ru: 'Пятница' }
 ]
 
-const ScheduleTable: React.FC = () => {
+interface Props {
+    schedule: Collections.Schedule
+}
+
+const ScheduleTable: React.FC<Props> = ({ schedule }) => {
     const [currentCell, setCurrentCell] = useState<{ day: string, time: string } | null>(null)
     const [currentDay, setCurrentDay] = useState<string>('')
 
     const tableData = timeSlots.map((time, index) => {
         const row: Collections.ScheduleItem = { index: index + 1, time }
         daysOfWeek.forEach(({ en }) => {
-            row[en] = scheduleData[en]?.[index] ? [scheduleData[en][index]] : undefined
+            // @ts-expect-error
+            row[en] = schedule[en]?.[index] ? [schedule[en][index]] : undefined
         })
         return row
     })
@@ -85,7 +57,7 @@ const ScheduleTable: React.FC = () => {
                 lessons?.map((lesson, idx) => (
                     <div key={idx} style={{ marginBottom: '8px' }}>
                         <strong>{lesson.title}</strong>
-                        <div>Учитель: {lesson.teacher}</div>
+                        <div>Учитель: {lesson.teacher.name}</div>
                         <div>Кабинет: {lesson.cabinet}</div>
                     </div>
                 )) ?? ''

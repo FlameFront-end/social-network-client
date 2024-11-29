@@ -11,6 +11,7 @@ export const antdTheme: ThemeConfig = {
         colorBgBase: '#222222',
         controlOutline: '#1890ff',
         colorSplit: '#363738',
-        colorBgElevated: '#222222'
+        colorBgElevated: '#222222',
+        controlItemBgActive: '#363738'
     }
 }

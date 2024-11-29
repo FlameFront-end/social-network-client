@@ -15,12 +15,6 @@ export const SidebarContainer = styled.div<Props>`
     @media screen and (max-width: 800px) {
         display: none;
     }
-
-    //@media (max-width: 768px) {
-    //    width: 0;
-    //    position: absolute;
-    //    z-index: 1;
-    //}
 `
 
 export const MenuItemContainer = styled.div`

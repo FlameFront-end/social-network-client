@@ -109,11 +109,9 @@ declare namespace Collections {
 
     interface Lesson {
         title: string
-        teacher: string
+        teacher: Teacher
         cabinet: string
     }
-
-    type ScheduleData = Record<string, Lesson[]>
 
     interface ScheduleItem {
         index: number
@@ -121,10 +119,21 @@ declare namespace Collections {
         [key: string]: Lesson[] | undefined | string | number
     }
 
+    interface Schedule {
+        id: string
+        monday: Lesson[]
+        tuesday: Lesson[]
+        wednesday: ScheduleItem[]
+        thursday: Lesson[]
+        friday: Lesson[]
+    }
+
     interface Group {
         id: string
         name: string
-        schedule: ScheduleData
+        teacher: Teacher
+        students: Student[]
+        schedule: Schedule
     }
 
     type GroupedCourses = Array<[string, Group[]]>
@@ -133,7 +142,7 @@ declare namespace Collections {
         id: string
         name: string
         discipline: string
-        group?: string
+        group: string | null
     }
 
     interface Student {

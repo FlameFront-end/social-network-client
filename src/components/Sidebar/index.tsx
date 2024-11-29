@@ -59,7 +59,7 @@ const Sidebar: FC = () => {
     ]
 
     return (
-        <SidebarContainer collapsed={collapsed}>
+        <SidebarContainer collapsed={false}>
             <div className="menu">
                 {menuItems.map((item) => (
                     <MenuItemContainer key={item.key} onClick={item.onClick}>
