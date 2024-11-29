@@ -1,38 +1,35 @@
-import type React from 'react'
-import { useEffect, useState } from 'react'
+import { type FC, useEffect, useState } from 'react'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'
 import { StyledScheduleTableWrapper } from './ScheduleTable.styled.tsx'
-
-const timeSlots = ['08:00 - 09:30', '09:40 - 11:10', '11:20 - 12:59', '13:00 - 14:30']
-
-const daysOfWeek = [
-    { en: 'monday', ru: 'Понедельник' },
-    { en: 'tuesday', ru: 'Вторник' },
-    { en: 'wednesday', ru: 'Среда' },
-    { en: 'thursday', ru: 'Четверг' },
-    { en: 'friday', ru: 'Пятница' }
-]
+import { daysOfWeek, timeSlots } from '@/constants'
 
 interface Props {
     schedule: Collections.Schedule
 }
 
-const ScheduleTable: React.FC<Props> = ({ schedule }) => {
+interface TableRow {
+    index: number
+    time: string
+    [key: string]: any
+}
+
+const ScheduleTable: FC<Props> = ({ schedule }) => {
     const [currentCell, setCurrentCell] = useState<{ day: string, time: string } | null>(null)
     const [currentDay, setCurrentDay] = useState<string>('')
 
-    const tableData = timeSlots.map((time, index) => {
-        const row: Collections.ScheduleItem = { index: index + 1, time }
+    const tableData: TableRow[] = timeSlots.map((time, index) => {
+        const row: TableRow = { index: index + 1, time }
         daysOfWeek.forEach(({ en }) => {
-            // @ts-expect-error
-            row[en] = schedule[en]?.[index] ? [schedule[en][index]] : undefined
+            row[en] = schedule[en as Collections.DayKey]?.[index]
+                ? [schedule[en as Collections.DayKey][index]]
+                : undefined
         })
         return row
     })
 
-    const columns: ColumnsType<Collections.ScheduleItem> = [
+    const columns: ColumnsType<TableRow> = [
         {
             title: '№',
             dataIndex: 'index',
@@ -50,7 +47,7 @@ const ScheduleTable: React.FC<Props> = ({ schedule }) => {
             title: ru,
             dataIndex: en,
             key: en,
-            onCell: (record: Collections.ScheduleItem) => ({
+            onCell: (record: TableRow) => ({
                 className: currentCell?.day === en && currentCell?.time === record.time ? 'highlight-cell' : ''
             }),
             render: (lessons: Collections.Lesson[] | undefined) => (
@@ -94,7 +91,7 @@ const ScheduleTable: React.FC<Props> = ({ schedule }) => {
 
     return (
         <StyledScheduleTableWrapper>
-            <Table
+            <Table<TableRow>
                 columns={columns}
                 dataSource={tableData}
                 pagination={false}

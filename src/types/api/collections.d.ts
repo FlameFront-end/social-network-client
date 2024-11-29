@@ -123,10 +123,12 @@ declare namespace Collections {
         id: string
         monday: Lesson[]
         tuesday: Lesson[]
-        wednesday: ScheduleItem[]
+        wednesday: Lesson[]
         thursday: Lesson[]
         friday: Lesson[]
     }
+
+    type DayKey = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday'
 
     interface Group {
         id: string

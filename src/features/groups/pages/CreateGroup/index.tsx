@@ -5,14 +5,7 @@ import { Flex } from '@/kit'
 import { useGetAllTeachersQuery } from '../../../teachers/api/teachers.api'
 import { useGetAllStudentsQuery } from '../../../students/api/students.api'
 import { type CreateGroupPayload, useCreateGroupMutation } from '../../api/groups.api.ts'
-
-const daysOfWeek = [
-    { key: 'monday', label: 'Понедельник' },
-    { key: 'tuesday', label: 'Вторник' },
-    { key: 'wednesday', label: 'Среда' },
-    { key: 'thursday', label: 'Четверг' },
-    { key: 'friday', label: 'Пятница' }
-]
+import { daysOfWeek } from '@/constants'
 
 const CreateGroup: FC = () => {
     const [form] = Form.useForm()
@@ -124,22 +117,22 @@ const CreateGroup: FC = () => {
                 </Form.Item>
 
                 <Tabs
-                    items={daysOfWeek.map(({ key, label }) => ({
-                        key,
-                        label,
+                    items={daysOfWeek.map(({ en, ru }) => ({
+                        key: en,
+                        label: ru,
                         children: (
                             <Flex direction="column" gap={24}>
-                                {schedule[key].map((subject, index) => (
+                                {schedule[en].map((subject, index) => (
                                     <Space key={index} align="baseline">
                                         <Input
                                             placeholder="Предмет"
                                             value={subject.title}
-                                            onChange={(e) => { handleScheduleChange(key, index, 'title', e.target.value) }}
+                                            onChange={(e) => { handleScheduleChange(en, index, 'title', e.target.value) }}
                                         />
                                         <Select
                                             placeholder="Выберите учителя"
                                             value={subject.teacher.length ? subject.teacher : null}
-                                            onChange={(value) => { handleScheduleChange(key, index, 'teacher', value) }}
+                                            onChange={(value) => { handleScheduleChange(en, index, 'teacher', value) }}
                                             showSearch
                                             filterOption={(input, option) =>
                                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -153,14 +146,14 @@ const CreateGroup: FC = () => {
                                         <Input
                                             placeholder="Кабинет"
                                             value={subject.cabinet}
-                                            onChange={(e) => { handleScheduleChange(key, index, 'cabinet', e.target.value) }}
+                                            onChange={(e) => { handleScheduleChange(en, index, 'cabinet', e.target.value) }}
                                         />
-                                        <MinusCircleOutlined onClick={() => { handleRemoveSubject(key, index) }} />
+                                        <MinusCircleOutlined onClick={() => { handleRemoveSubject(en, index) }} />
                                     </Space>
                                 ))}
                                 <Button
                                     type="dashed"
-                                    onClick={() => { handleAddSubject(key) }}
+                                    onClick={() => { handleAddSubject(en) }}
                                     icon={<PlusOutlined />}
                                     style={{ width: 'max-content' }}
                                 >
