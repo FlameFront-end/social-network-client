@@ -113,12 +113,6 @@ declare namespace Collections {
         cabinet: string
     }
 
-    interface ScheduleItem {
-        index: number
-        time: string
-        [key: string]: Lesson[] | undefined | string | number
-    }
-
     interface Schedule {
         id: string
         monday: Lesson[]
